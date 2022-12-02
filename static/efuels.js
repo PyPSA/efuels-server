@@ -15,7 +15,7 @@
 
 
 // Centered on Frankfurt
-var map = L.map('mapid').setView([50.11, 8.68], 1);
+var map = L.map('mapid').setView([20,0], 2);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -31,7 +31,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 assumptions = {"year": 2012,
 	       "cf_exponent": 2,
 	       "destination" : {"lat": 50.11, "lng" : 8.68},
-	       "source" : {"lat": -50.11, "lng" : 8.68}
+	       "source" : {"lat": -30.8, "lng" : 18.5}
 	      };
 
 var locations = ["destination", "source"];
