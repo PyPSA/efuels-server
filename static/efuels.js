@@ -311,7 +311,7 @@ function solve() {
     if (solveButton.text() == solveButtonText["before"]) {
 	clear_results();
 	var send_job = new XMLHttpRequest();
-	send_job.open('POST', '/jobs', true);
+	send_job.open('POST', './jobs', true);
 	send_job.setRequestHeader("Content-Type", "application/json");
 	send_job.onload = function () {
 	    var data = JSON.parse(this.response);
@@ -349,7 +349,7 @@ function poll_result() {
 
     var poll = new XMLHttpRequest();
 
-    poll.open('GET', '/jobs/' + jobid, true);
+    poll.open('GET', './jobs/' + jobid, true);
 
     poll.onload = function () {
 	results = JSON.parse(this.response);
