@@ -64,9 +64,9 @@
             <section id="intro">
               <h2>Introduction</h2>
               <hr>
-              <p>
-                This tool calculates the cost of delivering hydrogen-based fuels such as ammonia, methanol, methane Fischer-Tropsch fuels and pure hydrogen.</p>
-	      <p>First choose your location to determine the weather data for the wind and solar generation. Then choose your cost and technology assumptions to find the solution with least cost.</p>
+              <p>This tool calculates the cost of delivering hydrogen-based fuels such as ammonia, methanol, methane Fischer-Tropsch fuels and pure hydrogen.</p>
+	      <p>It is a WORK IN PROGRESS and currently only works for submarine pipeline delivery of compressed hydrogen.</p>
+	      <p>First choose the locations where the hydrogen is produced and to which it is delivered. This determines the weather data for the wind and solar generation where the hydrogen is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
               <p>This is a <b>toy model</b> with a <b>strongly simplified</b> setup. Please read the <a class="js-scroll-trigger" href="#background">warnings</a> below.</p>
             </section>
 
@@ -101,6 +101,13 @@
             <section id="assumptions">
               <h2 data-toc-text="3. Choose technologies, costs and other assumptions">Step 2: Choose technologies, costs and other assumptions</h2>
               <hr>
+              <div class="form-group">
+                <label for="efuel">E-fuel to be produced</label>
+                <select class="form-control" name="efuel" id="efuel">
+                  <option value="hydrogen_submarine_pipeline" selected>Hydrogen by submarine pipeline</option>
+                </select>
+                <small class="form-text text-muted">NB: Currently the technology selection is limited to pipeline hydrogen.</small>
+              </div>
               <div class="form-group">
                 <label for="samplingSelector">Constant demand for efuel [MW]</label>
                 <input type="number" class="form-control" id="samplingSelector" name="efuels_load">

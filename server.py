@@ -80,7 +80,7 @@ floats = ["cf_exponent","efuels_load","wind_cost","solar_cost","battery_energy_c
 
 ints = ["year","frequency","version"]
 
-strings = []
+strings = ["efuel"]
 
 
 colors = {"wind":"#3B6182",
@@ -159,6 +159,9 @@ def sanitise_assumptions(assumptions):
 
     if assumptions["efuels_load"] == 0:
         return "No load", None
+
+    if assumptions["efuel"] not in ["hydrogen_submarine_pipeline"]:
+        return f"E-fuel {efuel} is not recognised", None
 
     return None, assumptions
 
