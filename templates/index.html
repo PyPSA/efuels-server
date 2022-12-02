@@ -307,6 +307,26 @@
                         <label for="avdSel9c">Hydrogen turbine discount rate [percent]</label>
                         <input type="number" class="form-control" id="advSel9c" name="hydrogen_turbine_discount">
                       </div>
+                      <div class="form-group">
+                        <label for="avdSel118">Hydrogen submarine pipeline capital cost (overnight) [EUR/MW/km]</label>
+                        <input type="number" class="form-control" id="advSel118" name="hydrogen_submarine_pipeline_cost">
+                      </div>
+                      <div class="form-group">
+                        <label for="avdSel119">Hydrogen submarine pipeline losses [percent/1000km]</label>
+                        <input type="number" class="form-control" id="advSel119" name="hydrogen_submarine_pipeline_losses">
+                      </div>
+		      <div class="form-group">
+                        <label for="avdSel119a">Hydrogen submarine pipeline fixed operation and maintenance costs [percent of overnight cost per year]</label>
+                        <input type="number" class="form-control" id="advSel119a" name="hydrogen_submarine_pipeline_fom">
+                      </div>
+                      <div class="form-group">
+                        <label for="avdSel119b">Hydrogen submarine pipeline lifetime [years]</label>
+                        <input type="number" class="form-control" id="advSel119b" name="hydrogen_submarine_pipeline_lifetime">
+                      </div>
+		      <div class="form-group">
+                        <label for="avdSel119c">Hydrogen submarine pipeline discount rate [percent]</label>
+                        <input type="number" class="form-control" id="advSel119c" name="hydrogen_submarine_pipeline_discount">
+                      </div>
 		      <div class="form-check">
 			<input class="form-check-input" type="checkbox" name="dispatchable1" id="techCheck5">
 			<label class="form-check-label" for="techCheck5">
@@ -499,6 +519,15 @@
                         <td class="tab_data"></td>
                         <td class="tab_data"><span id="dispatchable2_lcoe"></span></td>
                         <td class="tab_data"><span id="dispatchable2_rmv"></span></td>
+                      </tr>
+                      <tr>
+                        <td class="tab_asset">Hydrogen submarine pipeline</td>
+                        <td class="tab_data"><span id="hydrogen_submarine_pipeline_capacity"></span> MW</td>
+                        <td class="tab_data"><span id="hydrogen_submarine_pipeline_cf_used"></span></td>
+                        <td class="tab_data"></td>
+                        <td class="tab_data"></td>
+                        <td class="tab_data"></td>
+                        <td class="tab_data"><span id="hydrogen_submarine_pipeline_rmv"></span></td>
                       </tr>
                     </table>
 		    <small class="form-text text-muted">Cap Ftr = Capacity Factor, used is after curtailment, avail is available before curtailment, Curtlmt = Curtailment, LCOE/S = Levelised Cost of Electricity/Storage per energy used, Rel Mkt Value = Relative Market Value (market revenue averaged over dispatch divided by average market price)</small>

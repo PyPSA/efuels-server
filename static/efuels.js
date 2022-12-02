@@ -33,6 +33,7 @@ var colors = {"wind":"#3B6182",
               "hydrogen_energy" : "magenta",
 	      "dispatchable1" : "orange",
 	      "dispatchable2" : "lime",
+	      "hydrogen_submarine_pipeline" : "green",
 	      "load" : "black",
 	      "efuels_load" : "purple",
 	      "hydrogen_load" : "purple",
@@ -75,7 +76,12 @@ assumptions = {"year": 2011,
 	    "hydrogen_turbine_discount" : 5,
 	    "dispatchable1_discount" : 10,
 	       "dispatchable2_discount" : 10,
-      	    "wind" : true,
+	       "hydrogen_submarine_pipeline_cost" : 329.37,
+	       "hydrogen_submarine_pipeline_losses" : 2.1,
+	       "hydrogen_submarine_pipeline_fom" : 3,
+	       "hydrogen_submarine_pipeline_lifetime" : 30,
+	       "hydrogen_submarine_pipeline_discount" : 5,
+      	       "wind" : true,
 	    "solar" : true,
 	    "battery" : true,
 	    "hydrogen" : true,
@@ -86,7 +92,7 @@ assumptions = {"year": 2011,
 let assets = ["solar","wind","battery_power",
 	  "battery_energy","hydrogen_electrolyser",
 	  "hydrogen_turbine","hydrogen_energy",
-	  "dispatchable1","dispatchable2"];
+	      "dispatchable1","dispatchable2","hydrogen_submarine_pipeline"];
 
 let vre = ["solar","wind"];
 
@@ -434,7 +440,7 @@ function display_results(){
 
     document.getElementById("results_assumptions").innerHTML=" for weather year " + results["assumptions"]["year"];
     document.getElementById("average_cost").innerHTML="Average cost [EUR/MWh]: " + results["average_cost"].toFixed(1) + ", [EUR/kg]: " + (results["average_cost"]*0.033).toFixed(2);
-    document.getElementById("distance").innerHTML="Distance [km]: " + results["distance"].toFixed(0);
+    document.getElementById("distance").innerHTML="Distance as crow flies [km]: " + results["distance"].toFixed(0);
 
     for (let i = 0; i < assets.length; i++){
 	document.getElementById(assets[i] + "_capacity").innerHTML=Math.abs(results[assets[i] + "_capacity"].toFixed(1));
@@ -728,7 +734,7 @@ function draw_cost_stack(){
 	};
 	data.push(cost/results["assumptions"]["efuels_load"]);
 	color.push(colors[assets[i]]);
-	labels.push(assets[i].replace("_"," "));
+	labels.push(assets[i].replaceAll("_"," "));
     };
 
     draw_stack(data, labels, color, "Breakdown of avg. sys. cost [EUR/MWh]", "#average_cost_graph", " EUR/MWh");
@@ -745,7 +751,7 @@ function draw_power_capacity_stack(){
 	if(!assets[i].includes("energy")){
 	    data.push(results[assets[i]+"_capacity"]);
 	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replace("_"," "));
+	    labels.push(assets[i].replaceAll("_"," "));
 	};
     };
 
@@ -767,7 +773,7 @@ function draw_power_capacity_bar(){
 	if(!assets[i].includes("energy") && results[assets[i]+"_capacity"] >= 0.1){
 	    data.push(results[assets[i]+"_capacity"]);
 	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replace("_"," ").replace("hydrogen","H2"));
+	    labels.push(assets[i].replaceAll("_"," ").replace("hydrogen","H2"));
 	};
     };
 
@@ -786,7 +792,7 @@ function draw_energy_capacity_stack(){
 	if(assets[i].includes("energy")){
 	    data.push(results[assets[i]+"_capacity"]/1000.);
 	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replace("_"," "));
+	    labels.push(assets[i].replaceAll("_"," "));
 	};
     };
 
@@ -809,7 +815,7 @@ function draw_energy_capacity_bar(){
 	if(assets[i].includes("energy") && results[assets[i]+"_capacity"] >= 10){
 	    data.push(results[assets[i]+"_capacity"]/1000.);
 	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replace("energy","storage").replace("_"," ").replace("hydrogen","H2"));
+	    labels.push(assets[i].replace("energy","storage").replaceAll("_"," ").replace("hydrogen","H2"));
 	};
     };
 
@@ -828,7 +834,7 @@ function draw_energy_stack(){
 	if(!assets[i].includes("energy")){
 	    data.push(results[assets[i]+"_used"]);
 	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replace("_"," "));
+	    labels.push(assets[i].replaceAll("_"," "));
 	};
     };
 

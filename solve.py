@@ -58,7 +58,7 @@ def annuity(lifetime,rate):
 
 assumptions_df = pd.DataFrame(columns=["FOM","fixed","discount rate","lifetime","investment"],
                               index=["wind","solar","hydrogen_electrolyser","hydrogen_turbine","hydrogen_energy",
-                                     "battery_power","battery_energy","dispatchable1","dispatchable2"],
+                                     "battery_power","battery_energy","dispatchable1","dispatchable2","hydrogen_submarine_pipeline"],
                               dtype=float)
 
 threshold = 0.1
@@ -142,7 +142,7 @@ def run_optimisation(assumptions, pu):
 
     Nyears = 1
 
-    techs = ["wind","solar","battery_energy","battery_power","hydrogen_electrolyser","hydrogen_energy","hydrogen_turbine","dispatchable1","dispatchable2"]
+    techs = ["wind","solar","battery_energy","battery_power","hydrogen_electrolyser","hydrogen_energy","hydrogen_turbine","dispatchable1","dispatchable2","hydrogen_submarine_pipeline"]
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
@@ -246,9 +246,25 @@ def run_optimisation(assumptions, pu):
                      "hydrogen",
                      carrier="hydrogen")
 
+        network.add("Bus",
+                     "destination",
+                     carrier="hydrogen")
+
         network.add("Load","hydrogen_load",
-                    bus="hydrogen",
+                    bus="destination",
                     p_set=assumptions["efuels_load"])
+
+        network.add("Link",
+                    "hydrogen_submarine_pipeline",
+                    bus0="hydrogen",
+                    bus1="destination",
+                    p_nom_extendable=True,
+                    efficiency=(1-assumptions["hydrogen_submarine_pipeline_losses"]/100.)**(distance/1000.),
+                    capital_cost=assumptions_df.at["hydrogen_submarine_pipeline","fixed"]/1e3*distance)  # have to divide by 1e3 because of multiplication by 1e3 to go kW to MW above
+
+        print("pipeline efficiency is", (1-assumptions["hydrogen_submarine_pipeline_losses"]/100.)**(distance/1000.))
+
+        print("pieline cost per MW is",assumptions_df.at["hydrogen_submarine_pipeline","fixed"]/1e3*distance)
 
         network.add("Link",
                     "hydrogen_electrolyser",
@@ -440,6 +456,13 @@ def run_optimisation(assumptions, pu):
         results_series["hydrogen_electrolyser"] = 0.
         results_series["hydrogen_energy"] = 0.
         results_series["hydrogen_price"] = 0.
+
+    results_overview["hydrogen_submarine_pipeline_capacity"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
+    results_overview["hydrogen_submarine_pipeline_cost"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]*network.links.at["hydrogen_submarine_pipeline","capital_cost"]/year_weight
+    results_overview["hydrogen_submarine_pipeline_used"] = network.links_t.p0["hydrogen_submarine_pipeline"].mean()
+    results_overview["hydrogen_submarine_pipeline_cf_used"] = results_overview["hydrogen_submarine_pipeline_used"]/network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
+    results_overview["hydrogen_submarine_pipeline_rmv"] = 0.
+
 
     results_overview["average_cost"] = sum([results_overview[s] for s in results_overview.index if s[-5:] == "_cost"])/assumptions["efuels_load"]
 
