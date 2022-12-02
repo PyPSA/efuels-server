@@ -19,7 +19,7 @@ import pypsa
 
 from pypsa.linopt import get_var, linexpr, define_constraints
 
-
+from pypsa.geo import haversine
 
 import pandas as pd
 from pyomo.environ import Constraint
@@ -153,6 +153,12 @@ def run_optimisation(assumptions, pu):
     #convert costs from per kW to per MW
     assumptions_df["investment"] *= 1000.
     assumptions_df["fixed"] = [(annuity(v["lifetime"],v["discount rate"])+v["FOM"]/100.)*v["investment"]*Nyears for i,v in assumptions_df.iterrows()]
+
+
+    distance = haversine([assumptions["destination_lng"],assumptions["destination_lat"]],
+                         [assumptions["source_lng"],assumptions["source_lat"]])[0][0]
+
+    print(f'distance between points is {distance} km')
 
     print('Starting task with assumptions {}'.format(assumptions_df))
 
@@ -301,6 +307,7 @@ def run_optimisation(assumptions, pu):
 
 
     results_overview = pd.Series(dtype=float)
+    results_overview["distance"] = distance
     results_overview["objective"] = network.objective/8760
     results_overview["average_price"] = network.buses_t.marginal_price.mean()["elec"]
     if assumptions["hydrogen"]:
