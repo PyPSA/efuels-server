@@ -102,8 +102,8 @@
               <h2 data-toc-text="3. Choose technologies, costs and other assumptions">Step 2: Choose technologies, costs and other assumptions</h2>
               <hr>
               <div class="form-group">
-                <label for="samplingSelector">Constant electricity demand [MW]</label>
-                <input type="number" class="form-control" id="samplingSelector" name="load">
+                <label for="samplingSelector">Constant demand for efuel [MW]</label>
+                <input type="number" class="form-control" id="samplingSelector" name="efuels_load">
                 <small class="form-text text-muted">Demand should be large enough for utility-scale assets but small enough to neglect land availability constraints.</small>
               </div>
               <div class="form-group">
@@ -153,10 +153,6 @@
                         <label for="samplingSelector">Sampling frequency</label>
                         <input type="number" class="form-control" id="samplingSelector" aria-describedby="samplingSelect" name="frequency">
                         <small id="samplingSelect" class="form-text text-muted">n-hourly, n&lt;3 is very slow, big n solves faster (n=25 or n=49 give fast and relatively accurate results).</small>
-                      </div>
-                      <div class="form-group">
-                        <label for="avdSel1">Constant hydrogen demand [MW LHV]</label>
-                        <input type="number" class="form-control" id="advSel0" name="hydrogen_load">
                       </div>
                       <div class="form-group">
                         <label for="avdSel1">Wind capital cost (overnight) [EUR/kWp]</label>
