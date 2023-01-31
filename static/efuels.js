@@ -16,7 +16,6 @@
 
 var licenceText = '(Licence: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, Attribution: <a href="https://model.energy">model.energy</a> & <a href="https://www.ecmwf.int/en/forecasts/datasets/reanalysis-datasets/era5">ECMWF ERA5</a> via <a href="https://cds.climate.copernicus.eu/">Copernicus Climate Change Service</a> (see <a href="https://apps.ecmwf.int/datasets/licences/copernicus/">weather data licence</a>))';
 
-
 var parseDate = d3.timeParse("%Y-%m-%d %H:%M:00");
 
 var formatDate = d3.timeFormat("%b %d %H:%M");
@@ -53,42 +52,26 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 }).addTo(map);
 
 
+let assumptions = {};
 
-assumptions = {"year": 2011,
-	       "version": 221202,
-	       "cf_exponent": 2,
-	       "destination_lat" : 50.11,
-	       "destination_lng" : 8.68,
-	       "source_lat": -30.8,
-	       "source_lng" : 18.5,
-	       "frequency" : 3,
-	       "efuel" : "hydrogen_submarine_pipeline",
-	    "efuels_load" : 100,
-	    "wind_min" : 0,
-	    "solar_min" : 0,
-	    "wind_max" : 1e7,
-	    "solar_max" : 1e7,
-	    "wind_discount" : 5,
-	    "solar_discount" : 5,
-	    "battery_energy_discount" : 5,
-	    "battery_power_discount" : 5,
-	    "hydrogen_energy_discount" : 5,
-	    "hydrogen_electrolyser_discount" : 5,
-	    "hydrogen_turbine_discount" : 5,
-	    "dispatchable1_discount" : 10,
-	       "dispatchable2_discount" : 10,
-	       "hydrogen_submarine_pipeline_cost" : 329.37,
-	       "hydrogen_submarine_pipeline_losses" : 2.1,
-	       "hydrogen_submarine_pipeline_fom" : 3,
-	       "hydrogen_submarine_pipeline_lifetime" : 30,
-	       "hydrogen_submarine_pipeline_discount" : 5,
-      	       "wind" : true,
-	    "solar" : true,
-	    "battery" : true,
-	    "hydrogen" : true,
-	    "dispatchable1" : false,
-	    "dispatchable2" : false,
-	      };
+for (let key in defaults){
+    assumptions[key] = defaults[key]["value"];
+}
+
+let tech_assumptions = {"2020" : {},
+			"2030" : {},
+			"2050" : {},
+		       };
+
+let default_tech_scenario = "2030";
+
+for (let key in defaults_t[default_tech_scenario]){
+    assumptions[key] = defaults_t[default_tech_scenario][key]["value"];
+    for (let year in tech_assumptions){
+	tech_assumptions[year][key] = defaults_t[year][key]["value"];
+    }
+}
+
 
 let assets = ["solar","wind","battery_power",
 	  "battery_energy","hydrogen_electrolyser",
@@ -100,129 +83,6 @@ let vre = ["solar","wind"];
 let electricity = ["solar","wind","dispatchable1","dispatchable2"];
 
 let storage = ["battery","hydrogen"];
-
-
-
-
-let tech_assumptions = {"2020" : {"wind_cost" : 1120,
-				  "wind_fom" : 3,
-				  "wind_lifetime" : 25,
-				  "solar_cost" : 420,
-				  "solar_fom" : 3,
-				  "solar_lifetime" : 25,
-				  "battery_energy_cost" : 232,
-				  "battery_energy_fom" : 3,
-				  "battery_energy_lifetime" : 15,
-				  "battery_power_cost" : 270,
-				  "battery_power_fom" : 3,
-				  "battery_power_lifetime" : 15,
-				  "battery_power_efficiency_charging" : 95,
-				  "battery_power_efficiency_discharging" : 95,
-				  "hydrogen_energy_cost" : 0.7,
-				  "hydrogen_energy_fom" : 14,
-				  "hydrogen_energy_lifetime" : 25,
-				  "hydrogen_electrolyser_cost" : 1100,
-				  "hydrogen_electrolyser_efficiency" : 58,
-				  "hydrogen_electrolyser_fom" : 3,
-				  "hydrogen_electrolyser_lifetime" : 20,
-				  "hydrogen_turbine_cost" : 880,
-				  "hydrogen_turbine_efficiency" : 56,
-				  "hydrogen_turbine_fom" : 3,
-				  "hydrogen_turbine_lifetime" : 25,
-				  "dispatchable1_cost" : 400,
-				  "dispatchable1_marginal_cost" : 50,
-				  "dispatchable1_emissions" : 500,
-				  "dispatchable1_fom" : 3,
-				  "dispatchable1_lifetime" : 25,
-				  "dispatchable2_cost" : 6000,
-				  "dispatchable2_marginal_cost" : 10,
-				  "dispatchable2_emissions" : 0,
-				  "dispatchable2_fom" : 3,
-				  "dispatchable2_lifetime" : 25,
-				 },
-			"2030" : {"wind_cost" : 1040,
-				  "wind_fom" : 3,
-				  "wind_lifetime" : 25,
-				  "solar_cost" : 300,
-				  "solar_fom" : 3,
-				  "solar_lifetime" : 25,
-				  "battery_energy_cost" : 142,
-				  "battery_energy_fom" : 3,
-				  "battery_energy_lifetime" : 15,
-				  "battery_power_cost" : 160,
-				  "battery_power_fom" : 3,
-				  "battery_power_lifetime" : 15,
-				  "battery_power_efficiency_charging" : 95,
-				  "battery_power_efficiency_discharging" : 95,
-				  "hydrogen_energy_cost" : 0.7,
-				  "hydrogen_energy_fom" : 14,
-				  "hydrogen_energy_lifetime" : 25,
-				  "hydrogen_electrolyser_cost" : 600,
-				  "hydrogen_electrolyser_efficiency" : 62,
-				  "hydrogen_electrolyser_fom" : 3,
-				  "hydrogen_electrolyser_lifetime" : 20,
-				  "hydrogen_turbine_cost" : 830,
-				  "hydrogen_turbine_efficiency" : 58,
-				  "hydrogen_turbine_fom" : 3,
-				  "hydrogen_turbine_lifetime" : 25,
-				  "dispatchable1_cost" : 400,
-				  "dispatchable1_marginal_cost" : 50,
-				  "dispatchable1_emissions" : 500,
-				  "dispatchable1_fom" : 3,
-				  "dispatchable1_lifetime" : 25,
-				  "dispatchable2_cost" : 6000,
-				  "dispatchable2_marginal_cost" : 10,
-				  "dispatchable2_emissions" : 0,
-				  "dispatchable2_fom" : 3,
-				  "dispatchable2_lifetime" : 25,
-				 },
-			"2050" : {"wind_cost" : 960,
-				  "wind_fom" : 3,
-				  "wind_lifetime" : 25,
-				  "solar_cost" : 240,
-				  "solar_fom" : 3,
-				  "solar_lifetime" : 25,
-				  "battery_energy_cost" : 75,
-				  "battery_energy_fom" : 3,
-				  "battery_energy_lifetime" : 15,
-				  "battery_power_cost" : 60,
-				  "battery_power_fom" : 3,
-				  "battery_power_lifetime" : 15,
-				  "battery_power_efficiency_charging" : 95,
-				  "battery_power_efficiency_discharging" : 95,
-				  "hydrogen_energy_cost" : 0.7,
-				  "hydrogen_energy_fom" : 14,
-				  "hydrogen_energy_lifetime" : 25,
-				  "hydrogen_electrolyser_cost" : 400,
-				  "hydrogen_electrolyser_efficiency" : 67,
-				  "hydrogen_electrolyser_fom" : 3,
-				  "hydrogen_electrolyser_lifetime" : 20,
-				  "hydrogen_turbine_cost" : 800,
-				  "hydrogen_turbine_efficiency" : 60,
-				  "hydrogen_turbine_fom" : 3,
-				  "hydrogen_turbine_lifetime" : 25,
-				  "dispatchable1_cost" : 400,
-				  "dispatchable1_marginal_cost" : 50,
-				  "dispatchable1_emissions" : 500,
-				  "dispatchable1_fom" : 3,
-				  "dispatchable1_lifetime" : 25,
-				  "dispatchable2_cost" : 6000,
-				  "dispatchable2_marginal_cost" : 10,
-				  "dispatchable2_emissions" : 0,
-				  "dispatchable2_fom" : 3,
-				  "dispatchable2_lifetime" : 25,
-				 }
-		       };
-
-
-let default_tech_scenario = "2030";
-
-for (let i = 0; i < Object.keys(tech_assumptions[default_tech_scenario]).length; i++){
-    let key = Object.keys(tech_assumptions[default_tech_scenario])[i];
-    if(!(key in assumptions)){
-	assumptions[key] = tech_assumptions[default_tech_scenario][key];
-    };
-};
 
 
 d3.select("#tech_scenario").on("change", function(){
@@ -287,9 +147,7 @@ for (let i = 0; i < Object.keys(assumptions).length; i++){
 	    console.log(key,"changed to",assumptions[key]);
 	});
     }
-};
-
-
+}
 
 
 var solveButton = d3.select("#solve-button");

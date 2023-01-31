@@ -1,0 +1,140 @@
+name,year,type,value,unit,full_name,text
+year,,i,2011,,Weather year,Only the years 2011 and 2012 are available (until we get a bigger hard-drive)
+version,,i,221202,,Version,
+cf_exponent,,f,2,,Capacity factor exponent for spatial distribution of wind and solar,"If exponent is 0 generators are distributed evenly across the region, if it is 1 they are distributed proportional to capacity factor, if it is x they are distributed proportional to (capacity factor)^x"
+destination_lat,,f,50.11,degrees,Destination latitude,
+destination_lng,,f,8.68,degrees,Destination longitude,
+source_lat,,f,-30.8,degrees,Source latitude,
+source_lng,,f,18.5,degrees,Source longitude,
+frequency,,i,3,,Sampling frequency,"n-hourly, n<3 is very slow, big n solves faster (n=25 or n=49 give fast and relatively accurate results)"
+efuel,,s,hydrogen_submarine_pipeline,,E-fuel to be produced,NB: Currently the technology selection is limited to pipeline hydrogen
+efuels_load,,f,100,MW,Constant demand for efuel,Demand should be large enough for utility-scale assets but small enough to neglect land availability constraints
+wind_cost,2020,f,1120,EUR/kWp,Wind capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; includes grid connection costs"
+wind_cost,2030,f,1040,EUR/kWp,Wind capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; includes grid connection costs"
+wind_cost,2050,f,960,EUR/kWp,Wind capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; includes grid connection costs"
+wind_fom,2020,f,3,percent of overnight cost per year,Wind fixed operation and maintenance costs,
+wind_fom,2030,f,3,percent of overnight cost per year,Wind fixed operation and maintenance costs,
+wind_fom,2050,f,3,percent of overnight cost per year,Wind fixed operation and maintenance costs,
+wind_lifetime,2020,f,25,years,Wind lifetime,
+wind_lifetime,2030,f,25,years,Wind lifetime,
+wind_lifetime,2050,f,25,years,Wind lifetime,
+wind_max,,f,1e7,MWp,Wind maximum capacity allowed,
+wind_min,,f,0,MWp,Wind minimum capacity allowed,
+solar_cost,2020,f,420,EUR/kWp,Solar capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; cost for DC capacity, assumes panel:inverter output ratio of 1.35"
+solar_cost,2030,f,300,EUR/kWp,Solar capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; cost for DC capacity, assumes panel:inverter output ratio of 1.35"
+solar_cost,2050,f,240,EUR/kWp,Solar capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; cost for DC capacity, assumes panel:inverter output ratio of 1.35"
+solar_fom,2020,f,3,percent of overnight cost per year,Solar fixed operation and maintenance costs,
+solar_fom,2030,f,3,percent of overnight cost per year,Solar fixed operation and maintenance costs,
+solar_fom,2050,f,3,percent of overnight cost per year,Solar fixed operation and maintenance costs,
+solar_lifetime,2020,f,25,years,Solar lifetime,
+solar_lifetime,2030,f,25,years,Solar lifetime,
+solar_lifetime,2050,f,25,years,Solar lifetime,
+battery_energy_cost,2020,f,232,EUR/kWh,Battery energy capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Energy Storage, January 2020</a>"
+battery_energy_cost,2030,f,142,EUR/kWh,Battery energy capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Energy Storage, January 2020</a>"
+battery_energy_cost,2050,f,75,EUR/kWh,Battery energy capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Energy Storage, January 2020</a>"
+battery_energy_fom,2020,f,3,percent of overnight cost per year,Battery energy fixed operation and maintenance costs,
+battery_energy_fom,2030,f,3,percent of overnight cost per year,Battery energy fixed operation and maintenance costs,
+battery_energy_fom,2050,f,3,percent of overnight cost per year,Battery energy fixed operation and maintenance costs,
+battery_energy_lifetime,2020,f,15,years,Battery energy lifetime,
+battery_energy_lifetime,2030,f,15,years,Battery energy lifetime,
+battery_energy_lifetime,2050,f,15,years,Battery energy lifetime,
+battery_power_cost,2020,f,270,EUR/kW,Battery power capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Energy Storage, January 2020</a>; power costs include e.g. inverter"
+battery_power_cost,2030,f,160,EUR/kW,Battery power capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Energy Storage, January 2020</a>; power costs include e.g. inverter"
+battery_power_cost,2050,f,60,EUR/kW,Battery power capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Energy Storage, January 2020</a>; power costs include e.g. inverter"
+battery_power_fom,2020,f,3,percent of overnight cost per year,Battery power fixed operation and maintenance costs,
+battery_power_fom,2030,f,3,percent of overnight cost per year,Battery power fixed operation and maintenance costs,
+battery_power_fom,2050,f,3,percent of overnight cost per year,Battery power fixed operation and maintenance costs,
+battery_power_lifetime,2020,f,15,years,Battery power lifetime,
+battery_power_lifetime,2030,f,15,years,Battery power lifetime,
+battery_power_lifetime,2050,f,15,years,Battery power lifetime,
+battery_power_efficiency_charging,2020,f,95,percent,Battery power charging efficiency
+battery_power_efficiency_charging,2030,f,95,percent,Battery power charging efficiency
+battery_power_efficiency_charging,2050,f,95,percent,Battery power charging efficiency
+battery_power_efficiency_discharging,2020,f,95,percent,Battery power discharging efficiency,
+battery_power_efficiency_discharging,2030,f,95,percent,Battery power discharging efficiency,
+battery_power_efficiency_discharging,2050,f,95,percent,Battery power discharging efficiency,
+hydrogen_energy_cost,2020,f,0.7,EUR/kWh,Hydrogen energy capital cost (overnight),"Default assumption from <a href='https://doi.org/10.1016/j.energy.2018.05.059'>Welder et al 2018</a> assumes salt caverns in suitable underground salt deposits. For aboveground steel talks, replace with 11 EUR/kWh"
+hydrogen_energy_cost,2030,f,0.7,EUR/kWh,Hydrogen energy capital cost (overnight),"Default assumption from <a href='https://doi.org/10.1016/j.energy.2018.05.059'>Welder et al 2018</a> assumes salt caverns in suitable underground salt deposits. For aboveground steel talks, replace with 11 EUR/kWh"
+hydrogen_energy_cost,2050,f,0.7,EUR/kWh,Hydrogen energy capital cost (overnight),"Default assumption from <a href='https://doi.org/10.1016/j.energy.2018.05.059'>Welder et al 2018</a> assumes salt caverns in suitable underground salt deposits. For aboveground steel talks, replace with 11 EUR/kWh"
+hydrogen_energy_fom,2020,f,14,percent of overnight cost per year,Hydrogen energy fixed operation and maintenance costs,
+hydrogen_energy_fom,2030,f,14,percent of overnight cost per year,Hydrogen energy fixed operation and maintenance costs,
+hydrogen_energy_fom,2050,f,14,percent of overnight cost per year,Hydrogen energy fixed operation and maintenance costs,
+hydrogen_energy_lifetime,2020,f,25,years,Hydrogen energy lifetime,
+hydrogen_energy_lifetime,2030,f,25,years,Hydrogen energy lifetime,
+hydrogen_energy_lifetime,2050,f,25,years,Hydrogen energy lifetime,
+hydrogen_electrolyser_cost,2020,f,1100,EUR/kWel,Hydrogen electrolyser capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Renewable Fuels, February 2019</a>"
+hydrogen_electrolyser_cost,2030,f,600,EUR/kWel,Hydrogen electrolyser capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Renewable Fuels, February 2019</a>"
+hydrogen_electrolyser_cost,2050,f,400,EUR/kWel,Hydrogen electrolyser capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Renewable Fuels, February 2019</a>"
+hydrogen_electrolyser_efficiency,2020,f,58,"percent, LHV",Hydrogen electrolyser efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Renewable Fuels, February 2019</a>"
+hydrogen_electrolyser_efficiency,2030,f,62,"percent, LHV",Hydrogen electrolyser efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Renewable Fuels, February 2019</a>"
+hydrogen_electrolyser_efficiency,2050,f,67,"percent, LHV",Hydrogen electrolyser efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Renewable Fuels, February 2019</a>"
+hydrogen_electrolyser_fom,2020,f,3,percent of overnight cost per year,Hydrogen electrolyser fixed operation and maintenance costs,
+hydrogen_electrolyser_fom,2030,f,3,percent of overnight cost per year,Hydrogen electrolyser fixed operation and maintenance costs,
+hydrogen_electrolyser_fom,2050,f,3,percent of overnight cost per year,Hydrogen electrolyser fixed operation and maintenance costs,
+hydrogen_electrolyser_lifetime,2020,f,20,years,Hydrogen electrolyser lifetime,
+hydrogen_electrolyser_lifetime,2030,f,20,years,Hydrogen electrolyser lifetime,
+hydrogen_electrolyser_lifetime,2050,f,20,years,Hydrogen electrolyser lifetime,
+hydrogen_turbine_cost,2020,f,880,EUR/kW,Hydrogen combined cycle turbine (or fuel cell - see below) capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
+hydrogen_turbine_cost,2030,f,830,EUR/kW,Hydrogen combined cycle turbine (or fuel cell - see below) capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
+hydrogen_turbine_cost,2050,f,800,EUR/kW,Hydrogen combined cycle turbine (or fuel cell - see below) capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
+hydrogen_turbine_efficiency,2020,f,56,"percent, LHV",Hydrogen turbine efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
+hydrogen_turbine_efficiency,2030,f,58,"percent, LHV",Hydrogen turbine efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
+hydrogen_turbine_efficiency,2050,f,60,"percent, LHV",Hydrogen turbine efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
+hydrogen_turbine_fom,2020,f,3,percent of overnight cost per year,Hydrogen turbine fixed operation and maintenance costs,
+hydrogen_turbine_fom,2030,f,3,percent of overnight cost per year,Hydrogen turbine fixed operation and maintenance costs,
+hydrogen_turbine_fom,2050,f,3,percent of overnight cost per year,Hydrogen turbine fixed operation and maintenance costs,
+hydrogen_turbine_lifetime,2020,f,25,years,Hydrogen turbine lifetime,
+hydrogen_turbine_lifetime,2030,f,25,years,Hydrogen turbine lifetime,
+hydrogen_turbine_lifetime,2050,f,25,years,Hydrogen turbine lifetime,
+dispatchable1_cost,2020,f,400,EUR/kW,Dispatchable technology 1 capital cost (overnight),
+dispatchable1_cost,2030,f,400,EUR/kW,Dispatchable technology 1 capital cost (overnight),
+dispatchable1_cost,2050,f,400,EUR/kW,Dispatchable technology 1 capital cost (overnight),
+dispatchable1_marginal_cost,2020,f,50,EUR/MWhel,Dispatchable technology 1 marginal cost (including fuel and VOM),
+dispatchable1_marginal_cost,2030,f,50,EUR/MWhel,Dispatchable technology 1 marginal cost (including fuel and VOM),
+dispatchable1_marginal_cost,2050,f,50,EUR/MWhel,Dispatchable technology 1 marginal cost (including fuel and VOM),
+dispatchable1_emissions,2020,f,500,gCO2eq/kWhel,Dispatchable technology 1 emissions factor,
+dispatchable1_emissions,2030,f,500,gCO2eq/kWhel,Dispatchable technology 1 emissions factor,
+dispatchable1_emissions,2050,f,500,gCO2eq/kWhel,Dispatchable technology 1 emissions factor,
+dispatchable1_fom,2020,f,3,percent of overnight cost per year,Dispatchable technology 1 fixed operation and maintenance costs,
+dispatchable1_fom,2030,f,3,percent of overnight cost per year,Dispatchable technology 1 fixed operation and maintenance costs,
+dispatchable1_fom,2050,f,3,percent of overnight cost per year,Dispatchable technology 1 fixed operation and maintenance costs,
+dispatchable1_lifetime,2020,f,25,years,Dispatchable technology 1 lifetime,
+dispatchable1_lifetime,2030,f,25,years,Dispatchable technology 1 lifetime,
+dispatchable1_lifetime,2050,f,25,years,Dispatchable technology 1 lifetime,
+dispatchable2_cost,2020,f,6000,EUR/kW,Dispatchable technology 2 capital cost (overnight),
+dispatchable2_cost,2030,f,6000,EUR/kW,Dispatchable technology 2 capital cost (overnight),
+dispatchable2_cost,2050,f,6000,EUR/kW,Dispatchable technology 2 capital cost (overnight),
+dispatchable2_marginal_cost,2020,f,10,EUR/MWhel,Dispatchable technology 2 marginal cost (including fuel and VOM),
+dispatchable2_marginal_cost,2030,f,10,EUR/MWhel,Dispatchable technology 2 marginal cost (including fuel and VOM),
+dispatchable2_marginal_cost,2050,f,10,EUR/MWhel,Dispatchable technology 2 marginal cost (including fuel and VOM),
+dispatchable2_emissions,2020,f,0,gCO2eq/kWhel,Dispatchable technology 2 emissions factor,
+dispatchable2_emissions,2030,f,0,gCO2eq/kWhel,Dispatchable technology 2 emissions factor,
+dispatchable2_emissions,2050,f,0,gCO2eq/kWhel,Dispatchable technology 2 emissions factor,
+dispatchable2_fom,2020,f,3,percent of overnight cost per year,Dispatchable technology 2 fixed operation and maintenance costs,
+dispatchable2_fom,2030,f,3,percent of overnight cost per year,Dispatchable technology 2 fixed operation and maintenance costs,
+dispatchable2_fom,2050,f,3,percent of overnight cost per year,Dispatchable technology 2 fixed operation and maintenance costs,
+dispatchable2_lifetime,2020,f,25,years,Dispatchable technology 2 lifetime,
+dispatchable2_lifetime,2030,f,25,years,Dispatchable technology 2 lifetime,
+dispatchable2_lifetime,2050,f,25,years,Dispatchable technology 2 lifetime,
+solar_max,,f,1e7,MWp,Solar maximum capacity allowed,
+solar_min,,f,0,MWp,Solar minimum capacity allowed,
+wind_discount,,f,5,percent,Wind discount rate,
+solar_discount,,f,5,percent,Solar discount rate,
+battery_energy_discount,,f,5,percent,Battery energy discount rate,
+battery_power_discount,,f,5,percent,Battery power discount rate,
+hydrogen_energy_discount,,f,5,percent,Hydrogen energy discount rate,
+hydrogen_electrolyser_discount,,f,5,percent,Hydrogen electrolyser discount rate,
+hydrogen_turbine_discount,,f,5,percent,Hydrogen turbine discount rate,
+dispatchable1_discount,,f,10,percent,Dispatchable technology 1 discount rate,
+dispatchable2_discount,,f,10,percent,Dispatchable technology 2 discount rate,
+hydrogen_submarine_pipeline_cost,,f,329.37,EUR/MW/km,Hydrogen submarine pipeline capital cost (overnight),
+hydrogen_submarine_pipeline_losses,,f,2.1,percent/1000km,Hydrogen submarine pipeline losses,
+hydrogen_submarine_pipeline_fom,,f,3,percent of overnight cost per year,Hydrogen submarine pipeline fixed operation and maintenance costs,
+hydrogen_submarine_pipeline_lifetime,,f,30,years,Hydrogen submarine pipeline lifetime,
+hydrogen_submarine_pipeline_discount,,f,5,percent,Hydrogen submarine pipeline discount rate,
+wind,,b,True,,Wind turbine,
+solar,,b,True,,Solar photovoltaic cell,
+battery,,b,True,,Battery storage,
+hydrogen,,b,True,,Hydrogen gas storage,
+dispatchable1,,b,False,,Dispatchable technology 1,Default assumption is based on open cycle natural gas turbine (OCGT)
+dispatchable2,,b,False,,Dispatchable technology 2,Default assumption is based on new nuclear EPR reactor in Europe

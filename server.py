@@ -37,8 +37,17 @@ conn = Redis.from_url('redis://')
 queue = Queue('efuels', connection=conn)
 
 
+#na_filter leaves "" as "" rather than doing nan which confuses jinja2
+defaults = pd.read_csv("defaults.csv",index_col=[0,1],na_filter=False)
 
+for (n,t) in [("f",float),("i",int)]:
+    defaults.loc[defaults["type"] == n, "value"] = defaults.loc[defaults["type"] == n,"value"].astype(t)
 
+#work around fact bool("False") returns True
+defaults.loc[defaults.type == "b","value"] = (defaults.loc[defaults.type == "b","value"] == "True")
+
+defaults_t = {year: defaults.swaplevel().loc[year] for year in ["2020","2030","2050"]}
+defaults = defaults.swaplevel().loc[""]
 
 booleans = ["wind","solar","battery","hydrogen","dispatchable1","dispatchable2"]
 
@@ -236,7 +245,9 @@ def find_results(results_hash):
 #defaults to only listen to GET and HEAD
 @app.route('/')
 def root():
-    return render_template('index.html')
+    return render_template('index.html',
+                           defaults=defaults.T.to_dict(),
+                           defaults_t={year: defaults_t[year].T.to_dict() for year in defaults_t})
 
 
 @app.route('/jobs', methods=['GET','POST'])

@@ -65,3 +65,5 @@ plot/
 assumptions-hash/
 
 static/d*
+
+!defaults.csv
