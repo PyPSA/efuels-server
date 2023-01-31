@@ -49,47 +49,13 @@ defaults.loc[defaults.type == "b","value"] = (defaults.loc[defaults.type == "b",
 defaults_t = {year: defaults.swaplevel().loc[year] for year in ["2020","2030","2050"]}
 defaults = defaults.swaplevel().loc[""]
 
-booleans = ["wind","solar","battery","hydrogen","dispatchable1","dispatchable2"]
+booleans = defaults.index[defaults.type == "b"].to_list()
 
-floats = ["cf_exponent","efuels_load","wind_cost","solar_cost","battery_energy_cost",
-          "source_lat","source_lng","destination_lat","destination_lng",
-          "wind_fom","wind_lifetime","wind_discount",
-          "solar_fom","solar_lifetime","solar_discount",
-          "battery_energy_fom","battery_energy_lifetime","battery_energy_discount",
-          "battery_power_fom","battery_power_lifetime","battery_power_discount",
-          "battery_power_efficiency_charging","battery_power_efficiency_discharging",
-          "hydrogen_energy_fom","hydrogen_energy_lifetime","hydrogen_energy_discount",
-          "hydrogen_electrolyser_fom","hydrogen_electrolyser_lifetime","hydrogen_electrolyser_discount",
-          "hydrogen_turbine_fom","hydrogen_turbine_lifetime","hydrogen_turbine_discount",
-          "battery_power_cost","hydrogen_electrolyser_cost",
-          "hydrogen_energy_cost",
-          "hydrogen_electrolyser_efficiency",
-          "hydrogen_turbine_cost",
-          "hydrogen_turbine_efficiency",
-	  "hydrogen_submarine_pipeline_cost",
-	  "hydrogen_submarine_pipeline_losses",
-	  "hydrogen_submarine_pipeline_fom",
-	  "hydrogen_submarine_pipeline_lifetime",
-	  "hydrogen_submarine_pipeline_discount",
-          "dispatchable1_cost",
-          "dispatchable1_marginal_cost",
-          "dispatchable1_emissions",
-          "dispatchable1_discount",
-          "dispatchable1_fom","dispatchable1_lifetime",
-          "dispatchable2_cost",
-          "dispatchable2_marginal_cost",
-          "dispatchable2_emissions",
-          "dispatchable2_discount",
-          "dispatchable2_fom","dispatchable2_lifetime",
-          "wind_min",
-          "solar_min",
-          "wind_max",
-          "solar_max"]
+floats = defaults.index[defaults.type == "f"].union(defaults_t["2020"].index[defaults_t["2020"]["type"] == "f"]).to_list()
 
+ints = defaults.index[defaults.type == "i"].to_list()
 
-ints = ["year","frequency","version"]
-
-strings = ["efuel"]
+strings = defaults.index[defaults.type == "s"].to_list()
 
 
 colors = {"wind":"#3B6182",
