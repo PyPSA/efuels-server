@@ -138,6 +138,13 @@ for (let i = 0; i < Object.keys(assumptions).length; i++){
 	    console.log(key,"changed to",assumptions[key]);
 	});
     }
+    else if(typeof value === "string"){
+	document.getElementsByName(key)[0].value = value;
+	d3.selectAll("select[name='" + key + "']").on("change", function(){
+	    assumptions[key] = this.value;
+	    console.log(key,"changed to",assumptions[key]);
+	});
+    }
     else if(["job_type","source_lat","source_lng","destination_lat","destination_lng","version","jobid","timestamp","queue_length","weather_hex","results_hex"].includes(key)){
     }
     else{
@@ -298,7 +305,7 @@ function display_results(){
     $('#collapseResults').addClass("show");
 
     document.getElementById("results_assumptions").innerHTML=" for weather year " + results["assumptions"]["year"];
-    document.getElementById("average_cost").innerHTML="Average cost [EUR/MWh]: " + results["average_cost"].toFixed(1) + ", [EUR/kg]: " + (results["average_cost"]*0.033).toFixed(2);
+    document.getElementById("average_cost").innerHTML="Average price [EUR/MWh]: " + results["average_efuel_price"].toFixed(1);
     document.getElementById("distance").innerHTML="Distance as crow flies [km]: " + results["distance"].toFixed(0);
 
     for (let i = 0; i < assets.length; i++){

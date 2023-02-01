@@ -135,8 +135,8 @@ def sanitise_assumptions(assumptions):
     if assumptions["efuels_load"] == 0:
         return "No load", None
 
-    if assumptions["efuel"] not in ["hydrogen_submarine_pipeline"]:
-        return f"E-fuel {efuel} is not recognised", None
+    if assumptions["efuel"] not in ["hydrogen_submarine_pipeline","methanol"]:
+        return "E-fuel {} is not recognised".format(assumptions["efuel"]), None
 
     return None, assumptions
 

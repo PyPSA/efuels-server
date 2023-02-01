@@ -102,6 +102,7 @@
                 <label for="efuel">{{ defaults["efuel"]["full_name"] }}</label>
                 <select class="form-control" name="efuel" id="efuel">
                   <option value="hydrogen_submarine_pipeline" selected>Hydrogen by submarine pipeline</option>
+                  <option value="methanol" selected>Methanol</option>
                 </select>
                 <small class="form-text text-muted">{{ defaults["efuel"]["text"] }}</small>
               </div>
@@ -200,7 +201,7 @@
                     <h3 data-toc-skip>Results<span id="results_assumptions"></span></h3>
                     <br />
                     <p><b><span id="average_cost"></span></b></p>
-		    <small class="form-text text-muted">Cost is per unit of energy delivered in 2015 euros. For comparison, household electricity rates (including taxes and grid charges) averaged 211 EUR/MWh in the <a href="https://ec.europa.eu/eurostat/statistics-explained/index.php/Electricity_price_statistics">European Union in 2018</a> & 132 USD/MWh in the <a href="https://www.electricchoice.com/electricity-prices-by-state/">United States in 2019</a></small>
+		    <small class="form-text text-muted">Costs and prices are per unit of energy delivered in 2015 euros.</small>
 		    <br />
 		    <p><b><span id="distance"></span></b></p>
 		    <br />

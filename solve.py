@@ -48,6 +48,53 @@ octant_folder = "../cutouts/"
 solar_correction_factor = 0.926328
 
 
+override_component_attrs = pypsa.descriptors.Dict(
+        {k: v.copy() for k, v in pypsa.components.component_attrs.items()}
+    )
+override_component_attrs["Link"].loc["bus2"] = [
+        "string",
+        np.nan,
+        np.nan,
+        "2nd bus",
+        "Input (optional)",
+    ]
+override_component_attrs["Link"].loc["bus3"] = [
+        "string",
+        np.nan,
+        np.nan,
+        "3rd bus",
+        "Input (optional)",
+    ]
+override_component_attrs["Link"].loc["efficiency2"] = [
+        "static or series",
+        "per unit",
+        1.0,
+        "2nd bus efficiency",
+        "Input (optional)",
+    ]
+override_component_attrs["Link"].loc["efficiency3"] = [
+        "static or series",
+        "per unit",
+        1.0,
+        "3rd bus efficiency",
+        "Input (optional)",
+    ]
+override_component_attrs["Link"].loc["p2"] = [
+        "series",
+        "MW",
+        0.0,
+        "2nd bus output",
+        "Output",
+    ]
+override_component_attrs["Link"].loc["p3"] = [
+        "series",
+        "MW",
+        0.0,
+        "3rd bus output",
+        "Output",
+    ]
+
+
 def annuity(lifetime,rate):
     if rate == 0.:
         return 1/lifetime
@@ -142,7 +189,7 @@ def run_optimisation(assumptions, pu):
 
     Nyears = 1
 
-    techs = ["wind","solar","battery_energy","battery_power","hydrogen_electrolyser","hydrogen_energy","hydrogen_turbine","dispatchable1","dispatchable2","hydrogen_submarine_pipeline"]
+    techs = ["wind","solar","battery_energy","battery_power","hydrogen_electrolyser","hydrogen_energy","hydrogen_turbine","dispatchable1","dispatchable2","hydrogen_submarine_pipeline","methanolisation"]
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
@@ -162,7 +209,7 @@ def run_optimisation(assumptions, pu):
 
     print('Starting task with assumptions {}'.format(assumptions_df))
 
-    network = pypsa.Network()
+    network = pypsa.Network(override_component_attrs=override_component_attrs)
 
     snapshots = pd.date_range("{}-01-01".format(assumptions["year"]),"{}-12-31 23:00".format(assumptions["year"]),
                               freq=str(assumptions["frequency"])+"H")
@@ -240,15 +287,40 @@ def run_optimisation(assumptions, pu):
         def extra_functionality(network,snapshots):
             pass
 
-    if assumptions["hydrogen"]:
+    network.add("Bus",
+                "hydrogen",
+                carrier="hydrogen")
+
+    network.add("Link",
+                "hydrogen_electrolyser",
+                bus1="hydrogen",
+                bus0="elec",
+                p_nom_extendable=True,
+                efficiency=assumptions["hydrogen_electrolyser_efficiency"]/100.,
+                capital_cost=assumptions_df.at["hydrogen_electrolyser","fixed"])
+
+    #TODO remove for efuel
+    network.add("Link",
+                "hydrogen_turbine",
+                bus0="hydrogen",
+                bus1="elec",
+                p_nom_extendable=True,
+                efficiency=assumptions["hydrogen_turbine_efficiency"]/100.,
+                capital_cost=assumptions_df.at["hydrogen_turbine","fixed"]*assumptions["hydrogen_turbine_efficiency"]/100.)  #NB: fixed cost is per MWel
+
+    network.add("Store",
+                "hydrogen_energy",
+                bus="hydrogen",
+                e_nom_extendable=True,
+                e_cyclic=True,
+                capital_cost=assumptions_df.at["hydrogen_energy","fixed"])
+
+    if assumptions["efuel"] == "hydrogen_submarine_pipeline":
 
         network.add("Bus",
-                     "hydrogen",
-                     carrier="hydrogen")
+                    "destination",
+                    carrier="hydrogen")
 
-        network.add("Bus",
-                     "destination",
-                     carrier="hydrogen")
 
         network.add("Load","hydrogen_load",
                     bus="destination",
@@ -266,28 +338,48 @@ def run_optimisation(assumptions, pu):
 
         print("pieline cost per MW is",assumptions_df.at["hydrogen_submarine_pipeline","fixed"]/1e3*distance)
 
-        network.add("Link",
-                    "hydrogen_electrolyser",
-                    bus1="hydrogen",
-                    bus0="elec",
-                    p_nom_extendable=True,
-                    efficiency=assumptions["hydrogen_electrolyser_efficiency"]/100.,
-                    capital_cost=assumptions_df.at["hydrogen_electrolyser","fixed"])
+    elif assumptions["efuel"] == "methanol":
 
-        network.add("Link",
-                     "hydrogen_turbine",
-                     bus0="hydrogen",
-                     bus1="elec",
-                     p_nom_extendable=True,
-                     efficiency=assumptions["hydrogen_turbine_efficiency"]/100.,
-                     capital_cost=assumptions_df.at["hydrogen_turbine","fixed"]*assumptions["hydrogen_turbine_efficiency"]/100.)  #NB: fixed cost is per MWel
+        network.add("Bus",
+                    "destination",
+                    carrier="methanol")
+
+        network.add("Bus",
+                    "methanol",
+                    carrier="methanol")
 
         network.add("Store",
-                     "hydrogen_energy",
-                     bus="hydrogen",
-                     e_nom_extendable=True,
-                     e_cyclic=True,
-                     capital_cost=assumptions_df.at["hydrogen_energy","fixed"])
+                    "methanol",
+                    bus="methanol",
+                    e_nom_extendable=True,
+                    e_cyclic=True,
+                    capital_cost=1.) #TODO put realistic cost here
+
+        network.add("Load","methanol_load",
+                    bus="destination",
+                    p_set=assumptions["efuels_load"])
+
+        network.add("Link",
+                    "methanol synthesis",
+                    bus0="hydrogen",
+                    bus1="methanol",
+                    bus2="elec",
+                    p_nom_extendable=True,
+                    marginal_cost=assumptions["co2_cost"]*assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
+                    efficiency=assumptions["methanolisation_efficiency"],
+                    efficiency2=-assumptions["methanolisation_electricity"]*assumptions["methanolisation_efficiency"],
+                    capital_cost=assumptions_df.at["methanolisation","fixed"]*assumptions["methanolisation_efficiency"]) #NB: cost is EUR/kW_MeOH
+
+        network.add("Link",
+                    "methanol shipping",
+                    bus0="methanol",
+                    bus1="destination",
+                    p_nom_extendable=True,
+                    efficiency=0.999, # TODO find values here
+                    capital_cost=1e3) # TODO find values here
+
+    else:
+        return None, None, "Efuel {} was not recognised".format(assumptions["efuel"])
 
     network.consistency_check()
 
@@ -326,6 +418,7 @@ def run_optimisation(assumptions, pu):
     results_overview["distance"] = distance
     results_overview["objective"] = network.objective/8760
     results_overview["average_price"] = network.buses_t.marginal_price.mean()["elec"]
+    results_overview["average_efuel_price"] = network.buses_t.marginal_price.mean()["destination"]
     if assumptions["hydrogen"]:
         results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
 
@@ -457,11 +550,18 @@ def run_optimisation(assumptions, pu):
         results_series["hydrogen_energy"] = 0.
         results_series["hydrogen_price"] = 0.
 
-    results_overview["hydrogen_submarine_pipeline_capacity"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
-    results_overview["hydrogen_submarine_pipeline_cost"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]*network.links.at["hydrogen_submarine_pipeline","capital_cost"]/year_weight
-    results_overview["hydrogen_submarine_pipeline_used"] = network.links_t.p0["hydrogen_submarine_pipeline"].mean()
-    results_overview["hydrogen_submarine_pipeline_cf_used"] = results_overview["hydrogen_submarine_pipeline_used"]/network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
-    results_overview["hydrogen_submarine_pipeline_rmv"] = 0.
+    if assumptions["efuel"] == "hydrogen_submarine_pipeline":
+        results_overview["hydrogen_submarine_pipeline_capacity"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
+        results_overview["hydrogen_submarine_pipeline_cost"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]*network.links.at["hydrogen_submarine_pipeline","capital_cost"]/year_weight
+        results_overview["hydrogen_submarine_pipeline_used"] = network.links_t.p0["hydrogen_submarine_pipeline"].mean()
+        results_overview["hydrogen_submarine_pipeline_cf_used"] = results_overview["hydrogen_submarine_pipeline_used"]/network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
+        results_overview["hydrogen_submarine_pipeline_rmv"] = 0.
+    else:
+        results_overview["hydrogen_submarine_pipeline_capacity"] = 0.
+        results_overview["hydrogen_submarine_pipeline_cost"] = 0.
+        results_overview["hydrogen_submarine_pipeline_used"] = 0.
+        results_overview["hydrogen_submarine_pipeline_cf_used"] = 0.
+        results_overview["hydrogen_submarine_pipeline_rmv"] = 0.
 
 
     results_overview["average_cost"] = sum([results_overview[s] for s in results_overview.index if s[-5:] == "_cost"])/assumptions["efuels_load"]
