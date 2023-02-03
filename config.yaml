@@ -1,0 +1,29 @@
+
+tech_years: [2020,2030,2050]
+
+tech_data_commit: "3a23cfc5808df00a2c039fd0e7ce8755a090d4df"
+trace_commit: "55e71c86d36869079b46377ce7ef16a46afa1d99"
+
+
+years_available_start: 2011
+years_available_end: 2012
+
+float_upper_limit: 1.e+7
+
+colors:
+  wind : "#3B6182"
+  solar: "#FFFF00"
+  battery: "#999999"
+  battery_charge: "#999999"
+  battery_discharge: "#999999"
+  battery_power: "#999999"
+  battery_energy: "#666666"
+  hydrogen_turbine: red
+  hydrogen_electrolyser: cyan
+  hydrogen_energy: magenta
+  dispatchable1: orange
+  dispatchable2: lime
+  hydrogen_submarine_pipeline: green
+  load: black
+  efuels_load: purple
+  hydrogen_load: purple

@@ -22,7 +22,7 @@ import rq
 from rq.job import Job
 from rq import Queue
 
-import json, os, hashlib
+import json, os, hashlib, yaml
 
 import pandas as pd
 
@@ -57,27 +57,8 @@ ints = defaults.index[defaults.type == "i"].to_list()
 
 strings = defaults.index[defaults.type == "s"].to_list()
 
-
-colors = {"wind":"#3B6182",
-          "solar" :"#FFFF00",
-          "battery" : "#999999",
-          "battery_charge" : "#999999",
-          "battery_discharge" : "#999999",
-          "battery_power" : "#999999",
-          "battery_energy" : "#666666",
-          "hydrogen_turbine" : "red",
-          "hydrogen_electrolyser" : "cyan",
-          "hydrogen_energy" : "magenta",
-          "dispatchable1" : "orange",
-          "dispatchable2" : "lime",
-}
-
-
-years_available_start = 2011
-years_available_end = 2012
-
-float_upper_limit = 1e7
-
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
 
 def sanitise_assumptions(assumptions):
@@ -114,8 +95,8 @@ def sanitise_assumptions(assumptions):
             return "{} {} could not be converted to float".format(key,assumptions[key]), None
 
         if "lat" not in key and "lng" not in key:
-            if assumptions[key] < 0 or assumptions[key] > float_upper_limit:
-                return "{} {} was not in the valid range [0,{}]".format(key,assumptions[key],float_upper_limit), None
+            if assumptions[key] < 0 or assumptions[key] > config["float_upper_limit"]:
+                return "{} {} was not in the valid range [0,{}]".format(key,assumptions[key],config["float_upper_limit"]), None
 
     for key in ints:
         try:
@@ -129,7 +110,7 @@ def sanitise_assumptions(assumptions):
     if assumptions["frequency"] < 1 or assumptions["frequency"] > 8760:
         return "Frequency {} is not in the valid range [1,8760]".format(assumptions["frequency"]), None
 
-    if assumptions["year"] < years_available_start or assumptions["year"] > years_available_end:
+    if assumptions["year"] < config["years_available_start"] or assumptions["year"] > config["years_available_end"]:
         return "Year {} not in valid range".format(assumptions["year"]), None
 
     if assumptions["efuels_load"] == 0:
@@ -199,7 +180,7 @@ def find_results(results_hash):
         results[sign] = {}
         results[sign]["columns"] = cols
         results[sign]["data"] = results_series[cols].values.tolist()
-        results[sign]["color"] = [colors[c] for c in cols]
+        results[sign]["color"] = [config["colors"][c] for c in cols]
 
     balance = results_series[columns["positive"]].sum(axis=1) - results_series[columns["negative"]].sum(axis=1)
 
@@ -213,7 +194,8 @@ def find_results(results_hash):
 def root():
     return render_template('index.html',
                            defaults=defaults.T.to_dict(),
-                           defaults_t={year: defaults_t[year].T.to_dict() for year in defaults_t})
+                           defaults_t={year: defaults_t[year].T.to_dict() for year in defaults_t},
+                           colors=config["colors"])
 
 
 @app.route('/jobs', methods=['GET','POST'])

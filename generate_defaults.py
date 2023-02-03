@@ -1,19 +1,21 @@
-import pandas as pd, urllib, os
+import pandas as pd, urllib, os, yaml
 
 df = pd.read_csv("defaults-initial.csv",
                  index_col=[0,1],
                  na_filter=False)
 
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+
+years = config["tech_years"]
 
 
 #get technology data
-years = [2020,2030,2050]
-commit = "3a23cfc5808df00a2c039fd0e7ce8755a090d4df"
-
 
 for year in years:
     fn = f"costs_{year}.csv"
-    url = f"https://raw.githubusercontent.com/PyPSA/technology-data/{commit}/outputs/{fn}"
+    url = f"https://raw.githubusercontent.com/PyPSA/technology-data/{config['tech_data_commit']}/outputs/{fn}"
 
     if not os.path.isfile(fn):
         print("downloading",fn)
@@ -27,10 +29,9 @@ for year in years:
 
 
 #get traces efficiencies
-commit = "55e71c86d36869079b46377ce7ef16a46afa1d99"
 
 fn = "efficiencies.csv"
-url = f"https://raw.githubusercontent.com/euronion/trace/{commit}/data/{fn}"
+url = f"https://raw.githubusercontent.com/euronion/trace/{config['trace_commit']}/data/{fn}"
 if not os.path.isfile(fn):
     print("downloading",fn)
     urllib.request.urlretrieve(url,fn)

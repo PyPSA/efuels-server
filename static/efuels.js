@@ -21,24 +21,6 @@ var parseDate = d3.timeParse("%Y-%m-%d %H:%M:00");
 var formatDate = d3.timeFormat("%b %d %H:%M");
 
 
-
-var colors = {"wind":"#3B6182",
-              "solar" :"#FFFF00",
-              "battery" : "#999999",
-              "battery_power" : "#999999",
-              "battery_energy" : "#666666",
-              "hydrogen_turbine" : "red",
-              "hydrogen_electrolyser" : "cyan",
-              "hydrogen_energy" : "magenta",
-	      "dispatchable1" : "orange",
-	      "dispatchable2" : "lime",
-	      "hydrogen_submarine_pipeline" : "green",
-	      "load" : "black",
-	      "efuels_load" : "purple",
-	      "hydrogen_load" : "purple",
-             };
-
-
 // Centered on Frankfurt
 var map = L.map('mapid').setView([20,0], 2);
 
