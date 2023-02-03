@@ -149,6 +149,11 @@ section {
     padding: 5px;
 }
 
+#results_table th, td {
+    font-size: 85%;
+    padding: 5px;
+}
+
 .d3-tip {
     line-height: 1;
     padding: 6px;

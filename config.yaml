@@ -1,4 +1,7 @@
 
+
+current_version: 221202
+
 tech_years: [2020,2030,2050]
 
 tech_data_commit: "3a23cfc5808df00a2c039fd0e7ce8755a090d4df"
@@ -10,6 +13,8 @@ years_available_end: 2012
 
 float_upper_limit: 1.e+7
 
+preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen electrolyser"]
+
 colors:
   wind : "#3B6182"
   solar: "#FFFF00"
@@ -17,13 +22,22 @@ colors:
   battery_charge: "#999999"
   battery_discharge: "#999999"
   battery_power: "#999999"
+  battery inverter: "#999999"
   battery_energy: "#666666"
+  battery storage: "#666666"
   hydrogen_turbine: red
+  hydrogen turbine: red
   hydrogen_electrolyser: cyan
+  hydrogen electrolyser: cyan
   hydrogen_energy: magenta
+  hydrogen storage: magenta
   dispatchable1: orange
   dispatchable2: lime
   hydrogen_submarine_pipeline: green
+  hydrogen submarine pipeline: green
   load: black
   efuels_load: purple
   hydrogen_load: purple
+  methanol shipping: green
+  methanol synthesis: "#F08080"
+  methanol storage: black

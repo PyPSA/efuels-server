@@ -25,7 +25,7 @@ import pandas as pd
 from pyomo.environ import Constraint
 from rq import get_current_job
 
-import json, os, hashlib
+import json, os, hashlib, yaml
 
 #required to stop wierd failures
 import netCDF4
@@ -40,7 +40,8 @@ import numpy as np
 
 from shapely.geometry import box, Point, Polygon, MultiPolygon
 
-current_version = 221202
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
 octant_folder = "../cutouts/"
 
@@ -223,6 +224,7 @@ def run_optimisation(assumptions, pu):
     if assumptions["solar"]:
         network.add("Generator","solar",
                     bus="elec",
+                    carrier="solar",
                     p_max_pu = pu["solar"],
                     p_nom_extendable = True,
                     p_nom_min = assumptions["solar_min"],
@@ -233,6 +235,7 @@ def run_optimisation(assumptions, pu):
     if assumptions["wind"]:
         network.add("Generator","wind",
                     bus="elec",
+                    carrier="wind",
                     p_max_pu = pu["onwind"],
                     p_nom_extendable = True,
                     p_nom_min = assumptions["wind_min"],
@@ -258,6 +261,7 @@ def run_optimisation(assumptions, pu):
 
         network.add("Store","battery_energy",
                     bus = "battery",
+                    carrier="battery storage",
                     e_nom_extendable = True,
                     e_cyclic=True,
                     capital_cost=assumptions_df.at['battery_energy','fixed'])
@@ -265,6 +269,7 @@ def run_optimisation(assumptions, pu):
         network.add("Link","battery_power",
                     bus0 = "elec",
                     bus1 = "battery",
+                    carrier="battery inverter",
                     efficiency = assumptions["battery_power_efficiency_charging"]/100.,
                     p_nom_extendable = True,
                     capital_cost=assumptions_df.at['battery_power','fixed'])
@@ -272,6 +277,7 @@ def run_optimisation(assumptions, pu):
         network.add("Link","battery_discharge",
                     bus0 = "battery",
                     bus1 = "elec",
+                    carrier="battery discharger",
                     p_nom_extendable = True,
                     efficiency = assumptions["battery_power_efficiency_discharging"]/100.)
 
@@ -293,6 +299,7 @@ def run_optimisation(assumptions, pu):
 
     network.add("Link",
                 "hydrogen_electrolyser",
+                carrier="hydrogen electrolyser",
                 bus1="hydrogen",
                 bus0="elec",
                 p_nom_extendable=True,
@@ -302,6 +309,7 @@ def run_optimisation(assumptions, pu):
     #TODO remove for efuel
     network.add("Link",
                 "hydrogen_turbine",
+                carrier="hydrogen turbine",
                 bus0="hydrogen",
                 bus1="elec",
                 p_nom_extendable=True,
@@ -311,6 +319,7 @@ def run_optimisation(assumptions, pu):
     network.add("Store",
                 "hydrogen_energy",
                 bus="hydrogen",
+                carrier="hydrogen storage",
                 e_nom_extendable=True,
                 e_cyclic=True,
                 capital_cost=assumptions_df.at["hydrogen_energy","fixed"])
@@ -324,12 +333,14 @@ def run_optimisation(assumptions, pu):
 
         network.add("Load","hydrogen_load",
                     bus="destination",
+                    carrier="efuel",
                     p_set=assumptions["efuels_load"])
 
         network.add("Link",
                     "hydrogen_submarine_pipeline",
                     bus0="hydrogen",
                     bus1="destination",
+                    carrier="hydrogen submarine pipeline",
                     p_nom_extendable=True,
                     efficiency=(1-assumptions["hydrogen_submarine_pipeline_losses"]/100.)**(distance/1000.),
                     capital_cost=assumptions_df.at["hydrogen_submarine_pipeline","fixed"]/1e3*distance)  # have to divide by 1e3 because of multiplication by 1e3 to go kW to MW above
@@ -351,12 +362,14 @@ def run_optimisation(assumptions, pu):
         network.add("Store",
                     "methanol",
                     bus="methanol",
+                    carrier="methanol storage",
                     e_nom_extendable=True,
                     e_cyclic=True,
                     capital_cost=1.) #TODO put realistic cost here
 
         network.add("Load","methanol_load",
                     bus="destination",
+                    carrier="efuel",
                     p_set=assumptions["efuels_load"])
 
         network.add("Link",
@@ -364,6 +377,7 @@ def run_optimisation(assumptions, pu):
                     bus0="hydrogen",
                     bus1="methanol",
                     bus2="elec",
+                    carrier="methanol synthesis",
                     p_nom_extendable=True,
                     marginal_cost=assumptions["co2_cost"]*assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
                     efficiency=assumptions["methanolisation_efficiency"],
@@ -374,6 +388,7 @@ def run_optimisation(assumptions, pu):
                     "methanol shipping",
                     bus0="methanol",
                     bus1="destination",
+                    carrier="methanol shipping",
                     p_nom_extendable=True,
                     efficiency=0.999, # TODO find values here
                     capital_cost=1e3) # TODO find values here
@@ -432,139 +447,68 @@ def run_optimisation(assumptions, pu):
 
     for g in vre:
         if assumptions[g] and network.generators.p_nom_opt[g] > threshold:
-            results_overview[g+"_capacity"] = network.generators.p_nom_opt[g]
-            results_overview[g+"_cost"] = (network.generators.p_nom_opt*network.generators.capital_cost)[g]/year_weight + network.generators.at[g,"marginal_cost"]*network.generators_t.p[g].mean()
-            results_overview[g+"_available"] = network.generators.p_nom_opt[g]*network.generators_t.p_max_pu[g].mean()
-            results_overview[g+"_used"] = network.generators_t.p[g].mean()
-            results_overview[g+"_curtailment"] =  (results_overview[g+"_available"] - results_overview[g+"_used"])/results_overview[g+"_available"]
-            results_overview[g+"_cf_available"] = network.generators_t.p_max_pu[g].mean()
-            results_overview[g+"_cf_used"] = results_overview[g+"_used"]/network.generators.p_nom_opt[g]
-            results_overview[g+"_rmv"] = (network.buses_t.marginal_price["elec"]*network.generators_t.p[g]).sum()/network.generators_t.p[g].sum()/results_overview["average_price"]
             results_series[g] = network.generators_t.p[g]
         else:
-            results_overview[g+"_capacity"] = 0.
-            results_overview[g+"_cost"] = 0.
-            results_overview[g+"_curtailment"] = 0.
-            results_overview[g+"_used"] = 0.
-            results_overview[g+"_available"] = 0.
-            results_overview[g+"_cf_used"] = 0.
-            results_overview[g+"_cf_available"] = 0.
-            results_overview[g+"_rmv"] = 0.
             results_series[g] = 0.
 
     for i in range(1,3):
         g = "dispatchable" + str(i)
         if assumptions[g] and network.generators.p_nom_opt[g] > threshold:
-            results_overview[g+"_capacity"] = network.generators.p_nom_opt[g]
-            results_overview[g+"_cost"] = (network.generators.p_nom_opt*network.generators.capital_cost)[g]/year_weight
-            results_overview[g+"_marginal_cost"] = network.generators_t.p[g].mean()*network.generators.at[g,"marginal_cost"]
-            results_overview[g+"_used"] = network.generators_t.p[g].mean()
-            results_overview[g+"_cf_used"] = results_overview[g+"_used"]/network.generators.p_nom_opt[g]
-            results_overview[g+"_rmv"] = (network.buses_t.marginal_price["elec"]*network.generators_t.p[g]).sum()/network.generators_t.p[g].sum()/results_overview["average_price"]
             results_series[g] = network.generators_t.p[g]
         else:
-            results_overview[g+"_capacity"] = 0.
-            results_overview[g+"_cost"] = 0.
-            results_overview[g+"_marginal_cost"] = 0.
-            results_overview[g+"_used"] = 0.
-            results_overview[g+"_cf_used"] = 0.
-            results_overview[g+"_rmv"] = 0.
             results_series[g] = 0.
 
     if assumptions["battery"] and network.links.at["battery_power","p_nom_opt"] > threshold and network.stores.at["battery_energy","e_nom_opt"]:
-        results_overview["battery_power_capacity"] = network.links.at["battery_power","p_nom_opt"]
-        results_overview["battery_power_cost"] = network.links.at["battery_power","p_nom_opt"]*network.links.at["battery_power","capital_cost"]/year_weight
-        results_overview["battery_energy_capacity"] = network.stores.at["battery_energy","e_nom_opt"]
-        results_overview["battery_energy_cost"] = network.stores.at["battery_energy","e_nom_opt"]*network.stores.at["battery_energy","capital_cost"]/year_weight
-        results_overview["battery_power_used"] = network.links_t.p0["battery_discharge"].mean()
-        results_overview["battery_power_cf_used"] = results_overview["battery_power_used"]/network.links.at["battery_power","p_nom_opt"]
-        results_overview["battery_energy_used"] = network.stores_t.e["battery_energy"].mean()
-        results_overview["battery_energy_cf_used"] = results_overview["battery_energy_used"]/network.stores.at["battery_energy","e_nom_opt"]
-        results_overview["battery_power_rmv"] = (network.buses_t.marginal_price["elec"]*network.links_t.p0["battery_power"]).sum()/network.links_t.p0["battery_power"].sum()/results_overview["average_price"]
-        results_overview["battery_discharge_rmv"] = (network.buses_t.marginal_price["elec"]*network.links_t.p0["battery_discharge"]).sum()/network.links_t.p0["battery_discharge"].sum()/results_overview["average_price"]
         results_series["battery_discharge"] = -network.links_t.p1["battery_discharge"]
         results_series["battery_charge"] = network.links_t.p0["battery_power"]
         results_series["battery_energy"] = network.stores_t.e["battery_energy"]
     else:
-        results_overview["battery_power_capacity"] = 0.
-        results_overview["battery_power_cost"] = 0.
-        results_overview["battery_energy_capacity"] = 0.
-        results_overview["battery_energy_cost"] = 0.
-        results_overview["battery_power_used"] = 0.
-        results_overview["battery_power_cf_used"] = 0.
-        results_overview["battery_energy_used"] = 0.
-        results_overview["battery_energy_cf_used"] = 0.
-        results_overview["battery_power_rmv"] = 0.
-        results_overview["battery_discharge_rmv"] = 0.
         results_series["battery_discharge"] = 0.
         results_series["battery_charge"] = 0.
         results_series["battery_energy"] = 0.
 
     if assumptions["hydrogen"]:
-        results_overview["hydrogen_electrolyser_capacity"] = network.links.at["hydrogen_electrolyser","p_nom_opt"]
-        results_overview["hydrogen_electrolyser_cost"] = network.links.at["hydrogen_electrolyser","p_nom_opt"]*network.links.at["hydrogen_electrolyser","capital_cost"]/year_weight
-        results_overview["hydrogen_turbine_capacity"] = network.links.at["hydrogen_turbine","p_nom_opt"]*network.links.at["hydrogen_turbine","efficiency"]
-        results_overview["hydrogen_turbine_cost"] = network.links.at["hydrogen_turbine","p_nom_opt"]*network.links.at["hydrogen_turbine","capital_cost"]/year_weight
-        results_overview["hydrogen_energy_capacity"] = network.stores.at["hydrogen_energy","e_nom_opt"]
-        results_overview["hydrogen_energy_cost"] = network.stores.at["hydrogen_energy","e_nom_opt"]*network.stores.at["hydrogen_energy","capital_cost"]/year_weight
-        results_overview["hydrogen_electrolyser_used"] = network.links_t.p0["hydrogen_electrolyser"].mean()
-        if network.links.at["hydrogen_electrolyser","p_nom_opt"] > threshold:
-            results_overview["hydrogen_electrolyser_cf_used"] = results_overview["hydrogen_electrolyser_used"]/network.links.at["hydrogen_electrolyser","p_nom_opt"]
-            results_overview["hydrogen_electrolyser_rmv"] = (network.buses_t.marginal_price["elec"]*network.links_t.p0["hydrogen_electrolyser"]).sum()/network.links_t.p0["hydrogen_electrolyser"].sum()/results_overview["average_price"]
-        else:
-            results_overview["hydrogen_electrolyser_cf_used"] = 0.
-            results_overview["hydrogen_electrolyser_rmv"] = 0.
-        results_overview["hydrogen_turbine_used"] = network.links_t.p0["hydrogen_turbine"].mean()*network.links.at["hydrogen_turbine","efficiency"]
-        if network.links.at["hydrogen_turbine","p_nom_opt"] > threshold:
-            results_overview["hydrogen_turbine_cf_used"] = results_overview["hydrogen_turbine_used"]/results_overview["hydrogen_turbine_capacity"]
-            results_overview["hydrogen_turbine_rmv"] = (network.buses_t.marginal_price["elec"]*network.links_t.p0["hydrogen_turbine"]).sum()/network.links_t.p0["hydrogen_turbine"].sum()/results_overview["average_price"]
-        else:
-            results_overview["hydrogen_turbine_cf_used"] = 0.
-            results_overview["hydrogen_turbine_rmv"] = 0.
-        results_overview["hydrogen_energy_used"] = network.stores_t.e["hydrogen_energy"].mean()
-        if network.stores.at["hydrogen_energy","e_nom_opt"] > threshold:
-            results_overview["hydrogen_energy_cf_used"] = results_overview["hydrogen_energy_used"]/network.stores.at["hydrogen_energy","e_nom_opt"]
-        else:
-            results_overview["hydrogen_energy_cf_used"] = 0.
         results_series["hydrogen_turbine"] = -network.links_t.p1["hydrogen_turbine"]
         results_series["hydrogen_electrolyser"] = network.links_t.p0["hydrogen_electrolyser"]
         results_series["hydrogen_energy"] = network.stores_t.e["hydrogen_energy"]
         results_series["hydrogen_price"] = network.buses_t.marginal_price["hydrogen"]
     else:
-        results_overview["hydrogen_electrolyser_capacity"] = 0.
-        results_overview["hydrogen_electrolyser_cost"] = 0.
-        results_overview["hydrogen_turbine_capacity"] = 0.
-        results_overview["hydrogen_turbine_cost"] = 0.
-        results_overview["hydrogen_energy_capacity"] = 0.
-        results_overview["hydrogen_energy_cost"] = 0.
-        results_overview["hydrogen_electrolyser_used"] = 0.
-        results_overview["hydrogen_electrolyser_cf_used"] = 0.
-        results_overview["hydrogen_turbine_used"] = 0.
-        results_overview["hydrogen_turbine_cf_used"] = 0.
-        results_overview["hydrogen_energy_used"] = 0.
-        results_overview["hydrogen_energy_cf_used"] = 0.
-        results_overview["hydrogen_turbine_rmv"] = 0.
-        results_overview["hydrogen_electrolyser_rmv"] = 0.
         results_series["hydrogen_turbine"] = 0.
         results_series["hydrogen_electrolyser"] = 0.
         results_series["hydrogen_energy"] = 0.
         results_series["hydrogen_price"] = 0.
 
-    if assumptions["efuel"] == "hydrogen_submarine_pipeline":
-        results_overview["hydrogen_submarine_pipeline_capacity"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
-        results_overview["hydrogen_submarine_pipeline_cost"] = network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]*network.links.at["hydrogen_submarine_pipeline","capital_cost"]/year_weight
-        results_overview["hydrogen_submarine_pipeline_used"] = network.links_t.p0["hydrogen_submarine_pipeline"].mean()
-        results_overview["hydrogen_submarine_pipeline_cf_used"] = results_overview["hydrogen_submarine_pipeline_used"]/network.links.at["hydrogen_submarine_pipeline","p_nom_opt"]
-        results_overview["hydrogen_submarine_pipeline_rmv"] = 0.
-    else:
-        results_overview["hydrogen_submarine_pipeline_capacity"] = 0.
-        results_overview["hydrogen_submarine_pipeline_cost"] = 0.
-        results_overview["hydrogen_submarine_pipeline_used"] = 0.
-        results_overview["hydrogen_submarine_pipeline_cf_used"] = 0.
-        results_overview["hydrogen_submarine_pipeline_rmv"] = 0.
-
 
     results_overview["average_cost"] = sum([results_overview[s] for s in results_overview.index if s[-5:] == "_cost"])/assumptions["efuels_load"]
+
+
+    stats = network.statistics(aggregate_time="sum").groupby(level=1).sum()
+
+    stats["Total Expenditure"] = stats[["Capital Expenditure","Operational Expenditure"]].sum(axis=1)
+
+    #exclude components contributing less than 0.2 EUR/MWh
+    selection = stats.index[stats["Total Expenditure"]/assumptions["efuels_load"] > 0.2]
+    stats = stats.loc[selection]
+
+    for name,full_name in [("capex","Capital Expenditure"),("opex","Operational Expenditure"),("totex","Total Expenditure"),("capacity","Optimal Capacity")]:
+        results_overview = pd.concat((results_overview,
+                                      stats[full_name].rename(lambda x: x+ f" {name}")))
+
+    results_overview = pd.concat((results_overview,
+                                  (stats["Curtailment"]/(stats["Supply"]+stats["Curtailment"])).rename(lambda x: x+ " curtailment")))
+
+    results_overview = pd.concat((results_overview,
+                                  (stats["Total Expenditure"]/(stats["Supply"])).rename(lambda x: x+ " LCOE")))
+
+    stats_mean = network.statistics(aggregate_time="mean").groupby(level=1).sum().loc[selection]
+    results_overview = pd.concat((results_overview,
+                                  stats_mean["Capacity Factor"].rename(lambda x: x+ " cf used")))
+    results_overview = pd.concat((results_overview,
+                                  ((stats_mean["Supply"]+stats_mean["Curtailment"])/stats_mean["Optimal Capacity"]).rename(lambda x: x+ " cf available")))
+
+
+    fn = 'networks/{}.nc'.format(assumptions['results_hex'])
+    network.export_to_netcdf(fn)
 
     return results_overview, results_series, None
 
@@ -577,8 +521,8 @@ def solve(assumptions):
     job.meta['status'] = "Reading in data"
     job.save_meta()
 
-    if assumptions["version"] != current_version:
-        return error(f'Outdated version {assumptions["version"]} can no longer be calculated; please use version {current_version} instead', jobid)
+    if assumptions["version"] != config["current_version"]:
+        return error(f'Outdated version {assumptions["version"]} can no longer be calculated; please use version {config["current_version"]} instead', jobid)
 
     pu, error_msg = get_weather(assumptions["source_lat"], assumptions["source_lng"], assumptions["year"], assumptions['cf_exponent'])
     if error_msg is not None:
@@ -588,9 +532,6 @@ def solve(assumptions):
     #for test data stored monthly, make hourly again
     snapshots = pd.date_range("{}-01-01".format(assumptions["year"]),"{}-12-31 23:00".format(assumptions["year"]),freq="H")
     pu = pu.reindex(snapshots,method="nearest")
-
-    if assumptions["version"] != current_version:
-        return error(f'Outdated version {assumptions["version"]} can no longer be calculated; please use version {current_version} instead', jobid)
 
     series_csv = 'data/results-series-{}.csv'.format(assumptions['results_hex'])
     overview_csv = 'data/results-overview-{}.csv'.format(assumptions['results_hex'])

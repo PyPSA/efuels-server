@@ -166,9 +166,19 @@ def find_results(results_hash):
             results_overview[g+"_rmv"] = 0.
             results_series[g] = 0.
 
+    #determine nice ordering of components
+    current_order = results_overview.index[results_overview.index.str[-6:] == " totex"].str[:-6]
+    preferred_order = pd.Index(config["preferred order"])
+    new_order = preferred_order.intersection(current_order).append(current_order.difference(preferred_order))
+
+    print("old:",current_order)
+    print("new:",new_order)
+
     results = dict(results_overview)
 
     results["assumptions"] = assumptions
+
+    results["order"] = list(new_order)
 
     results["snapshots"] = [str(s) for s in results_series.index]
 

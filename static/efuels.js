@@ -250,24 +250,13 @@ function clear_results(){
     document.getElementById("results_assumptions").innerHTML="";
     document.getElementById("average_cost").innerHTML="";
     document.getElementById("distance").innerHTML="";
-    for (let i = 0; i < assets.length; i++){
-	document.getElementById(assets[i] + "_capacity").innerHTML="";
-	document.getElementById(assets[i] + "_cf_used").innerHTML="";
-	if(!assets[i].includes("energy")){
-	    document.getElementById(assets[i] + "_rmv").innerHTML="";
-	};
+
+    var table = document.getElementById('results_table');
+    var rowCount = table.rows.length;
+    for (let i=rowCount-1; i>0; i--){
+	table.deleteRow(i);
     };
-    document.getElementById("battery_discharge_rmv").innerHTML="";
-    for (let i = 0; i < vre.length; i++){
-	document.getElementById(vre[i] + "_cf_available").innerHTML="";
-	document.getElementById(vre[i] + "_curtailment").innerHTML="";
-    };
-    for (let i = 0; i < electricity.length; i++){
-	document.getElementById(electricity[i] + "_lcoe").innerHTML="";
-    };
-    for (let i = 0; i < storage.length; i++){
-	document.getElementById(storage[i] + "_lcos").innerHTML="";
-    };
+
     d3.select("#power").selectAll("g").remove();
     d3.select("#average_cost_graph").selectAll("g").remove();
     d3.select("#power_capacity_bar").selectAll("g").remove();
@@ -282,6 +271,44 @@ function clear_results(){
 
 
 
+function fill_results_table(){
+    var table = document.getElementById('results_table');
+
+
+    for(let i=0; i<results["order"].length; i++){
+	let asset = results["order"][i];
+	let row = table.insertRow(table.rows.length);
+	let cap = results[asset + " capacity"].toFixed(1) + " MW";
+	if (asset.includes("storage")) cap += "h";
+	let cfUsed = "";
+	if (["wind","solar"].includes(asset)) cfUsed = (100*results[asset + " cf used"]).toFixed(1);
+	let cfAvailable = "";
+	if (["wind","solar"].includes(asset)) cfAvailable = (100*results[asset + " cf available"]).toFixed(1);
+	let curtailment = "";
+	if (["wind","solar"].includes(asset)) curtailment = (100*results[asset + " curtailment"]).toFixed(1);
+	let lcoe = "";
+	if (["wind","solar"].includes(asset)) lcoe = results[asset + " LCOE"].toFixed(1);
+
+	let content = [asset,
+		       cap,
+		       cfUsed,
+		       cfAvailable,
+		       curtailment,
+		       lcoe];
+
+	for(let j=0; j<content.length;j++){
+	    let cell = row.insertCell(j);
+	    cell.innerHTML = content[j];
+	    if(j == 0){
+		cell.className="tab_asset";
+	    } else {
+		cell.className="tab_data";
+	    };
+	};
+    };
+};
+
+
 function display_results(){
 
     $('#collapseResults').addClass("show");
@@ -290,45 +317,12 @@ function display_results(){
     document.getElementById("average_cost").innerHTML="Average price [EUR/MWh]: " + results["average_efuel_price"].toFixed(1);
     document.getElementById("distance").innerHTML="Distance as crow flies [km]: " + results["distance"].toFixed(0);
 
-    for (let i = 0; i < assets.length; i++){
-	document.getElementById(assets[i] + "_capacity").innerHTML=Math.abs(results[assets[i] + "_capacity"].toFixed(1));
-	document.getElementById(assets[i] + "_cf_used").innerHTML=Math.abs((results[assets[i] + "_cf_used"]*100)).toFixed(1);
-	if(!assets[i].includes("energy")){
-	    document.getElementById(assets[i] + "_rmv").innerHTML=Math.abs((results[assets[i] + "_rmv"]*100)).toFixed(1);
-	};
-    };
-    document.getElementById("battery_discharge_rmv").innerHTML=Math.abs((results["battery_discharge_rmv"]*100)).toFixed(1);
-    for (let i = 0; i < vre.length; i++){
-	document.getElementById(vre[i] + "_cf_available").innerHTML=Math.abs((results[vre[i] + "_cf_available"]*100)).toFixed(1);
-	document.getElementById(vre[i] + "_curtailment").innerHTML=Math.abs((results[vre[i] + "_curtailment"]*100)).toFixed(1);
-    };
-
-    for (let i = 0; i < electricity.length; i++){
-	if(results[electricity[i] + "_capacity"] > 0.1){
-	    var cost = results[electricity[i]+"_cost"];
-	    if(results.hasOwnProperty(electricity[i]+"_marginal_cost")){
-		cost += results[electricity[i]+"_marginal_cost"];
-	    };
-	    document.getElementById(electricity[i] + "_lcoe").innerHTML=Math.abs(cost/(results[electricity[i] + "_capacity"]*results[electricity[i] + "_cf_used"])).toFixed(1);
-	};
-    };
-
-    // all per hour
-    if (results["battery_power_capacity"] > 0.1){
-	let battery_fedin = results["battery_power_capacity"]*results["battery_power_cf_used"];
-	let battery_charged = battery_fedin/0.95**2;
-	document.getElementById("battery_lcos").innerHTML=Math.abs((results["battery_power_cost"]+results["battery_energy_cost"]+battery_charged*results["battery_power_rmv"]*results["average_price"])/battery_fedin).toFixed(1);
-    };
-    if (results["hydrogen_turbine_capacity"] > 0.1){
-	let hydrogen_fedin = results["hydrogen_turbine_capacity"]*results["hydrogen_turbine_cf_used"];
-	let hydrogen_charged = hydrogen_fedin/(results["assumptions"]["hydrogen_turbine_efficiency"]/100)/(results["assumptions"]["hydrogen_electrolyser_efficiency"]/100);
-	document.getElementById("hydrogen_lcos").innerHTML=Math.abs((results["hydrogen_turbine_cost"]+results["hydrogen_energy_cost"]+results["hydrogen_electrolyser_cost"]+hydrogen_charged*results["hydrogen_electrolyser_rmv"]*results["average_price"])/hydrogen_fedin).toFixed(1);
-    };
 
     for(var j=0; j < results.snapshots.length; j++) {
 	results.snapshots[j] = parseDate(results.snapshots[j]);
     };
 
+    fill_results_table();
     draw_power_graph();
     draw_power_capacity_bar();
     draw_energy_capacity_bar();
@@ -575,35 +569,14 @@ function draw_cost_stack(){
     let color = [];
     let labels = [];
 
-    for(let i=0; i < assets.length; i++){
-	let cost = results[assets[i]+"_cost"];
-	if(results.hasOwnProperty(assets[i]+"_marginal_cost")){
-	    cost += results[assets[i]+"_marginal_cost"];
-	};
-	data.push(cost/results["assumptions"]["efuels_load"]);
-	color.push(colors[assets[i]]);
-	labels.push(assets[i].replaceAll("_"," "));
+    for(let i=0; i<results["order"].length; i++){
+	let asset = results["order"][i];
+	data.push(results[asset + " totex"]/results["assumptions"]["efuels_load"]/8760.);
+	color.push(colors[asset]);
+	labels.push(asset);
     };
 
     draw_stack(data, labels, color, "Breakdown of avg. sys. cost [EUR/MWh]", "#average_cost_graph", " EUR/MWh");
-};
-
-
-function draw_power_capacity_stack(){
-
-    let data = [];
-    let color = [];
-    let labels = [];
-
-    for(let i=0; i < assets.length; i++){
-	if(!assets[i].includes("energy")){
-	    data.push(results[assets[i]+"_capacity"]);
-	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replaceAll("_"," "));
-	};
-    };
-
-    draw_stack(data, labels, color, "Power capacity [MW]", "#power_capacity_graph", " MW");
 };
 
 
@@ -617,36 +590,18 @@ function draw_power_capacity_bar(){
     color.push(colors["efuels_load"]);
     labels.push("efuels demand");
 
-    for(let i=0; i < assets.length; i++){
-	if(!assets[i].includes("energy") && results[assets[i]+"_capacity"] >= 0.1){
-	    data.push(results[assets[i]+"_capacity"]);
-	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replaceAll("_"," ").replace("hydrogen","H2"));
+
+    for(let i=0; i<results["order"].length; i++){
+	let asset = results["order"][i];
+	if(!asset.includes("storage")){
+	    data.push(results[asset + " capacity"]);
+	    color.push(colors[asset]);
+	    labels.push(asset.replace("hydrogen","H2"));
 	};
     };
 
     draw_bar(data, labels, color, "Power capacity [MW]", "#power_capacity_bar", " MW");
 };
-
-
-
-function draw_energy_capacity_stack(){
-
-    let data = [];
-    let color = [];
-    let labels = [];
-
-    for(let i=0; i < assets.length; i++){
-	if(assets[i].includes("energy")){
-	    data.push(results[assets[i]+"_capacity"]/1000.);
-	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replaceAll("_"," "));
-	};
-    };
-
-    draw_stack(data, labels, color, "Energy storage capacity [GWh]", "#energy_capacity_graph", " GWh");
-};
-
 
 
 function draw_energy_capacity_bar(){
@@ -659,36 +614,17 @@ function draw_energy_capacity_bar(){
     color.push(colors["efuels_load"]);
     labels.push("24h efuels demand");
 
-    for(let i=0; i < assets.length; i++){
-	if(assets[i].includes("energy") && results[assets[i]+"_capacity"] >= 10){
-	    data.push(results[assets[i]+"_capacity"]/1000.);
-	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replace("energy","storage").replaceAll("_"," ").replace("hydrogen","H2"));
+    for(let i=0; i<results["order"].length; i++){
+	let asset = results["order"][i];
+	if(asset.includes("storage")){
+	    data.push(results[asset + " capacity"]/1e3);
+	    color.push(colors[asset]);
+	    labels.push(asset.replace("hydrogen","H2"));
 	};
     };
 
     draw_bar(data, labels, color, "Energy capacity [GWh]", "#energy_capacity_bar", " GWh");
 };
-
-
-
-function draw_energy_stack(){
-
-    let data = [];
-    let color = [];
-    let labels = [];
-
-    for(let i=0; i < assets.length; i++){
-	if(!assets[i].includes("energy")){
-	    data.push(results[assets[i]+"_used"]);
-	    color.push(colors[assets[i]]);
-	    labels.push(assets[i].replaceAll("_"," "));
-	};
-    };
-
-    draw_stack(data, labels, color, "Average power dispatch [MW]", "#energy_graph", " MW");
-};
-
 
 
 function draw_stack(data, labels, color, ylabel, svgName, suffix){
