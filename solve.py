@@ -43,7 +43,9 @@ from shapely.geometry import box, Point, Polygon, MultiPolygon
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
-octant_folder = "../cutouts/"
+
+threshold = config["results_threshold"]
+
 
 #based on mean deviation against renewables.ninja capacity factors for European countries for 2011-2013
 solar_correction_factor = 0.926328
@@ -109,8 +111,6 @@ assumptions_df = pd.DataFrame(columns=["FOM","fixed","discount rate","lifetime",
                                      "battery_power","battery_energy","dispatchable1","dispatchable2","hydrogen_submarine_pipeline"],
                               dtype=float)
 
-threshold = 0.1
-
 
 
 def error(message, jobid):
@@ -169,7 +169,7 @@ def get_weather(lat, lon, year, cf_exponent):
     pu = {}
 
     for tech in ["solar", "onwind"]:
-        o = xr.open_dataarray("{}octant{}-{}-{}.nc".format(octant_folder,octant,year,tech))
+        o = xr.open_dataarray("{}octant{}-{}-{}.nc".format(config["octant_folder"],octant,year,tech))
         pu[tech] = o.loc[position,:].to_pandas()
 
     pu = pd.DataFrame(pu)
@@ -180,6 +180,46 @@ def get_weather(lat, lon, year, cf_exponent):
     return pu, None
 
 
+def export_time_series(n):
+
+    bus_carriers = n.buses.carrier.unique()
+
+    all_carrier_dict = {}
+
+    for i in bus_carriers:
+        bus_map = (n.buses.carrier == i)
+        bus_map.at[""] = False
+
+        carrier_df = pd.DataFrame(index=n.snapshots,
+                                  dtype=float)
+
+        for c in n.iterate_components(n.one_port_components):
+
+            items = c.df.index[c.df.bus.map(bus_map).fillna(False)]
+
+            if len(items) == 0:
+                continue
+
+            s = c.pnl.p[items].multiply(c.df.loc[items,'sign'],axis=1).groupby(c.df.loc[items,'carrier'],axis=1).sum()
+            carrier_df = pd.concat([carrier_df,s],axis=1)
+
+        for c in n.iterate_components(n.branch_components):
+
+            for end in [col[3:] for col in c.df.columns if col[:3] == "bus"]:
+
+                items = c.df.index[c.df["bus" + str(end)].map(bus_map,na_action=False)]
+
+                if len(items) == 0:
+                    continue
+
+                s = (-1)*c.pnl["p"+end][items].groupby(c.df.loc[items,'carrier'],axis=1).sum()
+                carrier_df = pd.concat([carrier_df,s],axis=1)
+
+        all_carrier_dict[i] = carrier_df
+
+    all_carrier_df = pd.concat(all_carrier_dict, axis=1)
+
+    return all_carrier_df
 
 
 
@@ -328,7 +368,7 @@ def run_optimisation(assumptions, pu):
 
         network.add("Bus",
                     "destination",
-                    carrier="hydrogen")
+                    carrier="efuel")
 
 
         network.add("Load","hydrogen_load",
@@ -437,46 +477,17 @@ def run_optimisation(assumptions, pu):
     if assumptions["hydrogen"]:
         results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
 
-    year_weight = network.snapshot_weightings.objective.sum()
 
-    vre = ["wind","solar"]
+    results_series = export_time_series(network)
 
-    results_series = pd.DataFrame(index=network.snapshots,columns=vre+["battery_discharge","hydrogen_turbine","battery_charge","hydrogen_electrolyser","dispatchable1","dispatchable2","electricity_price","hydrogen_price","battery_energy","hydrogen_energy"],dtype=float)
+    absmax = results_series.abs().max()
 
-    results_series["electricity_price"] = network.buses_t.marginal_price["elec"]
+    to_drop = absmax.index[absmax < threshold*assumptions["efuels_load"]]
+    results_series.drop(to_drop,
+                        axis=1,
+                        inplace=True)
 
-    for g in vre:
-        if assumptions[g] and network.generators.p_nom_opt[g] > threshold:
-            results_series[g] = network.generators_t.p[g]
-        else:
-            results_series[g] = 0.
-
-    for i in range(1,3):
-        g = "dispatchable" + str(i)
-        if assumptions[g] and network.generators.p_nom_opt[g] > threshold:
-            results_series[g] = network.generators_t.p[g]
-        else:
-            results_series[g] = 0.
-
-    if assumptions["battery"] and network.links.at["battery_power","p_nom_opt"] > threshold and network.stores.at["battery_energy","e_nom_opt"]:
-        results_series["battery_discharge"] = -network.links_t.p1["battery_discharge"]
-        results_series["battery_charge"] = network.links_t.p0["battery_power"]
-        results_series["battery_energy"] = network.stores_t.e["battery_energy"]
-    else:
-        results_series["battery_discharge"] = 0.
-        results_series["battery_charge"] = 0.
-        results_series["battery_energy"] = 0.
-
-    if assumptions["hydrogen"]:
-        results_series["hydrogen_turbine"] = -network.links_t.p1["hydrogen_turbine"]
-        results_series["hydrogen_electrolyser"] = network.links_t.p0["hydrogen_electrolyser"]
-        results_series["hydrogen_energy"] = network.stores_t.e["hydrogen_energy"]
-        results_series["hydrogen_price"] = network.buses_t.marginal_price["hydrogen"]
-    else:
-        results_series["hydrogen_turbine"] = 0.
-        results_series["hydrogen_electrolyser"] = 0.
-        results_series["hydrogen_energy"] = 0.
-        results_series["hydrogen_price"] = 0.
+    #results_series["electricity_price"] = network.buses_t.marginal_price["elec"]
 
 
     results_overview["average_cost"] = sum([results_overview[s] for s in results_overview.index if s[-5:] == "_cost"])/assumptions["efuels_load"]
@@ -486,8 +497,8 @@ def run_optimisation(assumptions, pu):
 
     stats["Total Expenditure"] = stats[["Capital Expenditure","Operational Expenditure"]].sum(axis=1)
 
-    #exclude components contributing less than 0.2 EUR/MWh
-    selection = stats.index[stats["Total Expenditure"]/assumptions["efuels_load"] > 0.2]
+    #exclude components contributing less than 0.1 EUR/MWh
+    selection = stats.index[stats["Total Expenditure"]/assumptions["efuels_load"] > 100*threshold]
     stats = stats.loc[selection]
 
     for name,full_name in [("capex","Capital Expenditure"),("opex","Operational Expenditure"),("totex","Total Expenditure"),("capacity","Optimal Capacity")]:
@@ -533,10 +544,10 @@ def solve(assumptions):
     snapshots = pd.date_range("{}-01-01".format(assumptions["year"]),"{}-12-31 23:00".format(assumptions["year"]),freq="H")
     pu = pu.reindex(snapshots,method="nearest")
 
-    series_csv = 'data/results-series-{}.csv'.format(assumptions['results_hex'])
+    carrier_series_csv = 'data/results-carrier-series-{}.csv'.format(assumptions['results_hex'])
     overview_csv = 'data/results-overview-{}.csv'.format(assumptions['results_hex'])
 
-    print("Calculating results from scratch, saving as:", series_csv, overview_csv)
+    print("Calculating results from scratch, saving as:", overview_csv, carrier_series_csv)
     job.meta['status'] = "Solving optimisation problem"
     job.save_meta()
     results_overview, results_series, error_msg = run_optimisation(assumptions, pu)
@@ -544,8 +555,11 @@ def solve(assumptions):
         return error(error_msg, jobid)
     results_series = results_series.round(1)
 
-    results_series.to_csv(series_csv)
+    results_series.to_csv(carrier_series_csv)
     results_overview.to_csv(overview_csv,header=False)
+
+    results_series.to_csv(carrier_series_csv)
+
     with open('data/results-assumptions-{}.json'.format(assumptions['results_hex']), 'w') as fp:
         json.dump(assumptions,fp)
 

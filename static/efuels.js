@@ -257,10 +257,17 @@ function clear_results(){
 	table.deleteRow(i);
     };
 
-    d3.select("#power").selectAll("g").remove();
     d3.select("#average_cost_graph").selectAll("g").remove();
     d3.select("#power_capacity_bar").selectAll("g").remove();
     d3.select("#energy_capacity_bar").selectAll("g").remove();
+
+
+    let balances_selection = ["AC","hydrogen"];
+    for (var k=0; k < balances_selection.length; k++){
+	let balance = balances_selection[k];
+	d3.select("#" + balance + "_power_graph").selectAll("g").remove();
+	d3.select("#" + balance + "_power_graph_legend").selectAll("g").remove();
+    };
 
     document.getElementById("results-overview-download").innerHTML = '';
     document.getElementById("results-series-download").innerHTML = '';
@@ -323,10 +330,18 @@ function display_results(){
     };
 
     fill_results_table();
-    draw_power_graph();
     draw_power_capacity_bar();
     draw_energy_capacity_bar();
     draw_cost_stack();
+
+    let balances_selection = ["AC","hydrogen"];
+    for (var k=0; k < balances_selection.length; k++){
+	let balance = balances_selection[k];
+	console.log("Drawing power time series for", balance);
+	let series = results["carrier_series"][balance];
+	draw_series(series, results.snapshots, balance);
+    };
+
 
     document.getElementById("results-overview-download").innerHTML = '<a href="data/results-overview-' + results.assumptions.results_hex + '.csv">Download Comma-Separated-Variable (CSV) file of results overview</a> ' + licenceText;
     document.getElementById("results-series-download").innerHTML = '<a href="data/results-series-' + results.assumptions.results_hex + '.csv">Download Comma-Separated-Variable (CSV) file of results time series</a> ' + licenceText;
@@ -335,15 +350,14 @@ function display_results(){
 
 
 
+// taken from pypsa-server and renamed results -> series to avoid name clash
+function draw_series(series, snapshots, balance){
 
-function draw_power_graph(){
-
-    let snapshots = results["snapshots"];
-    let selection = [...Array(results["snapshots"].length).keys()];
+    let selection = [...Array(snapshots.length).keys()];
 
     // Inspired by https://bl.ocks.org/mbostock/3885211
 
-    var svgGraph = d3.select("#power"),
+    var svgGraph = d3.select("#" + balance + "_power_graph"),
 	margin = {top: 20, right: 20, bottom: 110, left: 50},
 	marginContext = {top: 430, right: 20, bottom: 30, left: 50},
 	width = svgGraph.attr("width") - margin.left - margin.right,
@@ -381,29 +395,29 @@ function draw_power_graph(){
 
     var previous = new Array(selection.length).fill(0);
 
-    for (var j = 0; j < results["positive"].columns.length; j++){
+    for (var j = 0; j < series["positive"].columns.length; j++){
 	var item = [];
 	for (var k = 0; k < selection.length; k++){
-	    item.push([previous[k], previous[k] + results["positive"]["data"][selection[k]][j]]);
-	    previous[k] = previous[k] + results["positive"]["data"][selection[k]][j];
+	    item.push([previous[k], previous[k] + series["positive"]["data"][selection[k]][j]]);
+	    previous[k] = previous[k] + series["positive"]["data"][selection[k]][j];
 	    }
 	data.push(item);
     }
     var previous = new Array(selection.length).fill(0);
 
-    for (var j = 0; j < results["negative"].columns.length; j++){
+    for (var j = 0; j < series["negative"].columns.length; j++){
 	var item = [];
 	for (var k = 0; k < selection.length; k++){
-	    item.push([-previous[k] - results["negative"]["data"][selection[k]][j],-previous[k]]);
-	    previous[k] = previous[k] + results["negative"]["data"][selection[k]][j];
+	    item.push([-previous[k] - series["negative"]["data"][selection[k]][j],-previous[k]]);
+	    previous[k] = previous[k] + series["negative"]["data"][selection[k]][j];
 	    }
 	data.push(item);
     }
 
     var ymin = 0, ymax = 0;
     for (var k = 0; k < selection.length; k++){
-	if(data[results["positive"].columns.length-1][k][1] > ymax){ ymax = data[results["positive"].columns.length-1][k][1];};
-	if(data[results["positive"].columns.length+results["negative"].columns.length-1][k][0] < ymin){ ymin = data[results["positive"].columns.length+results["negative"].columns.length-1][k][0];};
+	if(data[series["positive"].columns.length-1][k][1] > ymax){ ymax = data[series["positive"].columns.length-1][k][1];};
+	if(data[series["positive"].columns.length+series["negative"].columns.length-1][k][0] < ymin){ ymin = data[series["positive"].columns.length+series["negative"].columns.length-1][k][0];};
     };
 
     y.domain([ymin,ymax]);
@@ -443,23 +457,8 @@ function draw_power_graph(){
 
     layer.append("path")
         .attr("class", "area")
-        .style("fill", function(d, i) {if(i < results["positive"].color.length){ return results["positive"].color[i];} else{return results["negative"].color[i-results["positive"].color.length];} })
+        .style("fill", function(d, i) {if(i < series["positive"].color.length){ return series["positive"].color[i];} else{return series["negative"].color[i-series["positive"].color.length];} })
         .attr("d", area);
-
-    // add demand curve
-
-    var lineFunction = d3.line()
-	.x(function(d) { return x(d[0]) })
-	.y(function(d) { return y(d[1]) })
-	.curve(d3.curveLinear);
-
-    var demand = focus.append("g");
-
-    //demand.append("path")
-     //   .attr("d", lineFunction([[snapshots[0],assumptions["load"]],[snapshots[snapshots.length-1],assumptions["load"]]]))
-     //   .attr("id", "indicator")
-     //   .attr("stroke", "#000000")
-     //   .attr("stroke-width", 3);
 
 
     focus.append("g")
@@ -481,7 +480,7 @@ function draw_power_graph(){
         .attr("x",0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
-        .text("Power [MW]");
+        .text(series["label"] + " [" + series["units"] + "]");
 
 
     var layerContext = context.selectAll(".layerContext")
@@ -491,7 +490,7 @@ function draw_power_graph(){
 
     layerContext.append("path")
         .attr("class", "area")
-        .style("fill", function(d, i) {if(i < results["positive"].color.length){ return results["positive"].color[i];} else{return results["negative"].color[i-results["positive"].color.length];} })
+        .style("fill", function(d, i) {if(i < series["positive"].color.length){ return series["positive"].color[i];} else{return series["negative"].color[i-series["positive"].color.length];} })
         .attr("d", areaContext);
 
     context.append("g")
@@ -544,7 +543,7 @@ function draw_power_graph(){
 				      .scale(width / (s[1] - s[0]))
 				      .translate(-s[0], 0));
 	handle.attr("transform", function(d, i) { return "translate(" + [ s[i], - heightContext / 4] + ")"; });
-    }
+    };
 
     function zoomed() {
 	if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
@@ -555,11 +554,55 @@ function draw_power_graph(){
 	var newRange = x.range().map(t.invertX, t);
 	context.select(".brush").call(brush.move, newRange);
 	handle.attr("transform", function(d, i) { return "translate(" + [ newRange[i], - heightContext / 4] + ")"; });
-    }
+    };
 
+
+    //Legend
+
+    //slice to make copy
+    let labels = series["positive"]["columns"].slice().reverse().concat(series["negative"]["columns"]);
+    let color = series["positive"]["color"].slice().reverse().concat(series["negative"]["color"]);
+
+    //remove duplicate labels
+    console.log(balance, labels);
+    let toRemove = [];
+    for(var i=0; i < labels.length; i++){
+	let label = labels[i];
+	if(i != labels.indexOf(label)) {
+	    console.log(i, label, labels.indexOf(label));
+	    toRemove.push(i);
+	};
+    };
+
+    console.log("need to remove",toRemove);
+
+    for(var i=0; i < toRemove.length; i++){
+	// have to subtract i because array shifts to left each time
+	labels.splice(toRemove[i]-i, 1);
+	color.splice(toRemove[i]-i, 1);
+    };
+
+    let legendSVG = d3.select("#" + balance + "_power_graph_legend");
+
+    let legend = legendSVG.selectAll("g")
+	.data(labels)
+	.enter()
+	.append("g")
+	.attr("transform", function (d, i) {  return "translate(0," + (5 + i * 15) + ")" });
+
+    legend.append("rect")
+	.attr("x",0)
+	.attr("y",0)
+	.attr("width", 10)
+	.attr("height", 10)
+	.style("fill", function (d, i) { return color[i] });
+
+    legend.append("text")
+	.attr("x",20)
+	.attr("y",10)
+	.text(function (d, i) { return d});
 
 };
-
 
 
 

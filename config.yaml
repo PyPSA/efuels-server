@@ -1,5 +1,8 @@
 
 
+octant_folder: "../cutouts/"
+
+
 current_version: 221202
 
 tech_years: [2020,2030,2050]
@@ -12,6 +15,8 @@ years_available_start: 2011
 years_available_end: 2012
 
 float_upper_limit: 1.e+7
+
+results_threshold: 1.e-3
 
 preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen electrolyser"]
 

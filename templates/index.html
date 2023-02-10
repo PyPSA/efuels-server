@@ -216,8 +216,11 @@
                     </div>
                     <div id="graph">
 		      <br />
-		      <p><b>Dispatch over a year to meet the constant demand (electricity demand is the black line; you can zoom and pan to see the details; negative values correspond to storage consuming electricity):</b></p>
-                      <svg width="1100" height="500" id="power"></svg>
+		      {% for balance in ["AC","hydrogen"] %}
+		      <p><b>{{balance}} supply and demand time series (you can zoom and pan to see the details)</b></p>
+		      <svg width="900" height="500" id="{{balance}}_power_graph"></svg>
+		      <svg width="180" height="400" id="{{balance}}_power_graph_legend"></svg>
+		      {% endfor %}
                     </div>
                   </div>
                   <div id="results_summary">

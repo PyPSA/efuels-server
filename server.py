@@ -133,38 +133,27 @@ def compute_results_hash(assumptions):
 def find_results(results_hash):
 
     assumptions_json = f'data/results-assumptions-{results_hash}.json'
-    series_csv = f'data/results-series-{results_hash}.csv'
     overview_csv = f'data/results-overview-{results_hash}.csv'
+    carrier_series_csv = f'data/results-carrier-series-{results_hash}.csv'
 
     if not os.path.isfile(assumptions_json):
         return "Assumptions file is missing", {}
-    if not os.path.isfile(series_csv):
-        return "Series results file is missing", {}
     if not os.path.isfile(overview_csv):
         return "Overview results file is missing", {}
+    if not os.path.isfile(carrier_series_csv):
+        return "Carrier series results file is missing", {}
 
-    print("Using preexisting results files:", assumptions_json, series_csv, overview_csv)
+    print("Using preexisting results files:", assumptions_json, overview_csv, carrier_series_csv)
     with(open(assumptions_json, 'r')) as f:
         assumptions = json.load(f)
     results_overview = pd.read_csv(overview_csv,
                                    index_col=0,
                                    header=None,
                                    squeeze=True)
-    results_series = pd.read_csv(series_csv,
+    carrier_series = pd.read_csv(carrier_series_csv,
                                  index_col=0,
-                                 parse_dates=True)
-
-    #fill in old results before dispatchable
-    for i in range(1,3):
-        g = "dispatchable" + str(i)
-        if not assumptions[g]:
-            results_overview[g+"_capacity"] = 0.
-            results_overview[g+"_cost"] = 0.
-            results_overview[g+"_marginal_cost"] = 0.
-            results_overview[g+"_used"] = 0.
-            results_overview[g+"_cf_used"] = 0.
-            results_overview[g+"_rmv"] = 0.
-            results_series[g] = 0.
+                                 header=[0,1],
+                                 parse_dates=True).round(1)
 
     #determine nice ordering of components
     current_order = results_overview.index[results_overview.index.str[-6:] == " totex"].str[:-6]
@@ -180,21 +169,51 @@ def find_results(results_hash):
 
     results["order"] = list(new_order)
 
-    results["snapshots"] = [str(s) for s in results_series.index]
+    results["snapshots"] = [str(s) for s in carrier_series.index]
 
-    columns = {"positive" : ["wind","solar","battery_discharge","hydrogen_turbine","dispatchable1","dispatchable2"],
-               "negative" : ["battery_charge","hydrogen_electrolyser"]}
+    results["carrier_series"] = {}
 
+    for carrier in ["AC","hydrogen"]:
 
-    for sign, cols in columns.items():
-        results[sign] = {}
-        results[sign]["columns"] = cols
-        results[sign]["data"] = results_series[cols].values.tolist()
-        results[sign]["color"] = [config["colors"][c] for c in cols]
+        print("processing series for energy carrier", carrier)
 
-    balance = results_series[columns["positive"]].sum(axis=1) - results_series[columns["negative"]].sum(axis=1)
+        #group technologies
+        df =  carrier_series[carrier]
 
-    print(balance.describe())
+        #sort into positive and negative
+        separated = {}
+        separated["positive"] = pd.DataFrame(index=df.index,
+                                             dtype=float)
+        separated["negative"] = pd.DataFrame(index=df.index,
+                                             dtype=float)
+
+        for col in df.columns:
+            if df[col].min() > -1:
+                separated["positive"][col] = df[col]
+                separated["positive"][col][separated["positive"][col] < 0] = 0
+
+            elif df[col].max() < 1:
+                separated["negative"][col] = df[col]
+                separated["negative"][col][separated["negative"][col] > 0] = 0
+
+            else:
+                separated["positive"][col] = df[col]
+                separated["positive"][col][separated["positive"][col] < 0] = 0
+                separated["negative"][col] = df[col]
+                separated["negative"][col][separated["negative"][col] > 0] = 0
+
+        separated["negative"] *= -1
+
+        results["carrier_series"][carrier] = {}
+        results["carrier_series"][carrier]["label"] = "power"
+        results["carrier_series"][carrier]["units"] = "MW"
+
+        for sign in ["positive","negative"]:
+            results["carrier_series"][carrier][sign] = {}
+            results["carrier_series"][carrier][sign]["columns"] = separated[sign].columns.tolist()
+            results["carrier_series"][carrier][sign]["data"] = (separated[sign].values).tolist()
+            print(sign,separated[sign].columns)
+            results["carrier_series"][carrier][sign]["color"] = [config["colors"][i] for i in separated[sign].columns]
 
     return None, results
 
