@@ -262,9 +262,8 @@ function clear_results(){
     d3.select("#energy_capacity_bar").selectAll("g").remove();
 
 
-    let balances_selection = ["AC","hydrogen"];
-    for (var k=0; k < balances_selection.length; k++){
-	let balance = balances_selection[k];
+    for (var k=0; k < balances.length; k++){
+	let balance = balances[k];
 	d3.select("#" + balance + "_power_graph").selectAll("g").remove();
 	d3.select("#" + balance + "_power_graph_legend").selectAll("g").remove();
     };
@@ -334,9 +333,8 @@ function display_results(){
     draw_energy_capacity_bar();
     draw_cost_stack();
 
-    let balances_selection = ["AC","hydrogen"];
-    for (var k=0; k < balances_selection.length; k++){
-	let balance = balances_selection[k];
+    for (var k=0; k < balances.length; k++){
+	let balance = balances[k];
 	console.log("Drawing power time series for", balance);
 	let series = results["carrier_series"][balance];
 	draw_series(series, results.snapshots, balance);

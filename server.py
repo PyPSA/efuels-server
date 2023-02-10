@@ -173,7 +173,7 @@ def find_results(results_hash):
 
     results["carrier_series"] = {}
 
-    for carrier in ["AC","hydrogen"]:
+    for carrier in config["balances_to_display"]:
 
         print("processing series for energy carrier", carrier)
 
@@ -224,6 +224,7 @@ def root():
     return render_template('index.html',
                            defaults=defaults.T.to_dict(),
                            defaults_t={year: defaults_t[year].T.to_dict() for year in defaults_t},
+                           balances=config["balances_to_display"],
                            colors=config["colors"])
 
 

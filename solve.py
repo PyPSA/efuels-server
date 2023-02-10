@@ -259,11 +259,12 @@ def run_optimisation(assumptions, pu):
 
     network.snapshot_weightings = pd.Series(float(assumptions["frequency"]),index=network.snapshots)
 
-    network.add("Bus","elec")
+    network.add("Bus","electricity",
+                carrier="electricity")
 
     if assumptions["solar"]:
         network.add("Generator","solar",
-                    bus="elec",
+                    bus="electricity",
                     carrier="solar",
                     p_max_pu = pu["solar"],
                     p_nom_extendable = True,
@@ -274,7 +275,7 @@ def run_optimisation(assumptions, pu):
 
     if assumptions["wind"]:
         network.add("Generator","wind",
-                    bus="elec",
+                    bus="electricity",
                     carrier="wind",
                     p_max_pu = pu["onwind"],
                     p_nom_extendable = True,
@@ -289,7 +290,7 @@ def run_optimisation(assumptions, pu):
             network.add("Carrier",name,
                         co2_emissions=assumptions[name+"_emissions"])
             network.add("Generator",name,
-                        bus="elec",
+                        bus="electricity",
                         carrier=name,
                         p_nom_extendable=True,
                         marginal_cost=assumptions[name+"_marginal_cost"],
@@ -307,7 +308,7 @@ def run_optimisation(assumptions, pu):
                     capital_cost=assumptions_df.at['battery_energy','fixed'])
 
         network.add("Link","battery_power",
-                    bus0 = "elec",
+                    bus0 = "electricity",
                     bus1 = "battery",
                     carrier="battery inverter",
                     efficiency = assumptions["battery_power_efficiency_charging"]/100.,
@@ -316,7 +317,7 @@ def run_optimisation(assumptions, pu):
 
         network.add("Link","battery_discharge",
                     bus0 = "battery",
-                    bus1 = "elec",
+                    bus1 = "electricity",
                     carrier="battery discharger",
                     p_nom_extendable = True,
                     efficiency = assumptions["battery_power_efficiency_discharging"]/100.)
@@ -341,7 +342,7 @@ def run_optimisation(assumptions, pu):
                 "hydrogen_electrolyser",
                 carrier="hydrogen electrolyser",
                 bus1="hydrogen",
-                bus0="elec",
+                bus0="electricity",
                 p_nom_extendable=True,
                 efficiency=assumptions["hydrogen_electrolyser_efficiency"]/100.,
                 capital_cost=assumptions_df.at["hydrogen_electrolyser","fixed"])
@@ -351,7 +352,7 @@ def run_optimisation(assumptions, pu):
                 "hydrogen_turbine",
                 carrier="hydrogen turbine",
                 bus0="hydrogen",
-                bus1="elec",
+                bus1="electricity",
                 p_nom_extendable=True,
                 efficiency=assumptions["hydrogen_turbine_efficiency"]/100.,
                 capital_cost=assumptions_df.at["hydrogen_turbine","fixed"]*assumptions["hydrogen_turbine_efficiency"]/100.)  #NB: fixed cost is per MWel
@@ -416,7 +417,7 @@ def run_optimisation(assumptions, pu):
                     "methanol synthesis",
                     bus0="hydrogen",
                     bus1="methanol",
-                    bus2="elec",
+                    bus2="electricity",
                     carrier="methanol synthesis",
                     p_nom_extendable=True,
                     marginal_cost=assumptions["co2_cost"]*assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
@@ -472,7 +473,7 @@ def run_optimisation(assumptions, pu):
     results_overview = pd.Series(dtype=float)
     results_overview["distance"] = distance
     results_overview["objective"] = network.objective/8760
-    results_overview["average_price"] = network.buses_t.marginal_price.mean()["elec"]
+    results_overview["average_price"] = network.buses_t.marginal_price.mean()["electricity"]
     results_overview["average_efuel_price"] = network.buses_t.marginal_price.mean()["destination"]
     if assumptions["hydrogen"]:
         results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
@@ -487,7 +488,7 @@ def run_optimisation(assumptions, pu):
                         axis=1,
                         inplace=True)
 
-    #results_series["electricity_price"] = network.buses_t.marginal_price["elec"]
+    #results_series["electricity_price"] = network.buses_t.marginal_price["electricity"]
 
 
     results_overview["average_cost"] = sum([results_overview[s] for s in results_overview.index if s[-5:] == "_cost"])/assumptions["efuels_load"]
