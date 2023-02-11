@@ -86,7 +86,7 @@
                 <input type="text" class="form-control" id="sourLocation" name="source_location" readonly>
                 <small id="sourSelect" class="form-text text-muted">Select from map above.</small>
               </div>
-	      {% for d in ["year","cf_exponent"] %}
+	      {% for d in ["year"] %}
               <div class="form-group">
                 <label for="sel-{{ d }}">{{ defaults[d]["full_name"] }}</label>
                 <input type="number" class="form-control" id="sel-{{ d }}" name="{{ d }}">
