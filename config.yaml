@@ -3,7 +3,7 @@
 octant_folder: "../cutouts/"
 
 
-current_version: 221202
+current_version: 230210
 
 tech_years: [2020,2030,2050]
 
@@ -28,6 +28,7 @@ colors:
   battery: "#999999"
   battery_charge: "#999999"
   battery_discharge: "#999999"
+  battery discharger: "#999999"
   battery_power: "#999999"
   battery inverter: "#999999"
   battery_energy: "#666666"
@@ -48,3 +49,4 @@ colors:
   methanol shipping: green
   methanol synthesis: "#F08080"
   methanol storage: black
+  co2: "#708090"

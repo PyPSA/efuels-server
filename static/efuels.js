@@ -283,6 +283,10 @@ function fill_results_table(){
 
     for(let i=0; i<results["order"].length; i++){
 	let asset = results["order"][i];
+	// escape for co2
+	if(!(asset + " capacity" in results)){
+	    continue;
+	};
 	let row = table.insertRow(table.rows.length);
 	let cap = results[asset + " capacity"].toFixed(1) + " MW";
 	if (asset.includes("storage")) cap += "h";
@@ -634,7 +638,7 @@ function draw_power_capacity_bar(){
 
     for(let i=0; i<results["order"].length; i++){
 	let asset = results["order"][i];
-	if(!asset.includes("storage")){
+	if(!asset.includes("storage") && (asset + " capacity" in results)){
 	    data.push(results[asset + " capacity"]);
 	    color.push(colors[asset]);
 	    labels.push(asset.replace("hydrogen","H2"));

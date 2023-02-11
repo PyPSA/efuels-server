@@ -413,16 +413,28 @@ def run_optimisation(assumptions, pu):
                     carrier="efuel",
                     p_set=assumptions["efuels_load"])
 
+        network.add("Bus",
+                    "co2",
+                    carrier="co2")
+
+        network.add("Generator",
+                    "co2",
+                    bus="co2",
+                    carrier="co2",
+                    marginal_cost=assumptions["co2_cost"],
+                    p_nom=8760*assumptions["efuels_load"])
+
         network.add("Link",
                     "methanol synthesis",
                     bus0="hydrogen",
                     bus1="methanol",
                     bus2="electricity",
+                    bus3="co2",
                     carrier="methanol synthesis",
                     p_nom_extendable=True,
-                    marginal_cost=assumptions["co2_cost"]*assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
                     efficiency=assumptions["methanolisation_efficiency"],
                     efficiency2=-assumptions["methanolisation_electricity"]*assumptions["methanolisation_efficiency"],
+                    efficiency3=-assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
                     capital_cost=assumptions_df.at["methanolisation","fixed"]*assumptions["methanolisation_efficiency"]) #NB: cost is EUR/kW_MeOH
 
         network.add("Link",
@@ -518,6 +530,10 @@ def run_optimisation(assumptions, pu):
     results_overview = pd.concat((results_overview,
                                   ((stats_mean["Supply"]+stats_mean["Curtailment"])/stats_mean["Optimal Capacity"]).rename(lambda x: x+ " cf available")))
 
+    #this is not a real capacity
+    results_overview.drop("co2 capacity",
+                          inplace=True,
+                          errors='ignore')
 
     fn = 'networks/{}.nc'.format(assumptions['results_hex'])
     network.export_to_netcdf(fn)
