@@ -74,18 +74,6 @@ hydrogen_electrolyser_fom,2050,f,3,percent of overnight cost per year,Hydrogen e
 hydrogen_electrolyser_lifetime,2020,f,20,years,Hydrogen electrolyser lifetime,
 hydrogen_electrolyser_lifetime,2030,f,20,years,Hydrogen electrolyser lifetime,
 hydrogen_electrolyser_lifetime,2050,f,20,years,Hydrogen electrolyser lifetime,
-hydrogen_turbine_cost,2020,f,880,EUR/kW,Hydrogen combined cycle turbine (or fuel cell - see below) capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
-hydrogen_turbine_cost,2030,f,830,EUR/kW,Hydrogen combined cycle turbine (or fuel cell - see below) capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
-hydrogen_turbine_cost,2050,f,800,EUR/kW,Hydrogen combined cycle turbine (or fuel cell - see below) capital cost (overnight),"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
-hydrogen_turbine_efficiency,2020,f,56,"percent, LHV",Hydrogen turbine efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
-hydrogen_turbine_efficiency,2030,f,58,"percent, LHV",Hydrogen turbine efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
-hydrogen_turbine_efficiency,2050,f,60,"percent, LHV",Hydrogen turbine efficiency,"Default assumption from <a href='https://ens.dk/en/our-services/projections-and-models/technology-data'>Danish Energy Agency Technology Data for Generation of Electricity and District Heating, November 2019</a>; assumption taken from that for natural gas CCGT"
-hydrogen_turbine_fom,2020,f,3,percent of overnight cost per year,Hydrogen turbine fixed operation and maintenance costs,
-hydrogen_turbine_fom,2030,f,3,percent of overnight cost per year,Hydrogen turbine fixed operation and maintenance costs,
-hydrogen_turbine_fom,2050,f,3,percent of overnight cost per year,Hydrogen turbine fixed operation and maintenance costs,
-hydrogen_turbine_lifetime,2020,f,25,years,Hydrogen turbine lifetime,
-hydrogen_turbine_lifetime,2030,f,25,years,Hydrogen turbine lifetime,
-hydrogen_turbine_lifetime,2050,f,25,years,Hydrogen turbine lifetime,
 dispatchable1_cost,2020,f,400,EUR/kW,Dispatchable technology 1 capital cost (overnight),
 dispatchable1_cost,2030,f,400,EUR/kW,Dispatchable technology 1 capital cost (overnight),
 dispatchable1_cost,2050,f,400,EUR/kW,Dispatchable technology 1 capital cost (overnight),
@@ -124,7 +112,6 @@ battery_energy_discount,,f,5,percent,Battery energy discount rate,
 battery_power_discount,,f,5,percent,Battery power discount rate,
 hydrogen_energy_discount,,f,5,percent,Hydrogen energy discount rate,
 hydrogen_electrolyser_discount,,f,5,percent,Hydrogen electrolyser discount rate,
-hydrogen_turbine_discount,,f,5,percent,Hydrogen turbine discount rate,
 dispatchable1_discount,,f,10,percent,Dispatchable technology 1 discount rate,
 dispatchable2_discount,,f,10,percent,Dispatchable technology 2 discount rate,
 hydrogen_submarine_pipeline_cost,,f,329.37,EUR/MW/km,Hydrogen submarine pipeline capital cost (overnight),
@@ -154,3 +141,4 @@ methanolisation_lifetime,2050,f,20.0,years,Methanol synthesis lifetime,"Danish E
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."
 methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis carbon dioxide input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 66."
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
+methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,"Private discussions."

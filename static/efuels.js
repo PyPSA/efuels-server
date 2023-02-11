@@ -127,7 +127,7 @@ for (let i = 0; i < Object.keys(assumptions).length; i++){
 	    console.log(key,"changed to",assumptions[key]);
 	});
     }
-    else if(["job_type","source_lat","source_lng","destination_lat","destination_lng","version","jobid","timestamp","queue_length","weather_hex","results_hex"].includes(key)){
+    else if(["job_type","source_lat","source_lng","destination_lat","destination_lng","version","jobid","timestamp","queue_length","weather_hex","results_hex","cf_exponent"].includes(key)){
     }
     else{
 	document.getElementsByName(key)[0].value = value;

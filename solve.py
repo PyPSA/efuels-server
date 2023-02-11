@@ -107,8 +107,6 @@ def annuity(lifetime,rate):
 
 
 assumptions_df = pd.DataFrame(columns=["FOM","fixed","discount rate","lifetime","investment"],
-                              index=["wind","solar","hydrogen_electrolyser","hydrogen_turbine","hydrogen_energy",
-                                     "battery_power","battery_energy","dispatchable1","dispatchable2","hydrogen_submarine_pipeline"],
                               dtype=float)
 
 
@@ -230,7 +228,7 @@ def run_optimisation(assumptions, pu):
 
     Nyears = 1
 
-    techs = ["wind","solar","battery_energy","battery_power","hydrogen_electrolyser","hydrogen_energy","hydrogen_turbine","dispatchable1","dispatchable2","hydrogen_submarine_pipeline","methanolisation"]
+    techs = ["wind","solar","battery_energy","battery_power","hydrogen_electrolyser","hydrogen_energy","dispatchable1","dispatchable2","hydrogen_submarine_pipeline","methanolisation"]
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
@@ -347,23 +345,14 @@ def run_optimisation(assumptions, pu):
                 efficiency=assumptions["hydrogen_electrolyser_efficiency"]/100.,
                 capital_cost=assumptions_df.at["hydrogen_electrolyser","fixed"])
 
-    #TODO remove for efuel
-    network.add("Link",
-                "hydrogen_turbine",
-                carrier="hydrogen turbine",
-                bus0="hydrogen",
-                bus1="electricity",
-                p_nom_extendable=True,
-                efficiency=assumptions["hydrogen_turbine_efficiency"]/100.,
-                capital_cost=assumptions_df.at["hydrogen_turbine","fixed"]*assumptions["hydrogen_turbine_efficiency"]/100.)  #NB: fixed cost is per MWel
-
-    network.add("Store",
-                "hydrogen_energy",
-                bus="hydrogen",
-                carrier="hydrogen storage",
-                e_nom_extendable=True,
-                e_cyclic=True,
-                capital_cost=assumptions_df.at["hydrogen_energy","fixed"])
+    if assumptions["hydrogen"]:
+        network.add("Store",
+                    "hydrogen_energy",
+                    bus="hydrogen",
+                    carrier="hydrogen storage",
+                    e_nom_extendable=True,
+                    e_cyclic=True,
+                    capital_cost=assumptions_df.at["hydrogen_energy","fixed"])
 
     if assumptions["efuel"] == "hydrogen_submarine_pipeline":
 
@@ -432,6 +421,7 @@ def run_optimisation(assumptions, pu):
                     bus3="co2",
                     carrier="methanol synthesis",
                     p_nom_extendable=True,
+                    p_min_pu=assumptions["methanolisation_min_part_load"]/100,
                     efficiency=assumptions["methanolisation_efficiency"],
                     efficiency2=-assumptions["methanolisation_electricity"]*assumptions["methanolisation_efficiency"],
                     efficiency3=-assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
