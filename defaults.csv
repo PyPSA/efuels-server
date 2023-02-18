@@ -128,6 +128,7 @@ dispatchable2,,b,False,,Dispatchable technology 2,Default assumption is based on
 co2_cost,2020,f,300,EUR/tCO2,CO2 cost,
 co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
+methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,Private discussions.
 methanolisation_discount,,f,5,percent,Methanol synthesis,
 methanolisation_cost,2020,f,757.401,EUR/kW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2020,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
@@ -141,4 +142,3 @@ methanolisation_lifetime,2050,f,20.0,years,Methanol synthesis lifetime,"Danish E
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."
 methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis carbon dioxide input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 66."
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
-methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,"Private discussions."
