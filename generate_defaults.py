@@ -53,13 +53,20 @@ shipping = pd.read_csv(fn,
 
 
 
-for name,full_name in [("methanolisation","Methanol synthesis")]:
+for name,td_name,full_name in [("methanolisation","methanolisation","Methanol synthesis"),
+                               ("wind","onwind","Onshore wind"),
+                               ("solar","solar-utility","Utility-scale solar PV"),
+                               ("hydrogen_electrolyser","electrolysis","Hydrogen electrolyser"),
+                               ("hydrogen_energy","hydrogen storage underground","Hydrogen underground storage"),
+                               ("hydrogen_submarine_pipeline","H2 (g) submarine pipeline","Hydrogen submarine pipeline"),
+                               ("battery_energy","battery storage","Utility-scale battery energy"),
+                               ("battery_power","battery inverter","Utility-scale battery converter power")]:
     print(name,full_name)
     df.loc[(name + "_discount",""),:] = ["f",5,"percent",full_name + " discount rate",""]
     for year in years:
-        value = td[year].loc[(name,"investment"),"value"]
-        unit = td[year].loc[(name,"investment"),"unit"]
-        if "EUR/MW" in unit:
+        value = td[year].loc[(td_name,"investment"),"value"]
+        unit = td[year].loc[(td_name,"investment"),"unit"]
+        if "EUR/MW" in unit and name != "hydrogen_submarine_pipeline":
             unit = unit.replace("EUR/MW","EUR/kW")
             value /= 1e3
 
@@ -67,17 +74,38 @@ for name,full_name in [("methanolisation","Methanol synthesis")]:
                                                 value,
                                                 unit,
                                                 full_name + " capital cost (overnight)",
-                                                td[year].loc[(name,"investment"),"source"]]
+                                                td[year].loc[(td_name,"investment"),"source"]]
         df.loc[(name + "_fom",str(year)),:] = ["f",
-                                               td[year].loc[(name,"FOM"),"value"],
+                                               td[year].loc[(td_name,"FOM"),"value"] if (td_name,"FOM") in td[year].index else 0,
                                                "percent of overnight cost per year",
                                                full_name + " fixed operation and maintenance costs",
-                                               td[year].loc[(name,"FOM"),"source"]]
+                                               td[year].loc[(td_name,"FOM"),"source"] if (td_name,"FOM") in td[year].index else "default"]
         df.loc[(name + "_lifetime",str(year)),:] = ["f",
-                                                    td[year].loc[(name,"lifetime"),"value"],
-                                                    td[year].loc[(name,"lifetime"),"unit"],
+                                                    td[year].loc[(td_name,"lifetime"),"value"],
+                                                    td[year].loc[(td_name,"lifetime"),"unit"],
                                                     full_name + " lifetime",
-                                                    td[year].loc[(name,"lifetime"),"source"]]
+                                                    td[year].loc[(td_name,"lifetime"),"source"]]
+
+
+for name,td_name,full_name in [("battery_power_efficiency_charging","battery inverter","Battery power charging efficiency"),
+                               ("battery_power_efficiency_discharging","battery inverter","Battery power discharging efficiency"),
+                               ("hydrogen_electrolyser_efficiency","electrolysis","Hydrogen electrolyser efficiency")]:
+
+
+    for year in years:
+        value = 100*td[year].loc[(td_name,"efficiency"),"value"]
+        unit = "percent"
+        if "battery" in name:
+            value = 100*((value/100.)**0.5)
+        elif "electrolyser" in name:
+            unit ='"percent, LHV"'
+
+        df.loc[(name,str(year)),:] = ["f",
+                                      value,
+                                      unit,
+                                      full_name,
+                                      td[year].loc[(td_name,"efficiency"),"source"]]
+
 
 df.loc[("methanolisation_efficiency",""),:] = ["f",
                                                eff.loc[("methanolisation","all","hydrogen (g)"),"to_amount"][0]/eff.loc[("methanolisation","all","hydrogen (g)"),"from_amount"][0],
