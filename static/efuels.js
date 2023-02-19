@@ -250,6 +250,7 @@ function clear_results(){
     document.getElementById("results_assumptions").innerHTML="";
     document.getElementById("average_cost").innerHTML="";
     document.getElementById("distance").innerHTML="";
+    document.getElementById("distance_transported").innerHTML="";
 
     var table = document.getElementById('results_table');
     var rowCount = table.rows.length;
@@ -326,6 +327,7 @@ function display_results(){
     document.getElementById("results_assumptions").innerHTML=" for weather year " + results["assumptions"]["year"];
     document.getElementById("average_cost").innerHTML="Average price [EUR/MWh]: " + results["average_efuel_price"].toFixed(1);
     document.getElementById("distance").innerHTML="Distance as crow flies [km]: " + results["distance"].toFixed(0);
+    document.getElementById("distance_transported").innerHTML="Distance transported [km]: " + results["distance_transported"].toFixed(0);
 
 
     for(var j=0; j < results.snapshots.length; j++) {

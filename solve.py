@@ -234,7 +234,7 @@ def run_optimisation(assumptions, pu):
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
-        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if "ship" in item else assumptions[item + "_cost"]*1e3 #kW to MW
+        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if ("ship" in item or "pipeline" in item) else assumptions[item + "_cost"]*1e3 #kW to MW
         assumptions_df.at[item,"FOM"] = assumptions[item + "_fom"]
         assumptions_df.at[item,"lifetime"] = assumptions[item + "_lifetime"]
 
@@ -245,6 +245,16 @@ def run_optimisation(assumptions, pu):
                          [assumptions["source_lng"],assumptions["source_lat"]])[0][0]
 
     print(f'distance between points is {distance} km')
+
+
+    if assumptions["efuel"] in ["hydrogen_submarine_pipeline"]:
+        distance_transported = assumptions["pipeline_distance_factor"]*distance
+    elif assumptions["efuel"] in ["methanol"]:
+        distance_transported = assumptions["shipping_distance_factor"]*distance
+    else:
+        distance_transported = 0.
+
+    print(f'distance transported between points is {distance_transported} km')
 
     print('Starting task with assumptions {}'.format(assumptions_df))
 
@@ -372,12 +382,12 @@ def run_optimisation(assumptions, pu):
                     bus1="destination",
                     carrier="hydrogen submarine pipeline",
                     p_nom_extendable=True,
-                    efficiency=(1-assumptions["hydrogen_submarine_pipeline_losses"]/100.)**(distance/1000.),
-                    capital_cost=assumptions_df.at["hydrogen_submarine_pipeline","fixed"]/1e3*distance)  # have to divide by 1e3 because of multiplication by 1e3 to go kW to MW above
+                    efficiency=(1-assumptions["hydrogen_submarine_pipeline_losses"]/100.)**(distance_transported/1000.),
+                    capital_cost=assumptions_df.at["hydrogen_submarine_pipeline","fixed"]*distance_transported)
 
-        print("pipeline efficiency is", (1-assumptions["hydrogen_submarine_pipeline_losses"]/100.)**(distance/1000.))
+        print("pipeline efficiency is", (1-assumptions["hydrogen_submarine_pipeline_losses"]/100.)**(distance_transported/1000.))
 
-        print("pieline cost per MW is",assumptions_df.at["hydrogen_submarine_pipeline","fixed"]/1e3*distance)
+        print("pieline cost per MW is",assumptions_df.at["hydrogen_submarine_pipeline","fixed"]*distance_transported)
 
     elif assumptions["efuel"] == "methanol":
 
@@ -434,12 +444,12 @@ def run_optimisation(assumptions, pu):
     if assumptions["efuel"] in ["methanol"]:
         efuel = assumptions["efuel"]
         loading_loss = 2*assumptions[efuel+"_ship_loading_loss"]/100
-        transport_loss = assumptions[efuel+"_ship_energy_demand"]/assumptions[efuel+"_ship_capacity_mwh"]*(2*distance)
+        transport_loss = assumptions[efuel+"_ship_energy_demand"]/assumptions[efuel+"_ship_capacity_mwh"]*(2*distance_transported)
         total_loss = loading_loss+transport_loss
         efficiency = (1-total_loss)
         print("efficiency",round(efficiency,3))
 
-        travel_time = 2*assumptions[efuel+"_ship_loading_time"] + 2*distance/assumptions[efuel+"_ship_average_speed"]
+        travel_time = 2*assumptions[efuel+"_ship_loading_time"] + 2*distance_transported/assumptions[efuel+"_ship_average_speed"]
         trips_per_year = 8760/travel_time
 
         print("trips per year",round(trips_per_year,3))
@@ -498,6 +508,7 @@ def run_optimisation(assumptions, pu):
 
     results_overview = pd.Series(dtype=float)
     results_overview["distance"] = distance
+    results_overview["distance_transported"] = distance_transported
     results_overview["objective"] = network.objective/8760
     results_overview["average_price"] = network.buses_t.marginal_price.mean()["electricity"]
     results_overview["average_efuel_price"] = network.buses_t.marginal_price.mean()["destination"]
