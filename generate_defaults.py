@@ -1,4 +1,4 @@
-import pandas as pd, urllib, os, yaml
+import pandas as pd, urllib.request, os, yaml
 
 df = pd.read_csv("defaults-initial.csv",
                  index_col=[0,1],
@@ -40,9 +40,22 @@ eff = pd.read_csv(fn,
                   index_col=[0,1,2])
 
 
+#get traces shipping data
+
+fn = "shipping.csv"
+url = f"https://raw.githubusercontent.com/euronion/trace/{config['trace_commit']}/data/{fn}"
+if not os.path.isfile(fn):
+    print("downloading",fn)
+    urllib.request.urlretrieve(url,fn)
+
+shipping = pd.read_csv(fn,
+                       index_col=[0,1])
+
+
+
 for name,full_name in [("methanolisation","Methanol synthesis")]:
     print(name,full_name)
-    df.loc[(name + "_discount",""),:] = ["f",5,"percent",full_name,""]
+    df.loc[(name + "_discount",""),:] = ["f",5,"percent",full_name + " discount rate",""]
     for year in years:
         value = td[year].loc[(name,"investment"),"value"]
         unit = td[year].loc[(name,"investment"),"unit"]
@@ -83,6 +96,41 @@ df.loc[("methanolisation_electricity",""),:] = ["f",
                                                 "MWhel/MWh-MeOH-LHV",
                                                 "Methanol synthesis electricity input",
                                                 eff.loc[("methanolisation","all","electricity"),"source"][0]]
+
+
+for name,td_name in [("methanol","MeOH")]:#,("lch4","CH4 (l)"),("ft","FT fuel"),("lh2","H2 (l)"),("lohc","LOHC"),("nh3","NH3 (l)")]
+
+
+    df.loc[(name + "_ship_discount",""),:] = ["f",5,"percent",name + " shipping discount rate",""]
+
+
+    fuel_df = shipping.loc[td_name + " transport ship"]
+
+
+    for attr,td_attr,full in [("loading_loss","(un-) loading losses","unloading/loading loss"),
+                              ("loading_time","(un-) loading time","unloading/loading time"),
+                              ("average_speed","average speed","average speed"),
+                              ("capacity_mwh","capacity","energy capacity"),
+                              ("energy_demand","energy demand","energy demand")]:
+
+        df.loc[(name + "_ship_" + attr,""),:] = ["f",
+                                                 fuel_df.at[td_attr,"value"],
+                                                 fuel_df.at[td_attr,"unit"],
+                                                 name + " shipping " + full,
+                                                 fuel_df.at[td_attr,"comment"]]
+
+
+    for attr,td_attr,full in [("fom","FOM","fixed operation and maintenance costs"),
+                              ("cost","investment","capital cost (overnight)"),
+                              ("lifetime","lifetime","lifetime"),
+                              ("capacity_t","capacity","mass capacity")]:
+
+        for year in years:
+            df.loc[(name + "_ship_" + attr,str(year)),:] = ["f",
+                                                            td[year].loc[(td_name + " transport ship",td_attr),"value"],
+                                                            td[year].loc[(td_name + " transport ship",td_attr),"unit"],
+                                                            name + " shipping " + full,
+                                                            td[year].loc[(td_name + " transport ship",td_attr),"source"]]
 
 print(df)
 

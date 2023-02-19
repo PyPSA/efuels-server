@@ -129,7 +129,7 @@ co2_cost,2020,f,300,EUR/tCO2,CO2 cost,
 co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
 methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,Private discussions.
-methanolisation_discount,,f,5,percent,Methanol synthesis,
+methanolisation_discount,,f,5,percent,Methanol synthesis discount rate,
 methanolisation_cost,2020,f,757.401,EUR/kW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2020,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
 methanolisation_lifetime,2020,f,20.0,years,Methanol synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
@@ -142,3 +142,21 @@ methanolisation_lifetime,2050,f,20.0,years,Methanol synthesis lifetime,"Danish E
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."
 methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis carbon dioxide input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 66."
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
+methanol_ship_discount,,f,5,percent,methanol shipping discount rate,
+methanol_ship_loading_loss,,f,0.0,%/transfer,methanol shipping unloading/loading loss,"Guesstimate, transfer of simple non-cryogenic fluid."
+methanol_ship_loading_time,,f,48.0,h,methanol shipping unloading/loading time,Assume same as for LOHC.
+methanol_ship_average_speed,,f,27.8,km/h,methanol shipping average speed,Assume same as for LOHC.
+methanol_ship_capacity_mwh,,f,415208.0,MWh_LHV,methanol shipping energy capacity,Based on MeOH LHV of 5.53611 MWh/t_MeOH and 75000t capacity.
+methanol_ship_energy_demand,,f,0.2428,MWh/km,methanol shipping energy demand,Assume same as for LOHC.
+methanol_ship_fom,2020,f,5.0,%/year,methanol shipping fixed operation and maintenance costs,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_fom,2030,f,5.0,%/year,methanol shipping fixed operation and maintenance costs,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_fom,2050,f,5.0,%/year,methanol shipping fixed operation and maintenance costs,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_cost,2020,f,31700578.34,EUR,methanol shipping capital cost (overnight),"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_cost,2030,f,31700578.34,EUR,methanol shipping capital cost (overnight),"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_cost,2050,f,31700578.34,EUR,methanol shipping capital cost (overnight),"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_lifetime,2020,f,15.0,years,methanol shipping lifetime,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_lifetime,2030,f,15.0,years,methanol shipping lifetime,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_lifetime,2050,f,15.0,years,methanol shipping lifetime,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_capacity_t,2020,f,75000.0,t_MeOH,methanol shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_capacity_t,2030,f,75000.0,t_MeOH,methanol shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+methanol_ship_capacity_t,2050,f,75000.0,t_MeOH,methanol shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."

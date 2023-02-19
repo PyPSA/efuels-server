@@ -228,16 +228,16 @@ def run_optimisation(assumptions, pu):
 
     Nyears = 1
 
-    techs = ["wind","solar","battery_energy","battery_power","hydrogen_electrolyser","hydrogen_energy","dispatchable1","dispatchable2","hydrogen_submarine_pipeline","methanolisation"]
+    techs = [tech[:-5] for tech in assumptions if tech[-5:] == "_cost" and tech[-14:] != "_marginal_cost" and tech != "co2_cost"]
+
+    print("calculating costs for",techs)
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
-        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"]
+        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if "ship" in item else assumptions[item + "_cost"]*1e3 #kW to MW
         assumptions_df.at[item,"FOM"] = assumptions[item + "_fom"]
         assumptions_df.at[item,"lifetime"] = assumptions[item + "_lifetime"]
 
-    #convert costs from per kW to per MW
-    assumptions_df["investment"] *= 1000.
     assumptions_df["fixed"] = [(annuity(v["lifetime"],v["discount rate"])+v["FOM"]/100.)*v["investment"]*Nyears for i,v in assumptions_df.iterrows()]
 
 
@@ -427,17 +427,41 @@ def run_optimisation(assumptions, pu):
                     efficiency3=-assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
                     capital_cost=assumptions_df.at["methanolisation","fixed"]*assumptions["methanolisation_efficiency"]) #NB: cost is EUR/kW_MeOH
 
-        network.add("Link",
-                    "methanol shipping",
-                    bus0="methanol",
-                    bus1="destination",
-                    carrier="methanol shipping",
-                    p_nom_extendable=True,
-                    efficiency=0.999, # TODO find values here
-                    capital_cost=1e3) # TODO find values here
-
     else:
         return None, None, "Efuel {} was not recognised".format(assumptions["efuel"])
+
+
+    if assumptions["efuel"] in ["methanol"]:
+        efuel = assumptions["efuel"]
+        loading_loss = 2*assumptions[efuel+"_ship_loading_loss"]/100
+        transport_loss = assumptions[efuel+"_ship_energy_demand"]/assumptions[efuel+"_ship_capacity_mwh"]*(2*distance)
+        total_loss = loading_loss+transport_loss
+        efficiency = (1-total_loss)
+        print("efficiency",round(efficiency,3))
+
+        travel_time = 2*assumptions[efuel+"_ship_loading_time"] + 2*distance/assumptions[efuel+"_ship_average_speed"]
+        trips_per_year = 8760/travel_time
+
+        print("trips per year",round(trips_per_year,3))
+
+        cost_per_t_capacity = assumptions_df.at[efuel+'_ship','fixed']/assumptions[efuel+"_ship_capacity_t"]
+
+        MWh_per_t = {"methanol" : 5.54}[efuel]
+
+        cost_per_MWh = cost_per_t_capacity/MWh_per_t
+
+        cost_per_MW = 8760*cost_per_MWh/trips_per_year
+        print("cost per MW", cost_per_MW)
+
+        network.add("Link",
+                    efuel + " shipping",
+                    bus0=efuel,
+                    bus1="destination",
+                    carrier=efuel + " shipping",
+                    p_nom_extendable=True,
+                    efficiency=efficiency,
+                    capital_cost=cost_per_MW)
+
 
     network.consistency_check()
 
