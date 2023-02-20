@@ -234,7 +234,7 @@ def run_optimisation(assumptions, pu):
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
-        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if ("ship" in item or "pipeline" in item or "dac" in item) else assumptions[item + "_cost"]*1e3 #kW to MW
+        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if ("ship" in item or "pipeline" in item or "dac" in item or "co2_storage" in item or "carbonaceous_storage" in item) else assumptions[item + "_cost"]*1e3 #kW to MW
         assumptions_df.at[item,"FOM"] = assumptions[item + "_fom"]
         assumptions_df.at[item,"lifetime"] = assumptions[item + "_lifetime"]
 
@@ -403,7 +403,7 @@ def run_optimisation(assumptions, pu):
                         carrier="co2 storage",
                         e_nom_extendable=True,
                         e_cyclic=True,
-                        capital_cost=1.) #TODO put realistic cost here
+                        capital_cost=assumptions_df.at["co2_storage","fixed"])
         else:
             network.add("Generator",
                         "co2",
@@ -454,7 +454,7 @@ def run_optimisation(assumptions, pu):
                     carrier="methanol storage",
                     e_nom_extendable=True,
                     e_cyclic=True,
-                    capital_cost=1.) #TODO put realistic cost here
+                    capital_cost=assumptions_df.at["liquid_carbonaceous_storage","fixed"]/config["mwh_per_m3"]["methanol"])
 
         network.add("Load","methanol_load",
                     bus="destination",
@@ -494,9 +494,7 @@ def run_optimisation(assumptions, pu):
 
         cost_per_t_capacity = assumptions_df.at[efuel+'_ship','fixed']/assumptions[efuel+"_ship_capacity_t"]
 
-        MWh_per_t = {"methanol" : 5.54}[efuel]
-
-        cost_per_MWh = cost_per_t_capacity/MWh_per_t
+        cost_per_MWh = cost_per_t_capacity/config["mwh_per_t"][efuel]
 
         cost_per_MW = 8760*cost_per_MWh/trips_per_year
         print("cost per MW", cost_per_MW)

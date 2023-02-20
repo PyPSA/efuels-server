@@ -62,7 +62,9 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
                                ("battery_energy","battery storage","Utility-scale battery energy"),
                                ("battery_power","battery inverter","Utility-scale battery converter power"),
                                ("dac","direct air capture","Direct air capture"),
-                               ("heat_pump","industrial heat pump medium temperature","Industrial heat pump up to 125 C")]:
+                               ("heat_pump","industrial heat pump medium temperature","Industrial heat pump up to 125 C"),
+                               ("liquid_carbonaceous_storage","General liquid hydrocarbon storage (product)","Liquid carbonaceous fuel storage tank"),
+                               ("co2_storage","CO2 storage tank","CO2 storage tank")]:
     print(name,full_name)
     df.loc[(name + "_discount",""),:] = ["f",5,"percent",full_name + " discount rate",""]
     for year in years:

@@ -22,6 +22,14 @@ balances_to_display: ["electricity","hydrogen"]
 
 preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen electrolyser"]
 
+#LHV
+mwh_per_t:
+  methanol: 5.54
+
+#LHV at 20 C
+mwh_per_m3:
+  methanol: 4.4
+
 colors:
   wind : "#3B6182"
   solar: "#FFFF00"
