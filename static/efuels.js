@@ -632,11 +632,12 @@ function draw_power_capacity_bar(){
     let data = [];
     let color = [];
     let labels = [];
+    let units = [];
 
     data.push(results["assumptions"]["efuels_load"]);
     color.push(colors["efuels_load"]);
     labels.push("efuels demand");
-
+    units.push("MW");
 
     for(let i=0; i<results["order"].length; i++){
 	let asset = results["order"][i];
@@ -644,10 +645,11 @@ function draw_power_capacity_bar(){
 	    data.push(results[asset + " capacity"]);
 	    color.push(colors[asset]);
 	    labels.push(asset.replace("hydrogen","H2"));
+	    units.push(asset.includes("co2") ? "tCO2/h" : "MW");
 	};
     };
 
-    draw_bar(data, labels, color, "Power capacity [MW]", "#power_capacity_bar", " MW");
+    draw_bar(data, labels, color, units, "Power capacity [MW]", "#power_capacity_bar");
 };
 
 
@@ -656,10 +658,12 @@ function draw_energy_capacity_bar(){
     let data = [];
     let color = [];
     let labels = [];
+    let units = [];
 
     data.push(results["assumptions"]["efuels_load"]*24/1000.);
     color.push(colors["efuels_load"]);
     labels.push("24h efuels demand");
+    units.push("GWh");
 
     for(let i=0; i<results["order"].length; i++){
 	let asset = results["order"][i];
@@ -667,10 +671,11 @@ function draw_energy_capacity_bar(){
 	    data.push(results[asset + " capacity"]/1e3);
 	    color.push(colors[asset]);
 	    labels.push(asset.replace("hydrogen","H2"));
+	    units.push(asset.includes("co2") ? "ktCO2" : "GWh");
 	};
     };
 
-    draw_bar(data, labels, color, "Energy capacity [GWh]", "#energy_capacity_bar", " GWh");
+    draw_bar(data, labels, color, units, "Storage capacity [GWh or ktCO2]", "#energy_capacity_bar");
 };
 
 
@@ -762,7 +767,7 @@ function draw_stack(data, labels, color, ylabel, svgName, suffix){
 
 
 
-function draw_bar(data, labels, color, ylabel, svgName, suffix){
+function draw_bar(data, labels, color, units, ylabel, svgName){
 
     let svgGraph = d3.select(svgName),
 	margin = {top: 20, right: 20, bottom: 30, left: 50},
@@ -784,7 +789,7 @@ function draw_bar(data, labels, color, ylabel, svgName, suffix){
 	.attr('class', 'd3-tip')
 	.offset([-8, 0])
 	.html(function(d,i) {
-	    return labels[i] + ": " + Math.abs(data[i]).toFixed(1) + suffix;
+	    return labels[i] + ": " + Math.abs(data[i]).toFixed(1) + " " + units[i];
 	});
     svgGraph.call(tip);
 

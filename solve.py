@@ -234,7 +234,7 @@ def run_optimisation(assumptions, pu):
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
-        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if ("ship" in item or "pipeline" in item) else assumptions[item + "_cost"]*1e3 #kW to MW
+        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if ("ship" in item or "pipeline" in item or "dac" in item) else assumptions[item + "_cost"]*1e3 #kW to MW
         assumptions_df.at[item,"FOM"] = assumptions[item + "_fom"]
         assumptions_df.at[item,"lifetime"] = assumptions[item + "_lifetime"]
 
@@ -364,6 +364,55 @@ def run_optimisation(assumptions, pu):
                     e_cyclic=True,
                     capital_cost=assumptions_df.at["hydrogen_energy","fixed"])
 
+    #add CO2 source
+    if assumptions["efuel"] in ["methanol"]:
+
+        network.add("Bus",
+                    "co2",
+                    carrier="co2")
+
+        if assumptions["dac"]:
+
+            network.add("Bus",
+                        "heat",
+                        carrier="heat")
+
+            network.add("Link",
+                        "heat pump",
+                        bus0="electricity",
+                        bus1="heat",
+                        carrier="heat pump",
+                        p_nom_extendable=True,
+                        capital_cost=assumptions_df.at["heat_pump","fixed"]*assumptions["heat_pump_efficiency"]/100.,
+                        efficiency=assumptions["heat_pump_efficiency"]/100.)
+
+            network.add("Link",
+                        "dac",
+                        bus0="electricity",
+                        bus1="co2",
+                        bus2="heat",
+                        carrier="dac",
+                        p_nom_extendable=True,
+                        capital_cost=assumptions_df.at["dac","fixed"]/assumptions["dac_electricity"],
+                        efficiency=1/assumptions["dac_electricity"],
+                        efficiency2=-assumptions["dac_heat"]/assumptions["dac_electricity"])
+
+            network.add("Store",
+                        "co2",
+                        bus="co2",
+                        carrier="co2 storage",
+                        e_nom_extendable=True,
+                        e_cyclic=True,
+                        capital_cost=1.) #TODO put realistic cost here
+        else:
+            network.add("Generator",
+                        "co2",
+                        bus="co2",
+                        carrier="co2",
+                        marginal_cost=assumptions["co2_cost"],
+                        p_nom=8760*assumptions["efuels_load"])
+
+
     if assumptions["efuel"] == "hydrogen_submarine_pipeline":
 
         network.add("Bus",
@@ -411,17 +460,6 @@ def run_optimisation(assumptions, pu):
                     bus="destination",
                     carrier="efuel",
                     p_set=assumptions["efuels_load"])
-
-        network.add("Bus",
-                    "co2",
-                    carrier="co2")
-
-        network.add("Generator",
-                    "co2",
-                    bus="co2",
-                    carrier="co2",
-                    marginal_cost=assumptions["co2_cost"],
-                    p_nom=8760*assumptions["efuels_load"])
 
         network.add("Link",
                     "methanol synthesis",

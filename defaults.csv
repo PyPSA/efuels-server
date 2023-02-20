@@ -60,6 +60,7 @@ wind,,b,True,,Wind turbine,
 solar,,b,True,,Solar photovoltaic cell,
 battery,,b,True,,Battery storage,
 hydrogen,,b,True,,Hydrogen gas storage,
+dac,,b,True,,Direct air capture,"If not selected, CO2 is costed according to assumptions below"
 dispatchable1,,b,False,,Dispatchable technology 1,Default assumption is based on open cycle natural gas turbine (OCGT)
 dispatchable2,,b,False,,Dispatchable technology 2,Default assumption is based on new nuclear EPR reactor in Europe
 co2_cost,2020,f,300,EUR/tCO2,CO2 cost,
@@ -139,18 +140,43 @@ battery_power_lifetime,2030,f,10.0,years,Utility-scale battery converter power l
 battery_power_cost,2050,f,60.0,EUR/kW,Utility-scale battery converter power capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_fom,2050,f,0.9,percent of overnight cost per year,Utility-scale battery converter power fixed operation and maintenance costs,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_lifetime,2050,f,10.0,years,Utility-scale battery converter power lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx, Note K."
+dac_discount,,f,5,percent,Direct air capture discount rate,
+dac_cost,2020,f,7000000.0,EUR/(tCO2/h),Direct air capture capital cost (overnight),"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_fom,2020,f,4.95,percent of overnight cost per year,Direct air capture fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_lifetime,2020,f,20.0,years,Direct air capture lifetime,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_cost,2030,f,6000000.0,EUR/(tCO2/h),Direct air capture capital cost (overnight),"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_fom,2030,f,4.95,percent of overnight cost per year,Direct air capture fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_lifetime,2030,f,20.0,years,Direct air capture lifetime,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_cost,2050,f,4000000.0,EUR/(tCO2/h),Direct air capture capital cost (overnight),"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_fom,2050,f,4.95,percent of overnight cost per year,Direct air capture fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_lifetime,2050,f,20.0,years,Direct air capture lifetime,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+heat_pump_discount,,f,5,percent,Industrial heat pump up to 125 C discount rate,
+heat_pump_cost,2020,f,871.2,EUR/kW,Industrial heat pump up to 125 C capital cost (overnight),"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_fom,2020,f,0.11,percent of overnight cost per year,Industrial heat pump up to 125 C fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_lifetime,2020,f,20.0,years,Industrial heat pump up to 125 C lifetime,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_cost,2030,f,778.8,EUR/kW,Industrial heat pump up to 125 C capital cost (overnight),"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_fom,2030,f,0.11,percent of overnight cost per year,Industrial heat pump up to 125 C fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_lifetime,2030,f,20.0,years,Industrial heat pump up to 125 C lifetime,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_cost,2050,f,700.0,EUR/kW,Industrial heat pump up to 125 C capital cost (overnight),"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_fom,2050,f,0.1,percent of overnight cost per year,Industrial heat pump up to 125 C fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_lifetime,2050,f,20.0,years,Industrial heat pump up to 125 C lifetime,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
 battery_power_efficiency_charging,2020,f,97.46794344808963,percent,Battery power charging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_efficiency_charging,2030,f,97.97958971132712,percent,Battery power charging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_efficiency_charging,2050,f,97.97958971132712,percent,Battery power charging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_efficiency_discharging,2020,f,97.46794344808963,percent,Battery power discharging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_efficiency_discharging,2030,f,97.97958971132712,percent,Battery power discharging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_efficiency_discharging,2050,f,97.97958971132712,percent,Battery power discharging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
+heat_pump_efficiency,2020,f,254.99999999999997,percent,Industrial heat pump COP,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_efficiency,2030,f,270.0,percent,Industrial heat pump COP,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
+heat_pump_efficiency,2050,f,285.0,percent,Industrial heat pump COP,"Danish Energy Agency, technology_data_for_industrial_process_heat.xlsx"
 hydrogen_electrolyser_efficiency,2020,f,66.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_efficiency,2030,f,68.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_efficiency,2050,f,75.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."
 methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis carbon dioxide input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 66."
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
+dac_electricity,,f,0.28,MWh/tCO2,Direct air capture electricity consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+dac_heat,,f,1.5,MWh/tCO2,Direct air capture heat consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
 methanol_ship_discount,,f,5,percent,methanol shipping discount rate,
 methanol_ship_loading_loss,,f,0.0,%/transfer,methanol shipping unloading/loading loss,"Guesstimate, transfer of simple non-cryogenic fluid."
 methanol_ship_loading_time,,f,48.0,h,methanol shipping unloading/loading time,Assume same as for LOHC.

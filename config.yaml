@@ -50,3 +50,6 @@ colors:
   methanol synthesis: "#F08080"
   methanol storage: black
   co2: "#708090"
+  dac: "#708090"
+  co2 storage: "#708090"
+  heat pump: red
