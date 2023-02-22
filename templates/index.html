@@ -103,8 +103,10 @@
               <div class="form-group">
                 <label for="efuel">{{ defaults["efuel"]["full_name"] }}</label>
                 <select class="form-control" name="efuel" id="efuel">
-                  <option value="hydrogen_submarine_pipeline" selected>Hydrogen by submarine pipeline</option>
-                  <option value="methanol" selected>Methanol</option>
+                  <option value="{{ config['efuels_default'] }}" selected>{{ config['efuels'][config['efuels_default']] }}</option>
+		  {% for k,v in config['efuels'].items() if k != config['efuels_default'] %}
+                  <option value="{{ k }}">{{ v }}</option>
+		  {% endfor %}
                 </select>
                 <small class="form-text text-muted">{{ defaults["efuel"]["text"] }}</small>
               </div>
@@ -118,9 +120,9 @@
               <div class="form-group">
                 <label for="tech_scenario">Technology assumption scenario</label>
                 <select class="form-control" name="tech_scenario" id="tech_scenario">
-                  <option value="2020">2020 scenario</option>
-                  <option value="2030" selected>2030 scenario</option>
-                  <option value="2050">2050 scenario</option>
+		  {% for year in config['tech_years'] %}
+                  <option value="{{ year }}"{{ " selected" if year == config['tech_years_default'] else "" }}>{{ year }} scenario</option>
+		  {% endfor %}
                 </select>
                 <small class="form-text text-muted">Individual cost assumptions can be changed below under "advanced assumption settings". 2030 is the default year for technology assumptions because this is the earliest reasonable time when most regions could have zero emissions.</small>
               </div>

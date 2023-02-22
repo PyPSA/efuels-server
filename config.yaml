@@ -7,6 +7,14 @@ current_version: 230210
 
 tech_years: [2020,2030,2050]
 
+tech_years_default: 2030
+
+efuels:
+  hydrogen_submarine_pipeline: "Hydrogen by submarine pipeline"
+  methanol: Methanol
+
+efuels_default: hydrogen_submarine_pipeline
+
 tech_data_commit: "3a23cfc5808df00a2c039fd0e7ce8755a090d4df"
 trace_commit: "55e71c86d36869079b46377ce7ef16a46afa1d99"
 

@@ -45,12 +45,13 @@ for (let key in defaults){
     assumptions[key] = defaults[key]["value"];
 }
 
-let tech_assumptions = {"2020" : {},
-			"2030" : {},
-			"2050" : {},
-		       };
+let tech_assumptions = {};
 
-let default_tech_scenario = "2030";
+for (let i = 0; i < config["tech_years"].length; i++){
+    tech_assumptions[String(config["tech_years"][i])] = {};
+}
+
+let default_tech_scenario = String(config["tech_years_default"]);
 
 for (let key in defaults_t[default_tech_scenario]){
     assumptions[key] = defaults_t[default_tech_scenario][key]["value"];
@@ -74,7 +75,7 @@ let storage = ["battery","hydrogen"];
 
 d3.select("#tech_scenario").on("change", function(){
     let scenario = this.value;
-    console.log("tech scenario change to ",scenario);
+    console.log("tech scenario change to",scenario);
     for (let i = 0; i < Object.keys(tech_assumptions[scenario]).length; i++){
 	let key = Object.keys(tech_assumptions[scenario])[i];
 	let value = tech_assumptions[scenario][key];
