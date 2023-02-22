@@ -1,4 +1,4 @@
-## Copyright 2022 Tom Brown
+## Copyright 2022-3 Tom Brown
 
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU Affero General Public License as
@@ -221,11 +221,23 @@ def find_results(results_hash):
 #defaults to only listen to GET and HEAD
 @app.route('/')
 def root():
+
+    print("requests:",request.args)
+    if "results" in request.args:
+        results_hash = request.args.get("results",type=str)
+        error_message, results = find_results(results_hash)
+        if error_message is not None:
+            print("error:",error_message)
+            results = {}
+    else:
+        results = {}
+
     return render_template('index.html',
                            defaults=defaults.T.to_dict(),
                            defaults_t={year: defaults_t[year].T.to_dict() for year in defaults_t},
                            balances=config["balances_to_display"],
-                           colors=config["colors"])
+                           colors=config["colors"],
+                           results=results)
 
 
 @app.route('/jobs', methods=['GET','POST'])

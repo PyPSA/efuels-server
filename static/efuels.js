@@ -80,6 +80,14 @@ d3.select("#tech_scenario").on("change", function(){
 
 
 
+
+// overwrite assumptions if given already
+if("assumptions" in results){
+    assumptions = results["assumptions"];
+};
+
+
+
 let locations = ["destination", "source"];
 
 for (let i=0; i<locations.length; i++){
@@ -113,7 +121,9 @@ for (let i = 0; i < Object.keys(assumptions).length; i++){
     let key = Object.keys(assumptions)[i];
     let value = assumptions[key];
     console.log(key,value);
-    if(typeof value === "boolean"){
+    if(["job_type","source_lat","source_lng","destination_lat","destination_lng","version","jobid","timestamp","queue_length","weather_hex","results_hex","cf_exponent"].includes(key)){
+    }
+    else if(typeof value === "boolean"){
 	document.getElementsByName(key)[0].checked = value;
 	d3.selectAll("input[name='" + key + "']").on("change", function(){
 	    assumptions[key] = this.checked;
@@ -126,8 +136,6 @@ for (let i = 0; i < Object.keys(assumptions).length; i++){
 	    assumptions[key] = this.value;
 	    console.log(key,"changed to",assumptions[key]);
 	});
-    }
-    else if(["job_type","source_lat","source_lng","destination_lat","destination_lng","version","jobid","timestamp","queue_length","weather_hex","results_hex","cf_exponent"].includes(key)){
     }
     else{
 	document.getElementsByName(key)[0].value = value;
@@ -197,6 +205,11 @@ function solve() {
 
 
 solveButton.on("click", solve);
+
+
+if(assumptions["job_type"] === "solve"){
+    display_results();
+};
 
 
 function poll_result() {
@@ -349,7 +362,7 @@ function display_results(){
 
     document.getElementById("results-overview-download").innerHTML = '<a href="data/results-overview-' + results.assumptions.results_hex + '.csv">Download Comma-Separated-Variable (CSV) file of results overview</a> ' + licenceText;
     document.getElementById("results-series-download").innerHTML = '<a href="data/results-series-' + results.assumptions.results_hex + '.csv">Download Comma-Separated-Variable (CSV) file of results time series</a> ' + licenceText;
-    document.getElementById("results-link").innerHTML = '<a href="https://model.energy/?results=' + results.assumptions.results_hex + '#solve">Link to these results</a>';
+    document.getElementById("results-link").innerHTML = '<a href="https://model.energy/efuels/?results=' + results.assumptions.results_hex + '#solve">Link to these results</a>';
 };
 
 
