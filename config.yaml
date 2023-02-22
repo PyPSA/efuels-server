@@ -18,6 +18,9 @@ float_upper_limit: 1.e+8
 
 results_threshold: 1.e-3
 
+#seconds
+expected_time: 70
+
 balances_to_display: ["electricity","hydrogen"]
 
 preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen electrolyser"]

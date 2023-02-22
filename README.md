@@ -22,6 +22,12 @@ You can find a live version at:
 
 <https://model.energy/efuels/>
 
+The tool is a simplified version of the model behind the research
+paper [Import options for chemical energy carriers from renewable
+sources to Germany](https://doi.org/10.1371/journal.pone.0281380) by
+Johannes Hampp, Michael Düren and Tom Brown in PLOS ONE, 2023.
+
+
 
 ## Requirements
 
@@ -47,6 +53,16 @@ For (optional) server deployment:
 ### Data
 
 This uses the same data as <https://model.energy/>, see the [WHOBS-server repository](https://github.com/PyPSA/whobs-server).
+
+
+### Regenerate default assumptions
+
+The basic assumptions in `defaults-initial.csv` are added to by the script `generate_defaults.py`, which adds assumptions from the [trace repository](https://github.com/euronion/trace) and [technology-data repository](https://github.com/PyPSA/technology-data) (which is in turn largely based on the [Danish Energy Agency's Technology Data](https://ens.dk/en/our-services/projections-and-models/technology-data)). The CSV `defaults.csv` is an output of this script and should not be modified. All modifications should be make in `defaults-initial.csv`.
+
+To run the script do:
+
+`python generate_defaults.py`
+
 
 ## Run server locally on your own computer
 
@@ -75,7 +91,7 @@ Use nginx, gunicorn for the Python server, rq, and manage with supervisor.
 
 ## License
 
-Copyright 2022 Tom Brown <https://nworbmot.org/>
+Copyright 2022-3 Tom Brown <https://nworbmot.org/>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as

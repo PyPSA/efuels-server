@@ -34,6 +34,11 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 }).addTo(map);
 
 
+let balances = config["balances_to_display"];
+
+let colors = config["colors"];
+
+
 let assumptions = {};
 
 for (let key in defaults){
@@ -157,7 +162,7 @@ var jobid = "";
 var timer;
 var timeout;
 var timerStart;
-var timerExpected = 15;
+var timerExpected = config["expected_time"];
 
 
 // time between status polling in milliseconds

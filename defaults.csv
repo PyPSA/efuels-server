@@ -7,7 +7,7 @@ destination_lng,,f,8.68,degrees,Destination longitude,
 source_lat,,f,-30.8,degrees,Source latitude,
 source_lng,,f,18.5,degrees,Source longitude,
 frequency,,i,3,,Sampling frequency,"n-hourly, n<3 is very slow, big n solves faster (n=25 or n=49 give fast and relatively accurate results)"
-efuel,,s,hydrogen_submarine_pipeline,,E-fuel to be produced,NB: Currently the technology selection is limited to pipeline hydrogen
+efuel,,s,hydrogen_submarine_pipeline,,E-fuel to be produced,NB: Currently the technology selection is limited to a few options; the list of options will be expanded
 efuels_load,,f,100,MW,Constant demand for efuel,Demand should be large enough for utility-scale assets but small enough to neglect land availability constraints
 pipeline_distance_factor,,f,1.2,,Pipeline distance multiplicator factor,Factor that multiplies direct distance between source and destination to account for indirect pipeline routes; represents rough average of distance considered in Hampp et al (2023)
 shipping_distance_factor,,f,1.8,,Shipping distance multiplicator factor,Factor that multiplies direct distance between source and destination to account for indirect shipping routes; represents rough average of distance considered in Hampp et al (2023)
@@ -60,7 +60,7 @@ wind,,b,True,,Wind turbine,
 solar,,b,True,,Solar photovoltaic cell,
 battery,,b,True,,Battery storage,
 hydrogen,,b,True,,Hydrogen gas storage,
-dac,,b,True,,Direct air capture,"If not selected, CO2 is costed according to assumptions below"
+dac,,b,True,,Direct air capture,"If direct air capture is not selected, CO2 is costed according to assumptions specified below"
 dispatchable1,,b,False,,Dispatchable technology 1,Default assumption is based on open cycle natural gas turbine (OCGT)
 dispatchable2,,b,False,,Dispatchable technology 2,Default assumption is based on new nuclear EPR reactor in Europe
 co2_cost,2020,f,300,EUR/tCO2,CO2 cost,

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>model.energy</title>
+    <title>model.energy/efuels</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -64,10 +64,12 @@
             <section id="intro">
               <h2>Introduction</h2>
               <hr>
-              <p>This tool calculates the cost of delivering hydrogen-based fuels such as ammonia, methanol, methane Fischer-Tropsch fuels and pure hydrogen.</p>
-	      <p>It is a WORK IN PROGRESS and currently only works for submarine pipeline delivery of compressed hydrogen.</p>
-	      <p>First choose the locations where the hydrogen is produced and to which it is delivered. This determines the weather data for the wind and solar generation where the hydrogen is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
-              <p>This is a <b>toy model</b> with a <b>strongly simplified</b> setup. Please read the <a class="js-scroll-trigger" href="#background">warnings</a> below.</p>
+              <p>This tool calculates the cost of producing and transporting green hydrogen, i.e. electrolytic hydrogen produced with wind and solar power, as well as hydrogen-based fuels such as ammonia, methanol, methane and Fischer-Tropsch fuels.</p>
+	      <p>It is a WORK IN PROGRESS and currently only works for a selection of products.</p>
+	      <p>First choose the location where the hydrogen is produced and the location to which it is delivered. This determines the weather data for the wind and solar generation where the hydrogen is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
+              <p>This is a <b>toy model</b> with a <b>strongly simplified</b> setup. Please read the <a class="js-scroll-trigger" href="#warnings">warnings</a> below.</p>
+	      <p>The tool is a simplified version of the <a href="https://github.com/euronion/trace">trace model</a> behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown,  published in PLOS ONE in 2023.</p>
+	      <p>All code and data behind this tool is <a href="https://github.com/PyPSA/efuels-server">openly available</a>.</p>
             </section>
 
             <section id="location">
@@ -192,7 +194,7 @@
             <hr>
             <p>
               <button type="button" class="btn btn-lg btn-primary" id="solve-button">Solve</button>
-              &nbsp;&nbsp;<span id="countdown">Ready in around 15 seconds</span>, status: <span id="status">Waiting for job</span>
+              &nbsp;&nbsp;<span id="countdown">Ready in around {{ config["expected_time"] }} seconds</span>, status: <span id="status">Waiting for job</span>
             </p>
             <div class="accordion" id="accordionResults">
               <div id="collapseResults" class="collapse" data-parent="#accordionResults">
@@ -217,7 +219,7 @@
                     </div>
                     <div id="graph">
 		      <br />
-		      {% for balance in balances %}
+		      {% for balance in config["balances_to_display"] %}
 		      <p><b>{{balance}} supply and demand time series (you can zoom and pan to see the details)</b></p>
 		      <svg width="900" height="500" id="{{balance}}_power_graph"></svg>
 		      <svg width="180" height="400" id="{{balance}}_power_graph_legend"></svg>
@@ -253,8 +255,11 @@
               <h2>Background and warnings</h2>
               <hr>
               <p>
-                This is a <b>toy model</b> with a <b>strongly simplified</b> setup.
-                Please read the <a href="https://github.com/PyPSA/WHOBS#warnings">warnings</a> before interpreting the results. In particular:
+                This is a <b>toy model</b> with a <b>strongly simplified</b> setup.   Please read the <a href="https://github.com/PyPSA/WHOBS#warnings">warnings</a> before interpreting the results.
+	      </p>
+	      <p>The tool is a simplified version of the model behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown, published in PLOS ONE in 2023.</p>
+
+              <h3 id="warnings">Warnings</h3>
               </p>
               <ol>
                 <li>
@@ -268,20 +273,13 @@
                   solar thermal, geothermal, ocean energy, nuclear and
                   fossil/biomass plants with CCS. Two additional dispatchable technologies are provided under "advanced assumption settings". Additional storage technologies
                   include redox flow batteries, compressed air energy storage,
-                  etc. Other options include allowing demand to adapt to renewable profiles (demand-side management).
+                  etc.
                 </li>
                 <li>
                   No import or export capacities with other regions are
-                  assumed, so each region must meet the baseload profile by
-                  itself. Existing and planned transmission grid connections between
-                  regions can reduce costs by up to 20% by smoothing wind over a
+                  assumed, so each region must supply demand as an island. Existing and planned transmission grid connections between
+                  regions can reduce electricity costs by up to 20% by smoothing wind over a
                   continent-sized area (see e.g. <a href="https://arxiv.org/abs/1704.05492">this paper</a> or <a href="https://arxiv.org/abs/1705.07617">this one</a>).
-                </li>
-                <li>
-                  Including energy demand sectors other than electricity, like transport, heating and non-electric industrial demand can offer additional flexibility (e.g. load-shifting by battery electric vehicles and thermal storage for electrified heating), see e.g. <a href="https://arxiv.org/abs/1801.05290">this paper</a> or <a href="https://doi.org/10.1016/j.rser.2016.02.025">this one</a>.
-                </li>
-                <li>
-                  Costs here are for completely decarbonised electricity systems. Reaching lower levels of decarbonisation is much cheaper and doesn't necessarily require any storage at all. A non-zero carbon dioxide emission target and options for fossil-fuelled generators can be set under "advanced assumption settings".
                 </li>
                 <li>
                   The time series for wind and solar generation are
@@ -297,54 +295,41 @@
                   Solar profiles are calculated assuming that panels in the northern hemisphere face south, and that panels in the southern hemisphere face north, with a slope of 35 degrees against the horizontal in both cases.
                 </li>
                 <li>
-                  Because the wind and solar profiles are computed using a fixed distribution of power plants, there is no possibility to optimise the distribution of power plants within each region to reduce the costs of providing a baseload profile.
+                  The default costs for underground hydrogen storage (2 EUR/kWh) assume hydrogen gas is stored in salt caverns in suitable underground salt deposits. Studies on salt deposit availability are available for most countries, see e.g. <a href="https://www.researchgate.net/figure/Underground-salt-deposits-and-cavern-fields-in-Europe-225_fig5_319417820">this map</a> for Europe or Figure 2 of <a href="https://www.nrel.gov/docs/fy10osti/46719.pdf">NREL 2009</a> for the United States. Where suitable salt deposits are not available, hydrogen can be stored in aboveground steel tanks for 13 EUR/kWh.
                 </li>
                 <li>
-                  The costs for hydrogen storage (0.7 EUR/kWh) assume hydrogen gas is stored in salt caverns in suitable underground salt deposits based on assumptions from <a href="https://doi.org/10.1016/j.energy.2018.05.059">Welder et al 2018</a>. These costs are higher than assumed in e.g. Table 3 of <a href="https://www.nrel.gov/docs/fy10osti/46719.pdf">NREL 2009</a> (0.49 USD/kWh) using the most expensive option ("rock caverns created by excavating comparatively impervious rock formations"). Studies on salt deposit availability are available for most countries, see e.g. <a href="https://www.researchgate.net/figure/Underground-salt-deposits-and-cavern-fields-in-Europe-225_fig5_319417820">this map</a> for Europe or Figure 2 of <a href="https://www.nrel.gov/docs/fy10osti/46719.pdf">NREL 2009</a> for the United States. Where suitable salt deposits are not available, hydrogen can be stored in aboveground steel tanks for 11 EUR/kWh.
+                  Costs for ancillary services inside each production island are not included.
                 </li>
                 <li>
-                  Costs for the electricity grid inside each region and costs for ancillary services are not included.
-                </li>
+		  To avoid long job times, the default here is to run
+                only for a single weather year sampled at most every 3
+                hours. You can download the code yourself and run
+                hourly for multiple weather years.
+		</li>
               </ol>
-              <p>
-                To see an animation of a 95% decarbonised European electricity system,
-                including more renewable energy technologies and cross-border
-                transmission connections, see:
-              </p>
-              <p><a href="https://pypsa.org/animations/pypsa-eur-30/">PyPSA-Eur-30
-              animation</a></p>
-              <p>Here asset lifetimes are all assumed to be 25
-                years, with the exception of batteries (15 years) and hydrogen
-                electrolysers (20 years). Battery charging and discharging
-                efficiencies are both 95%. Fixed Operation and Maintenance (FOM)
-                costs are set at 3% of the investment cost of the asset per
-              year.</p>
-                <p>Fuel cells could be used instead of combined or open cycle turbines for hydrogen to power. Fuel cells are less mature than turbines, but have better chances of cost reduction and efficiency improvement.</p>
-              <p>To avoid long job times, the default here is to run only for a single
-                weather year sampled at most every 3 hours. You can find solved
-                versions run against every hour over 31 weather years here at
-                the <a href="https://github.com/PyPSA/WHOBS">WHOBS repository</a>.</p>
               <h3>Only free software and open data</h3>
               <p>The graphical user interface,
 		weather processing, optimisation model construction, solver and post-processing are all built with
 		free software and open data only. The
                 code for all parts except the solver can be downloaded from the GitHub
-                repository <a href="https://github.com/PyPSA/whobs-server">whobs-server</a>. It uses
+                repository <a href="https://github.com/PyPSA/efuels-server">efuels-server</a>. It uses
                 the <a href="https://github.com/PyPSA/PyPSA">Python for Power
                 System Analysis (PyPSA)</a> energy optimisation framework, open
                 weather data
                 from the European Centre for Medium-Range Weather Forecasts (ECMWF) <a href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels">ERA5 reanalysis dataset</a>, the <a href="https://github.com/PyPSA/atlite">atlite library</a> for converting weather data to generation profiles,
                 <a href="https://d3js.org/">D3.js</a> for graphics, <a href="https://www.mapbox.com/">Mapbox</a>, <a href="http://leafletjs.com/">Leaflet</a> and <a href="https://www.naturalearthdata.com/">Natural Earth</a> for maps,  <a href="https://github.com/coin-or/Clp">Clp</a> for the solver, and
-              free software for the server infrastructure (GNU/Linux, nginx, Flask, gunicorn, Redis).</p>
+		free software for the server infrastructure (GNU/Linux, nginx, Flask, gunicorn, Redis).</p>
+	      <p>The code is a simplified version of the <a href="https://github.com/euronion/trace">trace model</a> by Johannes Hampp used in <a href="https://doi.org/10.1371/journal.pone.0281380">Hampp et al, 2023</a>.</p>
               <h3>New functionality coming soon</h3>
-              <p>See the <a href="https://github.com/PyPSA/whobs-server/issues">GitHub issue tracker</a>.</p>
+              <p>See the <a href="https://github.com/PyPSA/efuels-server/issues">GitHub issue tracker</a>.</p>
 	      <h3>Problems/comments/feedback/help out</h3>
-              <p>If you encounter any problems please report them using the <a href="https://github.com/PyPSA/whobs-server/issues">GitHub issue tracker</a>. It would be helpful to note the jobid and any other error messages from your browser's JavaScript console (find the console via your browser's "Developer Tools").</p>
-              <p>If you want to help out and contribute improvements, please submit a <a href="https://github.com/PyPSA/whobs-server/pulls">pull request</a>!</p>
+              <p>If you encounter any problems please report them using the <a href="https://github.com/PyPSA/efuels-server/issues">GitHub issue tracker</a>. It would be helpful to note the jobid and any other error messages from your browser's JavaScript console (find the console via your browser's "Developer Tools").</p>
+              <p>If you want to help out and contribute improvements, please submit a <a href="https://github.com/PyPSA/efuels-server/pulls">pull request</a>!</p>
               <p>Any other feedback and comments can be sent to <a href="https://nworbmot.org/">Tom Brown</a>.</p>
               <h3>Contributors and thanks</h3>
 	      <ul>
                 <li><a href="https://nworbmot.org/">Tom Brown</a> conceived and developed the website.</li>
+		<li><a href="https://www.linkedin.com/in/johannes-hampp-4572b5126/">Johannes Hampp</a> developed the original <a href="https://github.com/euronion/trace">trace model</a> on which this website is based.</a>
                 <li><a href="https://tberg.dk">Bo Tranberg</a> of <a href="https://ento.ai">Ento Labs</a> implemented the user interface in <a href="https://getbootstrap.com">bootstrap</a>.</li>
                 <li><a href="https://github.com/coroa">Jonas Hörsch</a> developed the library <a href="https://github.com/PyPSA/atlite">atlite</a> that processes the weather data and selects different geographical areas.</li>
               </ul>
@@ -386,8 +371,7 @@
 
       var defaults = {{defaults | tojson}};
       var defaults_t = {{defaults_t | tojson}};
-      var colors = {{colors | tojson}};
-      var balances = {{balances | tojson}};
+      var config = {{config | tojson}};
       var results = {{ results | tojson }};
 
     </script>

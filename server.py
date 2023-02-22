@@ -235,8 +235,7 @@ def root():
     return render_template('index.html',
                            defaults=defaults.T.to_dict(),
                            defaults_t={year: defaults_t[year].T.to_dict() for year in defaults_t},
-                           balances=config["balances_to_display"],
-                           colors=config["colors"],
+                           config=config,
                            results=results)
 
 
