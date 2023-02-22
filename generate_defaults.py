@@ -59,6 +59,8 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
                                ("hydrogen_electrolyser","electrolysis","Hydrogen electrolyser"),
                                ("hydrogen_energy","hydrogen storage underground","Hydrogen underground storage"),
                                ("hydrogen_submarine_pipeline","H2 (g) submarine pipeline","Hydrogen submarine pipeline"),
+                               ("hvdc_submarine_cable","HVDC submarine","HVDC submarine cable"),
+                               ("hvdc_inverter_pair","HVDC inverter pair","HVDC AC-DC inverter pair"),
                                ("battery_energy","battery storage","Utility-scale battery energy"),
                                ("battery_power","battery inverter","Utility-scale battery converter power"),
                                ("dac","direct air capture","Direct air capture"),
@@ -70,9 +72,6 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
     for year in years:
         value = td[year].loc[(td_name,"investment"),"value"]
         unit = td[year].loc[(td_name,"investment"),"unit"]
-        if "EUR/MW" in unit and name != "hydrogen_submarine_pipeline":
-            unit = unit.replace("EUR/MW","EUR/kW")
-            value /= 1e3
 
         df.loc[(name + "_cost",str(year)),:] = ["f",
                                                 value,
@@ -110,6 +109,22 @@ for name,td_name,full_name in [("battery_power_efficiency_charging","battery inv
                                       unit,
                                       full_name,
                                       td[year].loc[(td_name,"efficiency"),"source"]]
+
+
+#hydrogen_submarine_pipeline_losses,,f,2.1,percent/1000km,Hydrogen submarine pipeline losses,
+
+df.loc[("hydrogen_submarine_pipeline_losses",""),:] = ["f",
+                                                       100*(1-eff.loc[("H2 (g) submarine pipeline","all","hydrogen (g) compressed submarine"),"efficiency"][0]),
+                                                       "percent/1000km",
+                                                       "Hydrogen submarine pipeline losses",
+                                                       eff.loc[("H2 (g) submarine pipeline","all","hydrogen (g) compressed submarine"),"source"][0]]
+
+df.loc[("hvdc_submarine_cable_losses",""),:] = ["f",
+                                                100*(1-eff.loc[("HVDC submarine","all","hvdc submarine"),"efficiency"][0]),
+                                                "percent/1000km",
+                                                "HVDC submarine cable losses",
+                                                eff.loc[("HVDC submarine","all","hvdc submarine"),"source"][0]]
+
 
 
 df.loc[("methanolisation_efficiency",""),:] = ["f",

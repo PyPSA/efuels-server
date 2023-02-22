@@ -116,7 +116,7 @@ def sanitise_assumptions(assumptions):
     if assumptions["efuels_load"] == 0:
         return "No load", None
 
-    if assumptions["efuel"] not in ["hydrogen_submarine_pipeline","methanol"]:
+    if assumptions["efuel"] not in config["efuels"]:
         return "E-fuel {} is not recognised".format(assumptions["efuel"]), None
 
     return None, assumptions
@@ -174,6 +174,9 @@ def find_results(results_hash):
     results["carrier_series"] = {}
 
     for carrier in config["balances_to_display"]:
+
+        if carrier not in carrier_series:
+            continue
 
         print("processing series for energy carrier", carrier)
 

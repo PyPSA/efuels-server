@@ -10,8 +10,9 @@ tech_years: [2020,2030,2050]
 tech_years_default: 2030
 
 efuels:
-  hydrogen_submarine_pipeline: "Hydrogen by submarine pipeline"
+  hydrogen_submarine_pipeline: Hydrogen by submarine pipeline
   methanol: Methanol
+  electricity_hvdc: Electricity by HVDC transmission
 
 efuels_default: hydrogen_submarine_pipeline
 
@@ -72,3 +73,4 @@ colors:
   dac: "#708090"
   co2 storage: "#708090"
   heat pump: red
+  hvdc: green

@@ -361,9 +361,13 @@ function display_results(){
 
     for (var k=0; k < balances.length; k++){
 	let balance = balances[k];
-	console.log("Drawing power time series for", balance);
-	let series = results["carrier_series"][balance];
-	draw_series(series, results.snapshots, balance);
+	if(balance in results["carrier_series"]){
+	    console.log("Drawing power time series for", balance);
+	    let series = results["carrier_series"][balance];
+	    draw_series(series, results.snapshots, balance);
+	} else {
+	    console.log("Balance data not available for", balance);
+	};
     };
 
 

@@ -43,6 +43,8 @@ from shapely.geometry import box, Point, Polygon, MultiPolygon
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
+defaults = pd.read_csv("defaults.csv",index_col=[0,1],na_filter=False)
+
 
 threshold = config["results_threshold"]
 
@@ -234,7 +236,7 @@ def run_optimisation(assumptions, pu):
 
     for item in techs:
         assumptions_df.at[item,"discount rate"] = assumptions[item + "_discount"]/100.
-        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"] if ("ship" in item or "pipeline" in item or "dac" in item or "co2_storage" in item or "carbonaceous_storage" in item) else assumptions[item + "_cost"]*1e3 #kW to MW
+        assumptions_df.at[item,"investment"] = assumptions[item + "_cost"]*1e3 if "EUR/kW" in defaults.loc[item + "_cost"]["unit"][0] else assumptions[item + "_cost"]
         assumptions_df.at[item,"FOM"] = assumptions[item + "_fom"]
         assumptions_df.at[item,"lifetime"] = assumptions[item + "_lifetime"]
 
@@ -247,7 +249,7 @@ def run_optimisation(assumptions, pu):
     print(f'distance between points is {distance} km')
 
 
-    if assumptions["efuel"] in ["hydrogen_submarine_pipeline"]:
+    if assumptions["efuel"] in ["electricity_hvdc", "hydrogen_submarine_pipeline"]:
         distance_transported = assumptions["pipeline_distance_factor"]*distance
     elif assumptions["efuel"] in ["methanol"]:
         distance_transported = assumptions["shipping_distance_factor"]*distance
@@ -474,6 +476,26 @@ def run_optimisation(assumptions, pu):
                     efficiency2=-assumptions["methanolisation_electricity"]*assumptions["methanolisation_efficiency"],
                     efficiency3=-assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
                     capital_cost=assumptions_df.at["methanolisation","fixed"]*assumptions["methanolisation_efficiency"]) #NB: cost is EUR/kW_MeOH
+
+    elif assumptions["efuel"] == "electricity_hvdc":
+
+        network.add("Bus",
+                    "destination",
+                    carrier="efuel")
+
+        network.add("Load","electricity_load",
+                    bus="destination",
+                    carrier="efuel",
+                    p_set=assumptions["efuels_load"])
+
+        network.add("Link",
+                    "hvdc",
+                    bus0="electricity",
+                    bus1="destination",
+                    carrier="hvdc",
+                    p_nom_extendable=True,
+                    efficiency=(1-assumptions["hvdc_submarine_cable_losses"]/100.)**(distance_transported/1000.),
+                    capital_cost=assumptions_df.at["hvdc_submarine_cable","fixed"]*distance_transported + assumptions_df.at["hvdc_inverter_pair","fixed"])
 
     else:
         return None, None, "Efuel {} was not recognised".format(assumptions["efuel"])

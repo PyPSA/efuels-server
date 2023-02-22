@@ -54,7 +54,6 @@ hydrogen_energy_discount,,f,5,percent,Hydrogen underground storage discount rate
 hydrogen_electrolyser_discount,,f,5,percent,Hydrogen electrolyser discount rate,
 dispatchable1_discount,,f,10,percent,Dispatchable technology 1 discount rate,
 dispatchable2_discount,,f,10,percent,Dispatchable technology 2 discount rate,
-hydrogen_submarine_pipeline_losses,,f,2.1,percent/1000km,Hydrogen submarine pipeline losses,
 hydrogen_submarine_pipeline_discount,,f,5,percent,Hydrogen submarine pipeline discount rate,
 wind,,b,True,,Wind turbine,
 solar,,b,True,,Solar photovoltaic cell,
@@ -68,13 +67,13 @@ co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
 methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,Private discussions.
 methanolisation_discount,,f,5,percent,Methanol synthesis discount rate,
-methanolisation_cost,2020,f,757.401,EUR/kW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
+methanolisation_cost,2020,f,757401.0,EUR/MW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2020,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
 methanolisation_lifetime,2020,f,20.0,years,Methanol synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
-methanolisation_cost,2030,f,650.71126,EUR/kW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
+methanolisation_cost,2030,f,650711.26,EUR/MW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2030,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
 methanolisation_lifetime,2030,f,20.0,years,Methanol synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
-methanolisation_cost,2050,f,480.58439000000004,EUR/kW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
+methanolisation_cost,2050,f,480584.39,EUR/MW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2050,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
 methanolisation_lifetime,2050,f,20.0,years,Methanol synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
 wind_cost,2020,f,1118.77,EUR/kW,Onshore wind capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
@@ -122,6 +121,26 @@ hydrogen_submarine_pipeline_lifetime,2030,f,30.0,years,Hydrogen submarine pipeli
 hydrogen_submarine_pipeline_cost,2050,f,329.37,EUR/MW/km,Hydrogen submarine pipeline capital cost (overnight),"Assume similar cost as for CH4 (g) submarine pipeline but with the same factor as between onland CH4 (g) pipeline and H2 (g) pipeline (2.86). This estimate is comparable to a 36in diameter pipeline calaculated based on d’Amore-Domenech et al (2021): 10.1016/j.apenergy.2021.116625 , supplementary material (=251 EUR/MW/km)."
 hydrogen_submarine_pipeline_fom,2050,f,3.0,percent of overnight cost per year,Hydrogen submarine pipeline fixed operation and maintenance costs,Assume same as for CH4 (g) submarine pipeline.
 hydrogen_submarine_pipeline_lifetime,2050,f,30.0,years,Hydrogen submarine pipeline lifetime,Assume same as for CH4 (g) submarine pipeline.
+hvdc_submarine_cable_discount,,f,5,percent,HVDC submarine cable discount rate,
+hvdc_submarine_cable_cost,2020,f,471.16,EUR/MW/km,HVDC submarine cable capital cost (overnight),Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_fom,2020,f,0.35,percent of overnight cost per year,HVDC submarine cable fixed operation and maintenance costs,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_lifetime,2020,f,40.0,years,HVDC submarine cable lifetime,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_cost,2030,f,471.16,EUR/MW/km,HVDC submarine cable capital cost (overnight),Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_fom,2030,f,0.35,percent of overnight cost per year,HVDC submarine cable fixed operation and maintenance costs,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_lifetime,2030,f,40.0,years,HVDC submarine cable lifetime,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_cost,2050,f,471.16,EUR/MW/km,HVDC submarine cable capital cost (overnight),Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_fom,2050,f,0.35,percent of overnight cost per year,HVDC submarine cable fixed operation and maintenance costs,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_submarine_cable_lifetime,2050,f,40.0,years,HVDC submarine cable lifetime,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
+hvdc_inverter_pair_discount,,f,5,percent,HVDC AC-DC inverter pair discount rate,
+hvdc_inverter_pair_cost,2020,f,162364.82,EUR/MW,HVDC AC-DC inverter pair capital cost (overnight),"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_fom,2020,f,2.0,percent of overnight cost per year,HVDC AC-DC inverter pair fixed operation and maintenance costs,"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_lifetime,2020,f,40.0,years,HVDC AC-DC inverter pair lifetime,"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_cost,2030,f,162364.82,EUR/MW,HVDC AC-DC inverter pair capital cost (overnight),"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_fom,2030,f,2.0,percent of overnight cost per year,HVDC AC-DC inverter pair fixed operation and maintenance costs,"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_lifetime,2030,f,40.0,years,HVDC AC-DC inverter pair lifetime,"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_cost,2050,f,162364.82,EUR/MW,HVDC AC-DC inverter pair capital cost (overnight),"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_fom,2050,f,2.0,percent of overnight cost per year,HVDC AC-DC inverter pair fixed operation and maintenance costs,"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
+hvdc_inverter_pair_lifetime,2050,f,40.0,years,HVDC AC-DC inverter pair lifetime,"Hagspiel et al. (2014): doi:10.1016/j.energy.2014.01.025 , table A.2 ."
 battery_energy_cost,2020,f,232.0,EUR/kWh,Utility-scale battery energy capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_energy_fom,2020,f,0,percent of overnight cost per year,Utility-scale battery energy fixed operation and maintenance costs,default
 battery_energy_lifetime,2020,f,20.0,years,Utility-scale battery energy lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
@@ -192,6 +211,8 @@ heat_pump_efficiency,2050,f,285.0,percent,Industrial heat pump COP,"Danish Energ
 hydrogen_electrolyser_efficiency,2020,f,66.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_efficiency,2030,f,68.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_efficiency,2050,f,75.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+hydrogen_submarine_pipeline_losses,,f,2.100000000000002,percent/1000km,Hydrogen submarine pipeline losses,"Danish Energy Agency, Technology Data for Energy Transport (2021), Excel datasheet: H2 140."
+hvdc_submarine_cable_losses,,f,2.300000000000002,percent/1000km,HVDC submarine cable losses,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."
 methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis carbon dioxide input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 66."
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
