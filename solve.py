@@ -1,4 +1,4 @@
-## Copyright 2022 Tom Brown
+## Copyright 2022-3 Tom Brown
 
 ## This program is free software; you can redistribute it and/or
 ## modify it under the terms of the GNU Affero General Public License as
@@ -251,7 +251,7 @@ def run_optimisation(assumptions, pu):
 
     if assumptions["efuel"] in ["electricity_hvdc", "hydrogen_submarine_pipeline"]:
         distance_transported = assumptions["pipeline_distance_factor"]*distance
-    elif assumptions["efuel"] in ["methanol"]:
+    elif assumptions["efuel"] in ["methanol","ammonia"]:
         distance_transported = assumptions["shipping_distance_factor"]*distance
     else:
         distance_transported = 0.
@@ -477,6 +477,56 @@ def run_optimisation(assumptions, pu):
                     efficiency3=-assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
                     capital_cost=assumptions_df.at["methanolisation","fixed"]*assumptions["methanolisation_efficiency"]) #NB: cost is EUR/kW_MeOH
 
+    elif assumptions["efuel"] == "ammonia":
+
+        network.add("Bus",
+                    "destination",
+                    carrier="ammonia")
+
+        network.add("Bus",
+                    "ammonia",
+                    carrier="ammonia")
+
+        network.add("Store",
+                    "ammonia",
+                    bus="ammonia",
+                    carrier="ammonia storage",
+                    e_nom_extendable=True,
+                    e_cyclic=True,
+                    capital_cost=assumptions_df.at["ammonia_storage","fixed"])
+
+        network.add("Load","ammonia_load",
+                    bus="destination",
+                    carrier="efuel",
+                    p_set=assumptions["efuels_load"])
+
+        network.add("Bus",
+                    "nitrogen",
+                    carrier="nitrogen")
+
+        network.add("Link",
+                    "air separation unit",
+                    bus0="electricity",
+                    bus1="nitrogen",
+                    carrier="air separation unit",
+                    p_nom_extendable=True,
+                    efficiency=assumptions["air_separation_unit_efficiency"], # in tN2/MWhel
+                    capital_cost=assumptions_df.at["air_separation_unit","fixed"]*assumptions["air_separation_unit_efficiency"]) #NB: cost is EUR/(tN2/h)
+
+        network.add("Link",
+                    "Haber Bosch",
+                    bus0="hydrogen",
+                    bus1="ammonia",
+                    bus2="electricity",
+                    bus3="nitrogen",
+                    carrier="Haber-Bosch synthesis",
+                    p_nom_extendable=True,
+                    p_min_pu=assumptions["haber_bosch_min_part_load"]/100,
+                    efficiency=assumptions["haber_bosch_efficiency"],
+                    efficiency2=-assumptions["haber_bosch_electricity"]*assumptions["haber_bosch_efficiency"],
+                    efficiency3=-assumptions["haber_bosch_nitrogen"]*assumptions["haber_bosch_efficiency"],
+                    capital_cost=assumptions_df.at["haber_bosch","fixed"]*assumptions["haber_bosch_efficiency"]) #NB: cost is EUR/kW_NH3
+
     elif assumptions["efuel"] == "electricity_hvdc":
 
         network.add("Bus",
@@ -510,7 +560,7 @@ def run_optimisation(assumptions, pu):
         return None, None, "Efuel {} was not recognised".format(assumptions["efuel"])
 
 
-    if assumptions["efuel"] in ["methanol"]:
+    if assumptions["efuel"] in ["methanol","ammonia"]:
         efuel = assumptions["efuel"]
         loading_loss = 2*assumptions[efuel+"_ship_loading_loss"]/100
         transport_loss = assumptions[efuel+"_ship_energy_demand"]/assumptions[efuel+"_ship_capacity_mwh"]*(2*distance_transported)

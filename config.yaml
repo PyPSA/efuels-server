@@ -12,6 +12,7 @@ tech_years_default: 2030
 efuels:
   hydrogen_submarine_pipeline: Hydrogen by submarine pipeline
   methanol: Methanol by ship
+  ammonia: Ammonia by ship
   electricity_hvdc: Electricity by submarine HVDC cable
 
 efuels_default: hydrogen_submarine_pipeline
@@ -37,6 +38,7 @@ preferred order: ["wind","solar","battery storage","battery inverter","hydrogen 
 #LHV
 mwh_per_t:
   methanol: 5.54
+  ammonia: 5.17
 
 #LHV at 20 C
 mwh_per_m3:
@@ -74,3 +76,7 @@ colors:
   co2 storage: "#708090"
   heat pump: red
   hvdc: green
+  ammonia storage: orange
+  Haber-Bosch synthesis: brown
+  air separation unit: red
+  ammonia shipping: green

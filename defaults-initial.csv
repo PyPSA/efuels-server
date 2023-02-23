@@ -66,3 +66,4 @@ co2_cost,2020,f,300,EUR/tCO2,CO2 cost,
 co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
 methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,"Private discussions."
+haber_bosch_min_part_load,,f,30.0,percent,Haber-Bosch ammonia synthesis minimum part load,"Danish Energy Agency renewable fuels database"

@@ -66,6 +66,7 @@ co2_cost,2020,f,300,EUR/tCO2,CO2 cost,
 co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
 methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,Private discussions.
+haber_bosch_min_part_load,,f,30.0,percent,Haber-Bosch ammonia synthesis minimum part load,Danish Energy Agency renewable fuels database
 methanolisation_discount,,f,5,percent,Methanol synthesis discount rate,
 methanolisation_cost,2020,f,757401.0,EUR/MW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2020,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
@@ -199,6 +200,36 @@ liquid_carbonaceous_storage_lifetime,2030,f,30.0,years,Liquid carbonaceous fuel 
 liquid_carbonaceous_storage_cost,2050,f,169.79,EUR/m^3,Liquid carbonaceous fuel storage tank capital cost (overnight),"Stelter and Nishida 2013: https://webstore.iea.org/insights-series-2013-focus-on-energy-security , pg. 8F ."
 liquid_carbonaceous_storage_fom,2050,f,6.25,percent of overnight cost per year,Liquid carbonaceous fuel storage tank fixed operation and maintenance costs,"Stelter and Nishida 2013: https://webstore.iea.org/insights-series-2013-focus-on-energy-security , figure 7 and pg. 12 ."
 liquid_carbonaceous_storage_lifetime,2050,f,30.0,years,Liquid carbonaceous fuel storage tank lifetime,"Stelter and Nishida 2013: https://webstore.iea.org/insights-series-2013-focus-on-energy-security , pg. 11."
+air_separation_unit_discount,,f,5,percent,Air separation unit for nitrogen discount rate,
+air_separation_unit_cost,2020,f,891679.11,EUR/t_N2/h,Air separation unit for nitrogen capital cost (overnight),"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_fom,2020,f,3.0,percent of overnight cost per year,Air separation unit for nitrogen fixed operation and maintenance costs,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_lifetime,2020,f,30.0,years,Air separation unit for nitrogen lifetime,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_cost,2030,f,729306.18,EUR/t_N2/h,Air separation unit for nitrogen capital cost (overnight),"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_fom,2030,f,3.0,percent of overnight cost per year,Air separation unit for nitrogen fixed operation and maintenance costs,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_lifetime,2030,f,30.0,years,Air separation unit for nitrogen lifetime,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_cost,2050,f,457307.78,EUR/t_N2/h,Air separation unit for nitrogen capital cost (overnight),"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_fom,2050,f,3.0,percent of overnight cost per year,Air separation unit for nitrogen fixed operation and maintenance costs,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+air_separation_unit_lifetime,2050,f,30.0,years,Air separation unit for nitrogen lifetime,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_discount,,f,5,percent,Haber-Bosch ammonia synthesis discount rate,
+haber_bosch_cost,2020,f,1586.29,EUR/kW_NH3,Haber-Bosch ammonia synthesis capital cost (overnight),"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_fom,2020,f,3.0,percent of overnight cost per year,Haber-Bosch ammonia synthesis fixed operation and maintenance costs,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_lifetime,2020,f,30.0,years,Haber-Bosch ammonia synthesis lifetime,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_cost,2030,f,1297.43,EUR/kW_NH3,Haber-Bosch ammonia synthesis capital cost (overnight),"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_fom,2030,f,3.0,percent of overnight cost per year,Haber-Bosch ammonia synthesis fixed operation and maintenance costs,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_lifetime,2030,f,30.0,years,Haber-Bosch ammonia synthesis lifetime,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_cost,2050,f,813.55,EUR/kW_NH3,Haber-Bosch ammonia synthesis capital cost (overnight),"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_fom,2050,f,3.0,percent of overnight cost per year,Haber-Bosch ammonia synthesis fixed operation and maintenance costs,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+haber_bosch_lifetime,2050,f,30.0,years,Haber-Bosch ammonia synthesis lifetime,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+ammonia_storage_discount,,f,5,percent,Liquid ammonia storage discount rate,
+ammonia_storage_cost,2020,f,161.93,EUR/MWh_NH3,Liquid ammonia storage capital cost (overnight),"Calculated based on Morgan E. 2013: doi:10.7275/11KT-3F59 , Fig. 55, Fig 58."
+ammonia_storage_fom,2020,f,2.0,percent of overnight cost per year,Liquid ammonia storage fixed operation and maintenance costs,"Guesstimate, based on H2 (l) storage tank."
+ammonia_storage_lifetime,2020,f,20.0,years,Liquid ammonia storage lifetime,"Morgan E. 2013: doi:10.7275/11KT-3F59 , pg. 290"
+ammonia_storage_cost,2030,f,161.93,EUR/MWh_NH3,Liquid ammonia storage capital cost (overnight),"Calculated based on Morgan E. 2013: doi:10.7275/11KT-3F59 , Fig. 55, Fig 58."
+ammonia_storage_fom,2030,f,2.0,percent of overnight cost per year,Liquid ammonia storage fixed operation and maintenance costs,"Guesstimate, based on H2 (l) storage tank."
+ammonia_storage_lifetime,2030,f,20.0,years,Liquid ammonia storage lifetime,"Morgan E. 2013: doi:10.7275/11KT-3F59 , pg. 290"
+ammonia_storage_cost,2050,f,161.93,EUR/MWh_NH3,Liquid ammonia storage capital cost (overnight),"Calculated based on Morgan E. 2013: doi:10.7275/11KT-3F59 , Fig. 55, Fig 58."
+ammonia_storage_fom,2050,f,2.0,percent of overnight cost per year,Liquid ammonia storage fixed operation and maintenance costs,"Guesstimate, based on H2 (l) storage tank."
+ammonia_storage_lifetime,2050,f,20.0,years,Liquid ammonia storage lifetime,"Morgan E. 2013: doi:10.7275/11KT-3F59 , pg. 290"
 co2_storage_discount,,f,5,percent,CO2 storage tank discount rate,
 co2_storage_cost,2020,f,2528.17,EUR/t_CO2,CO2 storage tank capital cost (overnight),"Lauri et al. 2014: doi: 10.1016/j.egypro.2014.11.297, Table 3."
 co2_storage_fom,2020,f,1.0,percent of overnight cost per year,CO2 storage tank fixed operation and maintenance costs,"Lauri et al. 2014: doi: 10.1016/j.egypro.2014.11.297, pg. 2746 ."
@@ -231,6 +262,10 @@ methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis 
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
 dac_electricity,,f,0.28,MWh/tCO2,Direct air capture electricity consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
 dac_heat,,f,1.5,MWh/tCO2,Direct air capture heat consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
+air_separation_unit_efficiency,,f,4.0,tN2/MWhel,Air separation unit output,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), pg.288 ."
+haber_bosch_efficiency,,f,0.8707761516750281,MWh-NH3-LHV/MWh-H2-LHV,Haber-Bosch ammonia synthesis hydrogen input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 57."
+haber_bosch_electricity,,f,0.2472999651608408,MWhel/MWh-NH3-LHV,Haber-Bosch ammonia synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , table 11."
+haber_bosch_nitrogen,,f,0.1596794797352224,tN2/MWh-NH3-LHV,Haber-Bosch ammonia synthesis nitrogen input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 57."
 methanol_ship_discount,,f,5,percent,methanol shipping discount rate,
 methanol_ship_loading_loss,,f,0.0,%/transfer,methanol shipping unloading/loading loss,"Guesstimate, transfer of simple non-cryogenic fluid."
 methanol_ship_loading_time,,f,48.0,h,methanol shipping unloading/loading time,Assume same as for LOHC.
@@ -249,3 +284,21 @@ methanol_ship_lifetime,2050,f,15.0,years,methanol shipping lifetime,"Assume comp
 methanol_ship_capacity_t,2020,f,75000.0,t_MeOH,methanol shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
 methanol_ship_capacity_t,2030,f,75000.0,t_MeOH,methanol shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
 methanol_ship_capacity_t,2050,f,75000.0,t_MeOH,methanol shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ammonia_ship_discount,,f,5,percent,ammonia shipping discount rate,
+ammonia_ship_loading_loss,,f,0.0,%/transfer,ammonia shipping unloading/loading loss,"Guesstimate, possibly negligible losses due to relatively close to ambient transport temperature."
+ammonia_ship_loading_time,,f,48.0,h,ammonia shipping unloading/loading time,Assume same as for CH4 (l).
+ammonia_ship_average_speed,,f,37.0,km/h,ammonia shipping average speed,Assume same as for CH4 (l).
+ammonia_ship_capacity_mwh,,f,273830.0,MWh_LHV,ammonia shipping energy capacity,Based on NH3 LHV of 5.1666 MWh/t_NH3 and 53000 t capacity.
+ammonia_ship_energy_demand,,f,0.5675,MWh/km,ammonia shipping energy demand,Assume same as for CH4 (l).
+ammonia_ship_fom,2020,f,4.0,%/year,ammonia shipping fixed operation and maintenance costs,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_fom,2030,f,4.0,%/year,ammonia shipping fixed operation and maintenance costs,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_fom,2050,f,4.0,%/year,ammonia shipping fixed operation and maintenance costs,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_cost,2020,f,74461941.34,EUR,ammonia shipping capital cost (overnight),"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_cost,2030,f,74461941.34,EUR,ammonia shipping capital cost (overnight),"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_cost,2050,f,74461941.34,EUR,ammonia shipping capital cost (overnight),"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_lifetime,2020,f,20.0,years,ammonia shipping lifetime,"Guess estimated based on H2 (l) tanker, but more mature technology"
+ammonia_ship_lifetime,2030,f,20.0,years,ammonia shipping lifetime,"Guess estimated based on H2 (l) tanker, but more mature technology"
+ammonia_ship_lifetime,2050,f,20.0,years,ammonia shipping lifetime,"Guess estimated based on H2 (l) tanker, but more mature technology"
+ammonia_ship_capacity_t,2020,f,53000.0,t_NH3,ammonia shipping mass capacity,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_capacity_t,2030,f,53000.0,t_NH3,ammonia shipping mass capacity,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+ammonia_ship_capacity_t,2050,f,53000.0,t_NH3,ammonia shipping mass capacity,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
