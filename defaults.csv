@@ -112,6 +112,16 @@ hydrogen_energy_lifetime,2030,f,100.0,years,Hydrogen underground storage lifetim
 hydrogen_energy_cost,2050,f,1.2,EUR/kWh,Hydrogen underground storage capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 hydrogen_energy_fom,2050,f,0.0,percent of overnight cost per year,Hydrogen underground storage fixed operation and maintenance costs,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 hydrogen_energy_lifetime,2050,f,100.0,years,Hydrogen underground storage lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
+hydrogen_turbine_discount,,f,5,percent,Hydrogen combined cycle turbine discount rate,
+hydrogen_turbine_cost,2020,f,880.0,EUR/kW,Hydrogen combined cycle turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_fom,2020,f,3.33,percent of overnight cost per year,Hydrogen combined cycle turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_lifetime,2020,f,25.0,years,Hydrogen combined cycle turbine lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_cost,2030,f,830.0,EUR/kW,Hydrogen combined cycle turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_fom,2030,f,3.35,percent of overnight cost per year,Hydrogen combined cycle turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_lifetime,2030,f,25.0,years,Hydrogen combined cycle turbine lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_cost,2050,f,800.0,EUR/kW,Hydrogen combined cycle turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_fom,2050,f,3.25,percent of overnight cost per year,Hydrogen combined cycle turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_lifetime,2050,f,25.0,years,Hydrogen combined cycle turbine lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 hydrogen_submarine_pipeline_cost,2020,f,329.37,EUR/MW/km,Hydrogen submarine pipeline capital cost (overnight),"Assume similar cost as for CH4 (g) submarine pipeline but with the same factor as between onland CH4 (g) pipeline and H2 (g) pipeline (2.86). This estimate is comparable to a 36in diameter pipeline calaculated based on d’Amore-Domenech et al (2021): 10.1016/j.apenergy.2021.116625 , supplementary material (=251 EUR/MW/km)."
 hydrogen_submarine_pipeline_fom,2020,f,3.0,percent of overnight cost per year,Hydrogen submarine pipeline fixed operation and maintenance costs,Assume same as for CH4 (g) submarine pipeline.
 hydrogen_submarine_pipeline_lifetime,2020,f,30.0,years,Hydrogen submarine pipeline lifetime,Assume same as for CH4 (g) submarine pipeline.
@@ -211,6 +221,9 @@ heat_pump_efficiency,2050,f,285.0,percent,Industrial heat pump COP,"Danish Energ
 hydrogen_electrolyser_efficiency,2020,f,66.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_efficiency,2030,f,68.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_efficiency,2050,f,75.0,"""percent, LHV""",Hydrogen electrolyser efficiency,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
+hydrogen_turbine_efficiency,2020,f,56.00000000000001,"""percent, LHV""",Hydrogen combined cycle turbine efficiency,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_efficiency,2030,f,57.99999999999999,"""percent, LHV""",Hydrogen combined cycle turbine efficiency,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+hydrogen_turbine_efficiency,2050,f,60.0,"""percent, LHV""",Hydrogen combined cycle turbine efficiency,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 hydrogen_submarine_pipeline_losses,,f,2.100000000000002,percent/1000km,Hydrogen submarine pipeline losses,"Danish Energy Agency, Technology Data for Energy Transport (2021), Excel datasheet: H2 140."
 hvdc_submarine_cable_losses,,f,2.300000000000002,percent/1000km,HVDC submarine cable losses,Purvins et al. (2018): https://doi.org/10.1016/j.jclepro.2018.03.095 .
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."

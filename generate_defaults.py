@@ -58,6 +58,7 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
                                ("solar","solar-utility","Utility-scale solar PV"),
                                ("hydrogen_electrolyser","electrolysis","Hydrogen electrolyser"),
                                ("hydrogen_energy","hydrogen storage underground","Hydrogen underground storage"),
+                               ("hydrogen_turbine","CCGT","Hydrogen combined cycle turbine"),
                                ("hydrogen_submarine_pipeline","H2 (g) submarine pipeline","Hydrogen submarine pipeline"),
                                ("hvdc_submarine_cable","HVDC submarine","HVDC submarine cable"),
                                ("hvdc_inverter_pair","HVDC inverter pair","HVDC AC-DC inverter pair"),
@@ -93,15 +94,15 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
 for name,td_name,full_name in [("battery_power_efficiency_charging","battery inverter","Battery power charging efficiency"),
                                ("battery_power_efficiency_discharging","battery inverter","Battery power discharging efficiency"),
                                ("heat_pump_efficiency","industrial heat pump medium temperature","Industrial heat pump COP"),
-                               ("hydrogen_electrolyser_efficiency","electrolysis","Hydrogen electrolyser efficiency")]:
-
+                               ("hydrogen_electrolyser_efficiency","electrolysis","Hydrogen electrolyser efficiency"),
+                               ("hydrogen_turbine_efficiency","CCGT","Hydrogen combined cycle turbine efficiency")]:
 
     for year in years:
         value = 100*td[year].loc[(td_name,"efficiency"),"value"]
         unit = "percent"
         if "battery" in name:
             value = 100*((value/100.)**0.5)
-        elif "electrolyser" in name:
+        elif "hydrogen" in name:
             unit ='"percent, LHV"'
 
         df.loc[(name,str(year)),:] = ["f",

@@ -11,8 +11,8 @@ tech_years_default: 2030
 
 efuels:
   hydrogen_submarine_pipeline: Hydrogen by submarine pipeline
-  methanol: Methanol
-  electricity_hvdc: Electricity by HVDC transmission
+  methanol: Methanol by ship
+  electricity_hvdc: Electricity by submarine HVDC cable
 
 efuels_default: hydrogen_submarine_pipeline
 
@@ -32,7 +32,7 @@ expected_time: 70
 
 balances_to_display: ["electricity","hydrogen"]
 
-preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen electrolyser"]
+preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen electrolyser","hydrogen turbine"]
 
 #LHV
 mwh_per_t:

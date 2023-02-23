@@ -497,6 +497,15 @@ def run_optimisation(assumptions, pu):
                     efficiency=(1-assumptions["hvdc_submarine_cable_losses"]/100.)**(distance_transported/1000.),
                     capital_cost=assumptions_df.at["hvdc_submarine_cable","fixed"]*distance_transported + assumptions_df.at["hvdc_inverter_pair","fixed"])
 
+        network.add("Link",
+                    "hydrogen_turbine",
+                    bus0="hydrogen",
+                    bus1="electricity",
+                    carrier="hydrogen turbine",
+                    p_nom_extendable=True,
+                    efficiency=assumptions["hydrogen_turbine_efficiency"]/100.,
+                    capital_cost=assumptions_df.at["hydrogen_turbine","fixed"]*assumptions["hydrogen_turbine_efficiency"]/100.)  #NB: fixed cost is per MWel
+
     else:
         return None, None, "Efuel {} was not recognised".format(assumptions["efuel"])
 
