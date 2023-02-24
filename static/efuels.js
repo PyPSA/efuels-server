@@ -311,8 +311,8 @@ function fill_results_table(){
 	let row = table.insertRow(table.rows.length);
 	let cap = results[asset + " capacity"].toFixed(1) + " MW";
 	if (asset.includes("storage")) cap += "h";
-	let cfUsed = "";
-	if (["wind","solar"].includes(asset)) cfUsed = (100*results[asset + " cf used"]).toFixed(1);
+	if (asset.includes("co2 storage")) cap = cap.slice(0,-3) + "tCO2";
+	let cfUsed = (100*results[asset + " cf used"]).toFixed(1);
 	let cfAvailable = "";
 	if (["wind","solar"].includes(asset)) cfAvailable = (100*results[asset + " cf available"]).toFixed(1);
 	let curtailment = "";
