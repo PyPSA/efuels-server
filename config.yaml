@@ -37,6 +37,7 @@ preferred order: ["wind","solar","battery storage","battery inverter","hydrogen 
 
 #LHV
 mwh_per_t:
+  hydrogen: 33
   methanol: 5.54
   ammonia: 5.17
 

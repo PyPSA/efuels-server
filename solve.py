@@ -629,8 +629,11 @@ def run_optimisation(assumptions, pu):
     results_overview["objective"] = network.objective/8760
     results_overview["average_price"] = network.buses_t.marginal_price.mean()["electricity"]
     results_overview["average_efuel_price"] = network.buses_t.marginal_price.mean()["destination"]
-    if assumptions["hydrogen"]:
-        results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
+    if "electricity" not in assumptions["efuel"]:
+        efuel = assumptions["efuel"]
+        fuel = efuel if "_" not in efuel else efuel[:efuel.find("_")]
+        results_overview["average_efuel_price_per_t"] = results_overview["average_efuel_price"]*config["mwh_per_t"][fuel]
+    results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
 
 
     results_series = export_time_series(network)
