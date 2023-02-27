@@ -85,6 +85,7 @@ for (let i=0; i<locations.length; i++){
     let lng = assumptions[location +"_lng"];
     let marker = L.marker([lat,lng], {draggable:'true'});
     map.addLayer(marker);
+    marker._icon.style.filter = (location == "source") ? "hue-rotate(120deg)" : "";
     marker.bindPopup('efuel ' + location);
     document.getElementsByName(location+"_location")[0].value = printLocation(lat,lng);
     marker.on('dragend', function(){
