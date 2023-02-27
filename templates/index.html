@@ -171,19 +171,6 @@
 			{% endif %}
                       </div>
 		      {% endfor %}
-		      {% for d in defaults_t["2030"] %}
-                      <div class="form-group">
-                        <label for="sel-{{ d }}">{{ defaults_t["2030"][d]["full_name"] }}
-			  {% if not defaults_t["2030"][d]["unit"] == "" %}
-			  [{{ defaults_t["2030"][d]["unit"] }}]
-			  {% endif %}
-			</label>
-                        <input type="number" class="form-control" id="sel-{{ d }}" name="{{ d }}">
-			{% if not defaults_t["2030"][d]["text"] == "" %}
-			<small class="form-text text-muted">{{ defaults_t["2030"][d]["text"]|safe }}</small>
-			{% endif %}
-                      </div>
-		      {% endfor %}
                     </div>
                   </div>
                 </div>

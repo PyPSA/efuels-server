@@ -36,6 +36,8 @@ conn = Redis.from_url('redis://')
 
 queue = Queue('efuels', connection=conn)
 
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
 #na_filter leaves "" as "" rather than doing nan which confuses jinja2
 defaults = pd.read_csv("defaults.csv",index_col=[0,1],na_filter=False)
@@ -46,19 +48,18 @@ for (n,t) in [("f",float),("i",int)]:
 #work around fact bool("False") returns True
 defaults.loc[defaults.type == "b","value"] = (defaults.loc[defaults.type == "b","value"] == "True")
 
-defaults_t = {year: defaults.swaplevel().loc[year] for year in ["2020","2030","2050"]}
+defaults_t = {str(year): defaults.swaplevel().loc[str(year)] for year in config["tech_years"]}
 defaults = defaults.swaplevel().loc[""]
+
+defaults = pd.concat((defaults,defaults_t[str(config["tech_years_default"])])).sort_index()
 
 booleans = defaults.index[defaults.type == "b"].to_list()
 
-floats = defaults.index[defaults.type == "f"].union(defaults_t["2020"].index[defaults_t["2020"]["type"] == "f"]).to_list()
+floats = defaults.index[defaults.type == "f"].to_list()
 
 ints = defaults.index[defaults.type == "i"].to_list()
 
 strings = defaults.index[defaults.type == "s"].to_list()
-
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f)
 
 
 def sanitise_assumptions(assumptions):

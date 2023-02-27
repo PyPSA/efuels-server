@@ -48,14 +48,9 @@ for (let key in defaults){
 let tech_assumptions = {};
 
 for (let i = 0; i < config["tech_years"].length; i++){
-    tech_assumptions[String(config["tech_years"][i])] = {};
-}
-
-let default_tech_scenario = String(config["tech_years_default"]);
-
-for (let key in defaults_t[default_tech_scenario]){
-    assumptions[key] = defaults_t[default_tech_scenario][key]["value"];
-    for (let year in tech_assumptions){
+    let year = String(config["tech_years"][i]);
+    tech_assumptions[year] = {};
+    for(let key in defaults_t[year]){
 	tech_assumptions[year][key] = defaults_t[year][key]["value"];
     }
 }
