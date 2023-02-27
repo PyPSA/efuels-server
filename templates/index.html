@@ -258,9 +258,9 @@
               <h2>Background and warnings</h2>
               <hr>
               <p>
-                This is a <b>toy model</b> with a <b>strongly simplified</b> setup.   Please read the <a href="https://github.com/PyPSA/WHOBS#warnings">warnings</a> before interpreting the results.
+                This is a <b>toy model</b> with a <b>strongly simplified</b> setup.   Please read the <a href="#warnings">warnings</a> before interpreting the results.
 	      </p>
-	      <p>The tool is a simplified version of the model behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown, published in PLOS ONE in 2023.</p>
+	      <p>The tool is a simplified version of the model behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown, published in PLOS ONE in 2023. See the <a href="#differences">differences</a> to the paper.</p>
 
               <h3 id="warnings">Warnings</h3>
               </p>
@@ -309,8 +309,67 @@
                 hours. You can download the code yourself and run
                 hourly for multiple weather years.
 		</li>
+                <li>
+		  The joint production of electricity and hydrogen can lead to lower costs for both, particularly for a low ratio of hydrogen to electricity production. Flexible electrolyser demand creates flexibility for integrating wind and solar for electricity production. However, operating the efuels production in island mode can save costs compared to joint production, since the alternating current doesn't have to match a perfect sine wave. This saves on power electronic costs.</li>
+		<li>The shipping model is simplified. We assume that there are enough ships for a continuous delivery of efuels. The number of ships needed takes into account the time it takes the ships to do a return trip including loading and unloading the efuel.</li>
+		<li>We do not allow waste heat integration. For example, the waste heat from methanol or Fischer-Tropsh synthesis could be fed to direct air capture.</li>
+		<li>Lower reliability delivery of efuels than baseload may cost less, especially for electricity and hydrogen, which are hard to store.</li>
+		<li>The minimum must-run level also represents availability, taking into account maintenance sheduling for many aggregated units.</li>
               </ol>
-              <h3>Only free software and open data</h3>
+              <h3 id="differences">Differences to model in Hampp et al, 2023</h3>
+	      <p>This tool is a simplified version of the model behind
+	      the research
+	      paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import
+	      options for chemical energy carriers from renewable
+	      sources to Germany</a> by Johannes Hampp, Michael Düren
+	      and Tom Brown, published in PLOS ONE in 2023 (Hampp et
+	      al, 2023).</p>
+              <p>The following list highlights the main differences.</p>
+	      <ol>
+                <li>The default assumption for hydrogen storage in the
+                paper is aboveground hydrogen steel tanks, whereas
+                on this website we assume underground storage in salt
+                caverns. The paper assumes costs of steel tanks in
+                2030 of around 45 EUR/kWh, FOM 2% and lifetime of 30
+                years; use these values to reproduce the paper's results.
+		</li>
+		<li>The paper assumes that the best wind and solar
+		resources in each country are used for domestic energy
+		and excludes these areas from being used for efuel
+		exports. Since this website only allows point
+		locations for wind and solar, we do not do this. This
+		effect can lead to slightly lower costs on the website
+		compared to the paper for densely-populated countries
+		like Germany.</li>
+		<li>The model for the paper allows many wind and solar locations in
+		each country to be combined. This leads to a
+		smoothing effect across the country that reduces balancing costs compared
+		to an efuels plant at a single location. This effect makes
+		the costs on the website higher than the paper in most
+		countries with good wind and solar resources in
+		  sparsely-populated areas.</li>
+		<li>The paper assumes that efuel demand is fixed for
+		the year, but is not strict about when the efuel is
+		delivered during the year. The website requires
+		baseload delivery of the efuel. This makes the website
+		 results more expensive.</li>
+		<li>The paper used <a href="https://github.com/niclasmattsson/GlobalEnergyGIS">GlobalEnergyGIS</a> for processing the weather data, whereas the website uses the <a href="https://github.com/PyPSA/atlite">atlite library</a>.</li>
+		<li>The paper uses a default minimum part load of
+		94.25% for methanol and Fischer-Tropsh synthesis, and
+		30% for NH3 and CH4. The website has a default of 50% for methanol
+		synthesis and 30% for NH3.</li>
+		<li>The paper includes compression costs and energy
+		demand for hydrogen and CO2 tanks, whereas the website
+		ignores these. For CO2 the effect is tiny, for H2 the
+		  effect is small for steel tanks.</li>
+		<li>The paper includes water desalination, whereas the paper ignores it since it is a small effect.</li>
+		<li>The website has a simplified version of the shipping model in the paper.</li>
+	      </ol>
+
+
+
+
+	      <h3>Only free software and open data</h3>
               <p>The graphical user interface,
 		weather processing, optimisation model construction, solver and post-processing are all built with
 		free software and open data only. The
