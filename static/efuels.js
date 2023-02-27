@@ -56,18 +56,6 @@ for (let i = 0; i < config["tech_years"].length; i++){
 }
 
 
-let assets = ["solar","wind","battery_power",
-	  "battery_energy","hydrogen_electrolyser",
-	  "hydrogen_turbine","hydrogen_energy",
-	      "dispatchable1","dispatchable2","hydrogen_submarine_pipeline"];
-
-let vre = ["solar","wind"];
-
-let electricity = ["solar","wind","dispatchable1","dispatchable2"];
-
-let storage = ["battery","hydrogen"];
-
-
 d3.select("#tech_scenario").on("change", function(){
     let scenario = this.value;
     console.log("tech scenario change to",scenario);
