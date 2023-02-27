@@ -12,8 +12,9 @@ years = config["tech_years"]
 
 
 #get technology data
-
+td = {}
 for year in years:
+
     fn = f"costs_{year}.csv"
     url = f"https://raw.githubusercontent.com/PyPSA/technology-data/{config['tech_data_commit']}/outputs/{fn}"
 
@@ -21,11 +22,8 @@ for year in years:
         print("downloading",fn)
         urllib.request.urlretrieve(url,fn)
 
-    td = {}
-    for year in years:
-        fn = f"costs_{year}.csv"
-        td[year] = pd.read_csv(fn,
-                               index_col=[0,1])
+    td[year] = pd.read_csv(fn,
+                           index_col=[0,1])
 
 
 #get traces efficiencies
