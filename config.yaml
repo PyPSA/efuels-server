@@ -33,7 +33,7 @@ expected_time: 70
 
 balances_to_display: ["electricity","hydrogen"]
 
-preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen electrolyser","hydrogen turbine"]
+preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen storage compressor","hydrogen electrolyser","hydrogen turbine"]
 
 #LHV
 mwh_per_t:
@@ -62,6 +62,8 @@ colors:
   hydrogen electrolyser: cyan
   hydrogen_energy: magenta
   hydrogen storage: magenta
+  hydrogen storage compressor: "#ff66ff"
+  hydrogen storage decompressor: "#660066"
   dispatchable1: orange
   dispatchable2: lime
   hydrogen_submarine_pipeline: green

@@ -294,6 +294,19 @@ co2_storage_lifetime,2040,f,25.0,years,CO2 storage tank lifetime,"Lauri et al. 2
 co2_storage_cost,2050,f,2528.17,EUR/t_CO2,CO2 storage tank capital cost (overnight),"Lauri et al. 2014: doi: 10.1016/j.egypro.2014.11.297, Table 3."
 co2_storage_fom,2050,f,1.0,percent of overnight cost per year,CO2 storage tank fixed operation and maintenance costs,"Lauri et al. 2014: doi: 10.1016/j.egypro.2014.11.297, pg. 2746 ."
 co2_storage_lifetime,2050,f,25.0,years,CO2 storage tank lifetime,"Lauri et al. 2014: doi: 10.1016/j.egypro.2014.11.297, pg. 2746 ."
+hydrogen_compressor_discount,,f,5,percent,Hydrogen storage compressor discount rate,
+hydrogen_compressor_cost,2020,f,79.42,EUR/kWh_H2,Hydrogen storage compressor capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_fom,2020,f,4.0,percent of overnight cost per year,Hydrogen storage compressor fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_lifetime,2020,f,15.0,years,Hydrogen storage compressor lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_cost,2030,f,79.42,EUR/kWh_H2,Hydrogen storage compressor capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_fom,2030,f,4.0,percent of overnight cost per year,Hydrogen storage compressor fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_lifetime,2030,f,15.0,years,Hydrogen storage compressor lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_cost,2040,f,79.42,EUR/kWh_H2,Hydrogen storage compressor capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_fom,2040,f,4.0,percent of overnight cost per year,Hydrogen storage compressor fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_lifetime,2040,f,15.0,years,Hydrogen storage compressor lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_cost,2050,f,79.42,EUR/kWh_H2,Hydrogen storage compressor capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_fom,2050,f,4.0,percent of overnight cost per year,Hydrogen storage compressor fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
+hydrogen_compressor_lifetime,2050,f,15.0,years,Hydrogen storage compressor lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.4."
 battery_power_efficiency_charging,2020,f,97.46794344808963,percent,Battery power charging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_efficiency_charging,2030,f,97.97958971132712,percent,Battery power charging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 battery_power_efficiency_charging,2040,f,97.97958971132712,percent,Battery power charging efficiency,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
@@ -325,6 +338,7 @@ air_separation_unit_efficiency,,f,4.0,tN2/MWhel,Air separation unit output,"Dani
 haber_bosch_efficiency,,f,0.8707761516750281,MWh-NH3-LHV/MWh-H2-LHV,Haber-Bosch ammonia synthesis hydrogen input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 57."
 haber_bosch_electricity,,f,0.2472999651608408,MWhel/MWh-NH3-LHV,Haber-Bosch ammonia synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , table 11."
 haber_bosch_nitrogen,,f,0.1596794797352224,tN2/MWh-NH3-LHV,Haber-Bosch ammonia synthesis nitrogen input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 57."
+hydrogen_compressor_electricity,,f,0.12000012000011999,MWhel/MWh-H2-LHV,Hydrogen storage compressor electricity input,"DEA technology data for energy storage, pg. 82 ."
 methanol_ship_discount,,f,5,percent,methanol shipping discount rate,
 methanol_ship_loading_loss,,f,0.0,%/transfer,methanol shipping unloading/loading loss,"Guesstimate, transfer of simple non-cryogenic fluid."
 methanol_ship_loading_time,,f,48.0,h,methanol shipping unloading/loading time,Assume same as for LOHC.

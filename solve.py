@@ -358,9 +358,32 @@ def run_optimisation(assumptions, pu):
                 capital_cost=assumptions_df.at["hydrogen_electrolyser","fixed"])
 
     if assumptions["hydrogen"]:
+
+        network.add("Bus",
+                    "compressed hydrogen",
+                    carrier="compressed hydrogen")
+
+        network.add("Link",
+                    "hydrogen_compressor",
+                    carrier="hydrogen storage compressor",
+                    bus0="hydrogen",
+                    bus1="compressed hydrogen",
+                    bus2="electricity",
+                    p_nom_extendable=True,
+                    efficiency=1,
+                    efficiency2=-assumptions["hydrogen_compressor_electricity"],
+                    capital_cost=assumptions_df.at["hydrogen_compressor","fixed"])
+
+        network.add("Link",
+                    "hydrogen_decompressor",
+                    carrier="hydrogen storage decompressor",
+                    bus0="compressed hydrogen",
+                    bus1="hydrogen",
+                    p_nom_extendable=True)
+
         network.add("Store",
                     "hydrogen_energy",
-                    bus="hydrogen",
+                    bus="compressed hydrogen",
                     carrier="hydrogen storage",
                     e_nom_extendable=True,
                     e_cyclic=True,

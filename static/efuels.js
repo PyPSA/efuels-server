@@ -603,7 +603,7 @@ function draw_series(series, snapshots, balance){
 	.data(labels)
 	.enter()
 	.append("g")
-	.attr("transform", function (d, i) {  return "translate(0," + (5 + i * 15) + ")" });
+	.attr("transform", function (d, i) {  return "translate(0," + (5 + i * 20) + ")" });
 
     legend.append("rect")
 	.attr("x",0)

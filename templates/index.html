@@ -202,17 +202,17 @@
                       <svg width="180" height="400" id="average_cost_graph"></svg>
                     </div>
                     <div id="power_capacity_bar_div">
-                      <svg width="500" height="400" id="power_capacity_bar"></svg>
+                      <svg width="600" height="400" id="power_capacity_bar"></svg>
                     </div>
                     <div id="energy_capacity_bar_div">
-                      <svg width="300" height="400" id="energy_capacity_bar"></svg>
+                      <svg width="370" height="400" id="energy_capacity_bar"></svg>
                     </div>
                     <div id="graph">
 		      <br />
 		      {% for balance in config["balances_to_display"] %}
 		      <p><b>{{balance}} supply and demand time series (you can zoom and pan to see the details)</b></p>
-		      <svg width="900" height="500" id="{{balance}}_power_graph"></svg>
-		      <svg width="180" height="400" id="{{balance}}_power_graph_legend"></svg>
+		      <svg width="890" height="500" id="{{balance}}_power_graph"></svg>
+		      <svg width="250" height="400" id="{{balance}}_power_graph_legend"></svg>
 		      {% endfor %}
                     </div>
                   </div>
@@ -346,9 +346,8 @@
 		30% for NH3 and CH4. The website has a default of 50% for methanol
 		synthesis and 30% for NH3.</li>
 		<li>The paper includes compression costs and energy
-		demand for hydrogen and CO2 tanks, whereas the website
-		ignores these. For CO2 the effect is tiny, for H2 the
-		  effect is small for steel tanks.</li>
+		demand for liquid CO2 tanks, whereas the website
+		ignores these since the effect is tiny.</li>
 		<li>The paper includes water desalination, whereas the paper ignores it since it is a small effect.</li>
 		<li>The website has a simplified version of the shipping model in the paper.</li>
 	      </ol>

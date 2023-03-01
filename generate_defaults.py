@@ -68,7 +68,8 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
                                ("air_separation_unit","air separation unit","Air separation unit for nitrogen"),
                                ("haber_bosch","Haber-Bosch","Haber-Bosch ammonia synthesis"),
                                ("ammonia_storage","NH3 (l) storage tank incl. liquefaction","Liquid ammonia storage"),
-                               ("co2_storage","CO2 storage tank","CO2 storage tank")]:
+                               ("co2_storage","CO2 storage tank","CO2 storage tank"),
+                               ("hydrogen_compressor","hydrogen storage compressor","Hydrogen storage compressor")]:
     print(name,full_name)
     df.loc[(name + "_discount",""),:] = ["f",5,"percent",full_name + " discount rate",""]
     for year in years:
@@ -182,6 +183,15 @@ df.loc[("haber_bosch_nitrogen",""),:] = ["f",
                                             "tN2/MWh-NH3-LHV",
                                             "Haber-Bosch ammonia synthesis nitrogen input",
                                             eff.loc[("Haber-Bosch","all","nitrogen (g)"),"source"][0]]
+
+
+df.loc[("hydrogen_compressor_electricity",""),:] = ["f",
+                                                    eff.loc[("H2 storage compressor","all","electricity"),"from_amount"][0]/eff.loc[("H2 storage compressor","all","electricity"),"to_amount"][0],
+                                                    "MWhel/MWh-H2-LHV",
+                                                    "Hydrogen storage compressor electricity input",
+                                                    eff.loc[("H2 storage compressor","all","electricity"),"source"][0]]
+
+
 
 for name,td_name in [("methanol","MeOH"),("ammonia","NH3 (l)")]:#,("lch4","CH4 (l)"),("ft","FT fuel"),("lh2","H2 (l)"),("lohc","LOHC")]
 
