@@ -365,7 +365,7 @@ def run_optimisation(assumptions, pu):
 
         network.add("Link",
                     "hydrogen_compressor",
-                    carrier="hydrogen storage compressor",
+                    carrier="hydrogen storing compressor",
                     bus0="hydrogen",
                     bus1="compressed hydrogen",
                     bus2="electricity",
@@ -376,7 +376,7 @@ def run_optimisation(assumptions, pu):
 
         network.add("Link",
                     "hydrogen_decompressor",
-                    carrier="hydrogen storage decompressor",
+                    carrier="hydrogen storing decompressor",
                     bus0="compressed hydrogen",
                     bus1="hydrogen",
                     p_nom_extendable=True)
