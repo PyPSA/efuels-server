@@ -67,6 +67,7 @@ co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
 methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,Private discussions.
 haber_bosch_min_part_load,,f,30.0,percent,Haber-Bosch ammonia synthesis minimum part load,Danish Energy Agency renewable fuels database
+methanation_min_part_load,,f,30.0,percent,Haber-Bosch ammonia synthesis minimum part load,Danish Energy Agency renewable fuels database
 methanolisation_discount,,f,5,percent,Methanol synthesis discount rate,
 methanolisation_cost,2020,f,757401.0,EUR/MW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2020,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
@@ -80,6 +81,32 @@ methanolisation_lifetime,2040,f,20.0,years,Methanol synthesis lifetime,"Danish E
 methanolisation_cost,2050,f,480584.39,EUR/MW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2050,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
 methanolisation_lifetime,2050,f,20.0,years,Methanol synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
+methanation_discount,,f,5,percent,Methanation discount rate,
+methanation_cost,2020,f,718.95,EUR/kW_CH4,Methanation capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 6: “Reference scenario”."
+methanation_fom,2020,f,3.0,percent of overnight cost per year,Methanation fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.2.3.1"
+methanation_lifetime,2020,f,20.0,years,Methanation lifetime,Guesstimate.
+methanation_cost,2030,f,628.6,EUR/kW_CH4,Methanation capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 6: “Reference scenario”."
+methanation_fom,2030,f,3.0,percent of overnight cost per year,Methanation fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.2.3.1"
+methanation_lifetime,2030,f,20.0,years,Methanation lifetime,Guesstimate.
+methanation_cost,2040,f,554.59,EUR/kW_CH4,Methanation capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 6: “Reference scenario”."
+methanation_fom,2040,f,3.0,percent of overnight cost per year,Methanation fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.2.3.1"
+methanation_lifetime,2040,f,20.0,years,Methanation lifetime,Guesstimate.
+methanation_cost,2050,f,480.58,EUR/kW_CH4,Methanation capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 6: “Reference scenario”."
+methanation_fom,2050,f,3.0,percent of overnight cost per year,Methanation fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.2.3.1"
+methanation_lifetime,2050,f,20.0,years,Methanation lifetime,Guesstimate.
+methane_liquefaction_discount,,f,5,percent,Methane liquefaction discount rate,
+methane_liquefaction_cost,2020,f,232.13,EUR/kW_CH4,Methane liquefaction capital cost (overnight),"Calculated, based on Lochner and Bothe (2009): https://doi.org/10.1016/j.enpol.2008.12.012 and Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_fom,2020,f,3.5,percent of overnight cost per year,Methane liquefaction fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_lifetime,2020,f,25.0,years,Methane liquefaction lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_cost,2030,f,232.13,EUR/kW_CH4,Methane liquefaction capital cost (overnight),"Calculated, based on Lochner and Bothe (2009): https://doi.org/10.1016/j.enpol.2008.12.012 and Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_fom,2030,f,3.5,percent of overnight cost per year,Methane liquefaction fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_lifetime,2030,f,25.0,years,Methane liquefaction lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_cost,2040,f,232.13,EUR/kW_CH4,Methane liquefaction capital cost (overnight),"Calculated, based on Lochner and Bothe (2009): https://doi.org/10.1016/j.enpol.2008.12.012 and Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_fom,2040,f,3.5,percent of overnight cost per year,Methane liquefaction fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_lifetime,2040,f,25.0,years,Methane liquefaction lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_cost,2050,f,232.13,EUR/kW_CH4,Methane liquefaction capital cost (overnight),"Calculated, based on Lochner and Bothe (2009): https://doi.org/10.1016/j.enpol.2008.12.012 and Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_fom,2050,f,3.5,percent of overnight cost per year,Methane liquefaction fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_liquefaction_lifetime,2050,f,25.0,years,Methane liquefaction lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
 wind_cost,2020,f,1118.77,EUR/kW,Onshore wind capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 wind_fom,2020,f,1.25,percent of overnight cost per year,Onshore wind fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 wind_lifetime,2020,f,27.0,years,Onshore wind lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
@@ -128,6 +155,19 @@ hydrogen_energy_lifetime,2040,f,100.0,years,Hydrogen underground storage lifetim
 hydrogen_energy_cost,2050,f,1.2,EUR/kWh,Hydrogen underground storage capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 hydrogen_energy_fom,2050,f,0.0,percent of overnight cost per year,Hydrogen underground storage fixed operation and maintenance costs,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
 hydrogen_energy_lifetime,2050,f,100.0,years,Hydrogen underground storage lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
+methane_storage_discount,,f,5,percent,Methane overground storage discount rate,
+methane_storage_cost,2020,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2020,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2020,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_cost,2030,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2030,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2030,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_cost,2040,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2040,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2040,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_cost,2050,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2050,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2050,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
 hydrogen_turbine_discount,,f,5,percent,Hydrogen combined cycle turbine discount rate,
 hydrogen_turbine_cost,2020,f,880.0,EUR/kW,Hydrogen combined cycle turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 hydrogen_turbine_fom,2020,f,3.33,percent of overnight cost per year,Hydrogen combined cycle turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
@@ -332,6 +372,9 @@ hvdc_submarine_cable_losses,,f,2.300000000000002,percent/1000km,HVDC submarine c
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."
 methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis carbon dioxide input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 66."
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
+methanation_efficiency,,f,0.7799979782323011,MWh-CH4-LHV/MWh-H2-LHV,Methanation efficiency wrt hydrogen,"Götz et al. (2016), fig. 11 ."
+methanation_co2,,f,0.19800126720811012,tCO2/MWh-CH4-LHV,Methanation carbon dioxide input,
+methane_liquefaction_electricity,,f,0.03597122302158273,MWh-el/MWh-CH4-LHV,Methane liquefaction electricity input,"Pospíšil et al. 2019: https://doi.org/10.1016/j.rser.2018.09.027 , Table 2 and Table 3. Source 2: https://encyclopedia.airliquide.com/methane (2021-02-10)."
 dac_electricity,,f,0.28,MWh/tCO2,Direct air capture electricity consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
 dac_heat,,f,1.5,MWh/tCO2,Direct air capture heat consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
 air_separation_unit_efficiency,,f,4.0,tN2/MWhel,Air separation unit output,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), pg.288 ."
@@ -383,3 +426,25 @@ ammonia_ship_capacity_t,2020,f,53000.0,t_NH3,ammonia shipping mass capacity,"Cih
 ammonia_ship_capacity_t,2030,f,53000.0,t_NH3,ammonia shipping mass capacity,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
 ammonia_ship_capacity_t,2040,f,53000.0,t_NH3,ammonia shipping mass capacity,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
 ammonia_ship_capacity_t,2050,f,53000.0,t_NH3,ammonia shipping mass capacity,"Cihlar et al 2020 based on IEA 2019, Table 3-B"
+methane_ship_discount,,f,5,percent,methane shipping discount rate,
+methane_ship_loading_loss,,f,0.7,%/transfer,methane shipping unloading/loading loss,
+methane_ship_loading_time,,f,48.0,h,methane shipping unloading/loading time,
+methane_ship_average_speed,,f,37.0,km/h,methane shipping average speed,
+methane_ship_capacity_mwh,,f,809717.0,MWh_LHV,methane shipping energy capacity,Based on CH4 LHV of 13.8888 MWh/t_CH4 and 58300 t capacity.
+methane_ship_energy_demand,,f,0.5675,MWh/km,methane shipping energy demand,Taken from source (average fuel demand / average cruising speed) without 50% efficiency.
+methane_ship_fom,2020,f,3.5,%/year,methane shipping fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_fom,2030,f,3.5,%/year,methane shipping fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_fom,2040,f,3.5,%/year,methane shipping fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_fom,2050,f,3.5,%/year,methane shipping fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_cost,2020,f,151000000.0,EUR,methane shipping capital cost (overnight),"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_cost,2030,f,151000000.0,EUR,methane shipping capital cost (overnight),"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_cost,2040,f,151000000.0,EUR,methane shipping capital cost (overnight),"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_cost,2050,f,151000000.0,EUR,methane shipping capital cost (overnight),"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_lifetime,2020,f,25.0,years,methane shipping lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_lifetime,2030,f,25.0,years,methane shipping lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_lifetime,2040,f,25.0,years,methane shipping lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_lifetime,2050,f,25.0,years,methane shipping lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_capacity_t,2020,f,58300.0,t_CH4,methane shipping mass capacity,"Calculated, based on Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_capacity_t,2030,f,58300.0,t_CH4,methane shipping mass capacity,"Calculated, based on Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_capacity_t,2040,f,58300.0,t_CH4,methane shipping mass capacity,"Calculated, based on Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+methane_ship_capacity_t,2050,f,58300.0,t_CH4,methane shipping mass capacity,"Calculated, based on Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"

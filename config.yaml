@@ -13,6 +13,7 @@ efuels:
   hydrogen_submarine_pipeline: Hydrogen by submarine pipeline
   methanol: Methanol by ship
   ammonia: Ammonia by ship
+  methane: Liquefied methane by ship
   electricity_hvdc: Electricity by submarine HVDC cable
 
 efuels_default: hydrogen_submarine_pipeline
@@ -24,7 +25,7 @@ trace_commit: "55e71c86d36869079b46377ce7ef16a46afa1d99"
 years_available_start: 2011
 years_available_end: 2012
 
-float_upper_limit: 1.e+8
+float_upper_limit: 1.e+9
 
 results_threshold: 1.e-3
 
@@ -42,10 +43,12 @@ mwh_per_t:
   hydrogen: 33
   methanol: 5.54
   ammonia: 5.17
+  methane: 13.9
 
 #LHV at 20 C
 mwh_per_m3:
   methanol: 4.4
+  methane: 0.01
 
 colors:
   wind : "#3B6182"
@@ -76,6 +79,10 @@ colors:
   methanol shipping: green
   methanol synthesis: "#F08080"
   methanol storage: black
+  methane shipping: green
+  methanation: "#F08080"
+  methane liquefaction: "#cc3300"
+  methane storage: black
   co2: "#999966"
   dac: "#999966"
   co2 storage: "#666633"

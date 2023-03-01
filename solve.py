@@ -251,7 +251,7 @@ def run_optimisation(assumptions, pu):
 
     if assumptions["efuel"] in ["electricity_hvdc", "hydrogen_submarine_pipeline"]:
         distance_transported = assumptions["pipeline_distance_factor"]*distance
-    elif assumptions["efuel"] in ["methanol","ammonia"]:
+    elif assumptions["efuel"] in ["methanol","ammonia","methane"]:
         distance_transported = assumptions["shipping_distance_factor"]*distance
     else:
         distance_transported = 0.
@@ -390,7 +390,7 @@ def run_optimisation(assumptions, pu):
                     capital_cost=assumptions_df.at["hydrogen_energy","fixed"])
 
     #add CO2 source
-    if assumptions["efuel"] in ["methanol"]:
+    if assumptions["efuel"] in ["methanol","methane"]:
 
         network.add("Bus",
                     "co2",
@@ -500,6 +500,57 @@ def run_optimisation(assumptions, pu):
                     efficiency3=-assumptions["methanolisation_co2"]*assumptions["methanolisation_efficiency"],
                     capital_cost=assumptions_df.at["methanolisation","fixed"]*assumptions["methanolisation_efficiency"]) #NB: cost is EUR/kW_MeOH
 
+    elif assumptions["efuel"] == "methane":
+
+        network.add("Bus",
+                    "destination",
+                    carrier="methane")
+
+        #this is liquefied methane
+        network.add("Bus",
+                    "methane",
+                    carrier="methane")
+
+        network.add("Bus",
+                    "gaseous methane",
+                    carrier="gaseous methane")
+
+        network.add("Store",
+                    "gaseous methane",
+                    bus="gaseous methane",
+                    carrier="methane storage",
+                    e_nom_extendable=True,
+                    e_cyclic=True,
+                    capital_cost=assumptions_df.at["methane_storage","fixed"]/config["mwh_per_m3"]["methane"])
+
+        network.add("Load","methane_load",
+                    bus="destination",
+                    carrier="efuel",
+                    p_set=assumptions["efuels_load"])
+
+        network.add("Link",
+                    "methanation",
+                    bus0="hydrogen",
+                    bus1="gaseous methane",
+                    bus2="co2",
+                    carrier="methanation",
+                    p_nom_extendable=True,
+                    p_min_pu=assumptions["methanation_min_part_load"]/100,
+                    efficiency=assumptions["methanation_efficiency"],
+                    efficiency2=-assumptions["methanation_co2"]*assumptions["methanation_efficiency"],
+                    capital_cost=assumptions_df.at["methanation","fixed"]*assumptions["methanation_efficiency"]) #NB: cost is EUR/MW_CH4
+
+        network.add("Link",
+                    "methane liquefaction",
+                    bus0="gaseous methane",
+                    bus1="methane",
+                    bus2="electricity",
+                    carrier="methane liquefaction",
+                    p_nom_extendable=True,
+                    efficiency=1,
+                    efficiency2=-assumptions["methane_liquefaction_electricity"],
+                    capital_cost=assumptions_df.at["methane_liquefaction","fixed"])
+
     elif assumptions["efuel"] == "ammonia":
 
         network.add("Bus",
@@ -583,7 +634,7 @@ def run_optimisation(assumptions, pu):
         return None, None, "Efuel {} was not recognised".format(assumptions["efuel"])
 
 
-    if assumptions["efuel"] in ["methanol","ammonia"]:
+    if assumptions["efuel"] in ["methanol","ammonia","methane"]:
         efuel = assumptions["efuel"]
         loading_loss = 2*assumptions[efuel+"_ship_loading_loss"]/100
         transport_loss = assumptions[efuel+"_ship_energy_demand"]/assumptions[efuel+"_ship_capacity_mwh"]*(2*distance_transported)
