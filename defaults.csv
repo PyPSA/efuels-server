@@ -59,7 +59,7 @@ wind,,b,True,,Wind turbine,
 solar,,b,True,,Solar photovoltaic cell,
 battery,,b,True,,Battery storage,
 hydrogen,,b,True,,Hydrogen gas storage,
-dac,,b,True,,Direct air capture,"If direct air capture is not selected, CO2 is costed according to assumptions specified below"
+dac,,b,True,,Direct air capture for carbonaceous fuels,"If direct air capture is not selected, CO2 is costed according to assumptions specified below"
 dispatchable1,,b,False,,Dispatchable technology 1,Default assumption is based on open cycle natural gas turbine (OCGT)
 dispatchable2,,b,False,,Dispatchable technology 2,Default assumption is based on new nuclear EPR reactor in Europe
 co2_cost,2020,f,300,EUR/tCO2,CO2 cost,
@@ -107,6 +107,19 @@ methane_liquefaction_lifetime,2040,f,25.0,years,Methane liquefaction lifetime,"F
 methane_liquefaction_cost,2050,f,232.13,EUR/kW_CH4,Methane liquefaction capital cost (overnight),"Calculated, based on Lochner and Bothe (2009): https://doi.org/10.1016/j.enpol.2008.12.012 and Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
 methane_liquefaction_fom,2050,f,3.5,percent of overnight cost per year,Methane liquefaction fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
 methane_liquefaction_lifetime,2050,f,25.0,years,Methane liquefaction lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+hydrogen_liquefaction_discount,,f,5,percent,Hydrogen liquefaction discount rate,
+hydrogen_liquefaction_cost,2020,f,870.56,EUR/kW_H2,Hydrogen liquefaction capital cost (overnight),"IRENA (2022): Global Hydrogen Trade to Meet the 1.5° Climate Goal: Technology Review of Hydrogen Carriers, https://www.irena.org/publications/2022/Apr/Global-hydrogen-trade-Part-II , pg. 62f."
+hydrogen_liquefaction_fom,2020,f,2.5,percent of overnight cost per year,Hydrogen liquefaction fixed operation and maintenance costs,"DNV GL (2020): Study on the Import of Liquid Renewable Energy: Technology Cost Assessment, https://www.gie.eu/wp-content/uploads/filr/2598/DNV-GL_Study-GLE-Technologies-and-costs-analysis-on-imports-of-liquid-renewable-energy.pdf ."
+hydrogen_liquefaction_lifetime,2020,f,20.0,years,Hydrogen liquefaction lifetime,"Reuß et al 2017, https://doi.org/10.1016/j.apenergy.2017.05.050 , Table 9."
+hydrogen_liquefaction_cost,2030,f,870.56,EUR/kW_H2,Hydrogen liquefaction capital cost (overnight),"IRENA (2022): Global Hydrogen Trade to Meet the 1.5° Climate Goal: Technology Review of Hydrogen Carriers, https://www.irena.org/publications/2022/Apr/Global-hydrogen-trade-Part-II , pg. 62f."
+hydrogen_liquefaction_fom,2030,f,2.5,percent of overnight cost per year,Hydrogen liquefaction fixed operation and maintenance costs,"DNV GL (2020): Study on the Import of Liquid Renewable Energy: Technology Cost Assessment, https://www.gie.eu/wp-content/uploads/filr/2598/DNV-GL_Study-GLE-Technologies-and-costs-analysis-on-imports-of-liquid-renewable-energy.pdf ."
+hydrogen_liquefaction_lifetime,2030,f,20.0,years,Hydrogen liquefaction lifetime,"Reuß et al 2017, https://doi.org/10.1016/j.apenergy.2017.05.050 , Table 9."
+hydrogen_liquefaction_cost,2040,f,696.45,EUR/kW_H2,Hydrogen liquefaction capital cost (overnight),"IRENA (2022): Global Hydrogen Trade to Meet the 1.5° Climate Goal: Technology Review of Hydrogen Carriers, https://www.irena.org/publications/2022/Apr/Global-hydrogen-trade-Part-II , pg. 62f."
+hydrogen_liquefaction_fom,2040,f,2.5,percent of overnight cost per year,Hydrogen liquefaction fixed operation and maintenance costs,"DNV GL (2020): Study on the Import of Liquid Renewable Energy: Technology Cost Assessment, https://www.gie.eu/wp-content/uploads/filr/2598/DNV-GL_Study-GLE-Technologies-and-costs-analysis-on-imports-of-liquid-renewable-energy.pdf ."
+hydrogen_liquefaction_lifetime,2040,f,20.0,years,Hydrogen liquefaction lifetime,"Reuß et al 2017, https://doi.org/10.1016/j.apenergy.2017.05.050 , Table 9."
+hydrogen_liquefaction_cost,2050,f,522.34,EUR/kW_H2,Hydrogen liquefaction capital cost (overnight),"IRENA (2022): Global Hydrogen Trade to Meet the 1.5° Climate Goal: Technology Review of Hydrogen Carriers, https://www.irena.org/publications/2022/Apr/Global-hydrogen-trade-Part-II , pg. 62f."
+hydrogen_liquefaction_fom,2050,f,2.5,percent of overnight cost per year,Hydrogen liquefaction fixed operation and maintenance costs,"DNV GL (2020): Study on the Import of Liquid Renewable Energy: Technology Cost Assessment, https://www.gie.eu/wp-content/uploads/filr/2598/DNV-GL_Study-GLE-Technologies-and-costs-analysis-on-imports-of-liquid-renewable-energy.pdf ."
+hydrogen_liquefaction_lifetime,2050,f,20.0,years,Hydrogen liquefaction lifetime,"Reuß et al 2017, https://doi.org/10.1016/j.apenergy.2017.05.050 , Table 9."
 wind_cost,2020,f,1118.77,EUR/kW,Onshore wind capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 wind_fom,2020,f,1.25,percent of overnight cost per year,Onshore wind fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 wind_lifetime,2020,f,27.0,years,Onshore wind lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
@@ -375,6 +388,8 @@ methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol sy
 methanation_efficiency,,f,0.7799979782323011,MWh-CH4-LHV/MWh-H2-LHV,Methanation efficiency wrt hydrogen,"Götz et al. (2016), fig. 11 ."
 methanation_co2,,f,0.19800126720811012,tCO2/MWh-CH4-LHV,Methanation carbon dioxide input,
 methane_liquefaction_electricity,,f,0.03597122302158273,MWh-el/MWh-CH4-LHV,Methane liquefaction electricity input,"Pospíšil et al. 2019: https://doi.org/10.1016/j.rser.2018.09.027 , Table 2 and Table 3. Source 2: https://encyclopedia.airliquide.com/methane (2021-02-10)."
+hydrogen_liquefaction_efficiency,,f,0.9834999999999999,MWh-H2-liquid/MWh-H2-gas,Hydrogen liquefaction efficiency,"Heuser et al. 2019: https://doi.org/10.1016/j.ijhydene.2018.12.156, table 1."
+hydrogen_liquefaction_electricity,,f,0.2034002034002034,MWh-el/MWh-H2-LHV,Hydrogen liquefaction electricity input,"Heuser et al. 2019: https://doi.org/10.1016/j.ijhydene.2018.12.156, table 1."
 dac_electricity,,f,0.28,MWh/tCO2,Direct air capture electricity consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
 dac_heat,,f,1.5,MWh/tCO2,Direct air capture heat consumption,"Danish Energy Agency, technology_data_for_carbon_capture_transport_storage.xlsx"
 air_separation_unit_efficiency,,f,4.0,tN2/MWhel,Air separation unit output,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), pg.288 ."
@@ -448,3 +463,25 @@ methane_ship_capacity_t,2020,f,58300.0,t_CH4,methane shipping mass capacity,"Cal
 methane_ship_capacity_t,2030,f,58300.0,t_CH4,methane shipping mass capacity,"Calculated, based on Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
 methane_ship_capacity_t,2040,f,58300.0,t_CH4,methane shipping mass capacity,"Calculated, based on Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
 methane_ship_capacity_t,2050,f,58300.0,t_CH4,methane shipping mass capacity,"Calculated, based on Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+lh2_ship_discount,,f,5,percent,lh2 shipping discount rate,
+lh2_ship_loading_loss,,f,2.0,%/transfer,lh2 shipping unloading/loading loss,
+lh2_ship_loading_time,,f,48.0,h,lh2 shipping unloading/loading time,
+lh2_ship_average_speed,,f,30.0,km/h,lh2 shipping average speed,
+lh2_ship_capacity_mwh,,f,378666.0,MWh_LHV,lh2 shipping energy capacity,Corresponds to 11360 t H2 (l) with LHV of 33.3333 MWh/t_H2
+lh2_ship_energy_demand,,f,0.413,MWh/km,lh2 shipping energy demand,
+lh2_ship_fom,2020,f,4.0,%/year,lh2 shipping fixed operation and maintenance costs,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_fom,2030,f,4.0,%/year,lh2 shipping fixed operation and maintenance costs,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_fom,2040,f,4.0,%/year,lh2 shipping fixed operation and maintenance costs,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_fom,2050,f,4.0,%/year,lh2 shipping fixed operation and maintenance costs,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_cost,2020,f,361223561.58,EUR,lh2 shipping capital cost (overnight),"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_cost,2030,f,361223561.58,EUR,lh2 shipping capital cost (overnight),"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_cost,2040,f,361223561.58,EUR,lh2 shipping capital cost (overnight),"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_cost,2050,f,361223561.58,EUR,lh2 shipping capital cost (overnight),"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_lifetime,2020,f,20.0,years,lh2 shipping lifetime,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_lifetime,2030,f,20.0,years,lh2 shipping lifetime,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_lifetime,2040,f,20.0,years,lh2 shipping lifetime,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_lifetime,2050,f,20.0,years,lh2 shipping lifetime,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_capacity_t,2020,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_capacity_t,2030,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_capacity_t,2040,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+lh2_ship_capacity_t,2050,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."

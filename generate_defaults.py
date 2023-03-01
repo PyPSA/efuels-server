@@ -54,6 +54,7 @@ shipping = pd.read_csv(fn,
 for name,td_name,full_name in [("methanolisation","methanolisation","Methanol synthesis"),
                                ("methanation","methanation","Methanation"),
                                ("methane_liquefaction","CH4 liquefaction","Methane liquefaction"),
+                               ("hydrogen_liquefaction","H2 liquefaction","Hydrogen liquefaction"),
                                ("wind","onwind","Onshore wind"),
                                ("solar","solar-utility","Utility-scale solar PV"),
                                ("hydrogen_electrolyser","electrolysis","Hydrogen electrolyser"),
@@ -172,6 +173,21 @@ df.loc[("methane_liquefaction_electricity",""),:] = ["f",
                                                      "Methane liquefaction electricity input",
                                                      eff.loc[("CH4 liquefaction","all","electricity"),"source"][0]]
 
+
+df.loc[("hydrogen_liquefaction_efficiency",""),:] = ["f",
+                                                     eff.loc[("H2 liquefaction","all","hydrogen (g)"),"to_amount"][0]/eff.loc[("H2 liquefaction","all","hydrogen (g)"),"from_amount"][0],
+                                                     "MWh-H2-liquid/MWh-H2-gas",
+                                                     "Hydrogen liquefaction efficiency",
+                                                     eff.loc[("H2 liquefaction","all","hydrogen (g)"),"source"][0]]
+
+
+df.loc[("hydrogen_liquefaction_electricity",""),:] = ["f",
+                                                     eff.loc[("H2 liquefaction","all","electricity"),"from_amount"][0]/eff.loc[("H2 liquefaction","all","electricity"),"to_amount"][0],
+                                                     "MWh-el/MWh-H2-LHV",
+                                                     "Hydrogen liquefaction electricity input",
+                                                     eff.loc[("H2 liquefaction","all","electricity"),"source"][0]]
+
+
 df.loc[("dac_electricity",""),:] = ["f",
                                     td[year].loc[("direct air capture","electricity-input"),"value"],
                                     td[year].loc[("direct air capture","electricity-input"),"unit"],
@@ -217,7 +233,7 @@ df.loc[("hydrogen_compressor_electricity",""),:] = ["f",
 
 
 
-for name,td_name in [("methanol","MeOH"),("ammonia","NH3 (l)"),("methane","CH4 (l)")]:#,("ft","FT fuel"),("lh2","H2 (l)"),("lohc","LOHC")]
+for name,td_name in [("methanol","MeOH"),("ammonia","NH3 (l)"),("methane","CH4 (l)"),("lh2","H2 (l)")]:#,("ft","FT fuel"),("lohc","LOHC")]
 
 
     df.loc[(name + "_ship_discount",""),:] = ["f",5,"percent",name + " shipping discount rate",""]

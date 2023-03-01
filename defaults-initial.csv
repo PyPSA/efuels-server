@@ -59,7 +59,7 @@ wind,,b,True,,Wind turbine,
 solar,,b,True,,Solar photovoltaic cell,
 battery,,b,True,,Battery storage,
 hydrogen,,b,True,,Hydrogen gas storage,
-dac,,b,True,,Direct air capture,"If direct air capture is not selected, CO2 is costed according to assumptions specified below"
+dac,,b,True,,Direct air capture for carbonaceous fuels,"If direct air capture is not selected, CO2 is costed according to assumptions specified below"
 dispatchable1,,b,False,,Dispatchable technology 1,Default assumption is based on open cycle natural gas turbine (OCGT)
 dispatchable2,,b,False,,Dispatchable technology 2,Default assumption is based on new nuclear EPR reactor in Europe
 co2_cost,2020,f,300,EUR/tCO2,CO2 cost,

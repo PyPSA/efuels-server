@@ -251,7 +251,7 @@ def run_optimisation(assumptions, pu):
 
     if assumptions["efuel"] in ["electricity_hvdc", "hydrogen_submarine_pipeline"]:
         distance_transported = assumptions["pipeline_distance_factor"]*distance
-    elif assumptions["efuel"] in ["methanol","ammonia","methane"]:
+    elif assumptions["efuel"] in ["methanol","ammonia","methane","lh2"]:
         distance_transported = assumptions["shipping_distance_factor"]*distance
     else:
         distance_transported = 0.
@@ -463,6 +463,33 @@ def run_optimisation(assumptions, pu):
 
         print("pieline cost per MW is",assumptions_df.at["hydrogen_submarine_pipeline","fixed"]*distance_transported)
 
+
+    elif assumptions["efuel"] == "lh2":
+
+        network.add("Bus",
+                    "destination",
+                    carrier="lh2")
+
+        network.add("Bus",
+                    "lh2",
+                    carrier="lh2")
+
+        network.add("Load","lh2_load",
+                    bus="destination",
+                    carrier="efuel",
+                    p_set=assumptions["efuels_load"])
+
+        network.add("Link",
+                    "hydrogen liquefaction",
+                    bus0="hydrogen",
+                    bus1="lh2",
+                    bus2="electricity",
+                    carrier="hydrogen liquefaction",
+                    p_nom_extendable=True,
+                    efficiency=assumptions["hydrogen_liquefaction_efficiency"],
+                    efficiency2=-assumptions["hydrogen_liquefaction_electricity"]*assumptions["hydrogen_liquefaction_efficiency"],
+                    capital_cost=assumptions_df.at["hydrogen_liquefaction","fixed"])
+
     elif assumptions["efuel"] == "methanol":
 
         network.add("Bus",
@@ -634,7 +661,7 @@ def run_optimisation(assumptions, pu):
         return None, None, "Efuel {} was not recognised".format(assumptions["efuel"])
 
 
-    if assumptions["efuel"] in ["methanol","ammonia","methane"]:
+    if assumptions["efuel"] in ["methanol","ammonia","methane","lh2"]:
         efuel = assumptions["efuel"]
         loading_loss = 2*assumptions[efuel+"_ship_loading_loss"]/100
         transport_loss = assumptions[efuel+"_ship_energy_demand"]/assumptions[efuel+"_ship_capacity_mwh"]*(2*distance_transported)

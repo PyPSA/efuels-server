@@ -11,6 +11,7 @@ tech_years_default: 2030
 
 efuels:
   hydrogen_submarine_pipeline: Hydrogen by submarine pipeline
+  lh2: Liquefied hydrogen by ship
   methanol: Methanol by ship
   ammonia: Ammonia by ship
   methane: Liquefied methane by ship
@@ -41,6 +42,7 @@ preferred order: ["wind","solar","battery storage","battery inverter","hydrogen 
 #LHV
 mwh_per_t:
   hydrogen: 33
+  lh2: 33
   methanol: 5.54
   ammonia: 5.17
   methane: 13.9
@@ -69,6 +71,8 @@ colors:
   hydrogen storage: magenta
   hydrogen storing compressor: "#ff66ff"
   hydrogen storing decompressor: "#660066"
+  hydrogen liquefaction: "#cc3300"
+  lh2 shipping: green
   dispatchable1: orange
   dispatchable2: lime
   hydrogen_submarine_pipeline: green
