@@ -50,7 +50,7 @@ wind_discount,,f,5,percent,Onshore wind discount rate,
 solar_discount,,f,5,percent,Utility-scale solar PV discount rate,
 battery_energy_discount,,f,5,percent,Utility-scale battery energy discount rate,
 battery_power_discount,,f,5,percent,Utility-scale battery converter power discount rate,
-hydrogen_energy_discount,,f,5,percent,Hydrogen underground storage discount rate,
+hydrogen_energy_discount,,f,5,percent,Hydrogen overground tank storage discount rate,
 hydrogen_electrolyser_discount,,f,5,percent,Hydrogen electrolyser discount rate,
 dispatchable1_discount,,f,10,percent,Dispatchable technology 1 discount rate,
 dispatchable2_discount,,f,10,percent,Dispatchable technology 2 discount rate,
@@ -156,31 +156,31 @@ hydrogen_electrolyser_lifetime,2040,f,32.0,years,Hydrogen electrolyser lifetime,
 hydrogen_electrolyser_cost,2050,f,250.0,EUR/kW_e,Hydrogen electrolyser capital cost (overnight),"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_fom,2050,f,2.0,percent of overnight cost per year,Hydrogen electrolyser fixed operation and maintenance costs,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
 hydrogen_electrolyser_lifetime,2050,f,35.0,years,Hydrogen electrolyser lifetime,"Danish Energy Agency, data_sheets_for_renewable_fuels.xlsx"
-hydrogen_energy_cost,2020,f,3.0,EUR/kWh,Hydrogen underground storage capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_fom,2020,f,0.0,percent of overnight cost per year,Hydrogen underground storage fixed operation and maintenance costs,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_lifetime,2020,f,100.0,years,Hydrogen underground storage lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_cost,2030,f,2.0,EUR/kWh,Hydrogen underground storage capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_fom,2030,f,0.0,percent of overnight cost per year,Hydrogen underground storage fixed operation and maintenance costs,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_lifetime,2030,f,100.0,years,Hydrogen underground storage lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_cost,2040,f,1.5,EUR/kWh,Hydrogen underground storage capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_fom,2040,f,0.0,percent of overnight cost per year,Hydrogen underground storage fixed operation and maintenance costs,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_lifetime,2040,f,100.0,years,Hydrogen underground storage lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_cost,2050,f,1.2,EUR/kWh,Hydrogen underground storage capital cost (overnight),"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_fom,2050,f,0.0,percent of overnight cost per year,Hydrogen underground storage fixed operation and maintenance costs,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-hydrogen_energy_lifetime,2050,f,100.0,years,Hydrogen underground storage lifetime,"Danish Energy Agency, technology_data_catalogue_for_energy_storage.xlsx"
-methane_storage_discount,,f,5,percent,Methane overground storage discount rate,
-methane_storage_cost,2020,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
-methane_storage_fom,2020,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
-methane_storage_lifetime,2020,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
-methane_storage_cost,2030,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
-methane_storage_fom,2030,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
-methane_storage_lifetime,2030,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
-methane_storage_cost,2040,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
-methane_storage_fom,2040,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
-methane_storage_lifetime,2040,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
-methane_storage_cost,2050,f,8629.2,EUR/m^3,Methane overground storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
-methane_storage_fom,2050,f,1.9,percent of overnight cost per year,Methane overground storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
-methane_storage_lifetime,2050,f,30.0,years,Methane overground storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
+hydrogen_energy_cost,2020,f,12.23,EUR/kWh_H2,Hydrogen overground tank storage capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_fom,2020,f,2.0,percent of overnight cost per year,Hydrogen overground tank storage fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_lifetime,2020,f,20.0,years,Hydrogen overground tank storage lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_cost,2030,f,12.23,EUR/kWh_H2,Hydrogen overground tank storage capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_fom,2030,f,2.0,percent of overnight cost per year,Hydrogen overground tank storage fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_lifetime,2030,f,20.0,years,Hydrogen overground tank storage lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_cost,2040,f,12.23,EUR/kWh_H2,Hydrogen overground tank storage capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_fom,2040,f,2.0,percent of overnight cost per year,Hydrogen overground tank storage fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_lifetime,2040,f,20.0,years,Hydrogen overground tank storage lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_cost,2050,f,12.23,EUR/kWh_H2,Hydrogen overground tank storage capital cost (overnight),"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_fom,2050,f,2.0,percent of overnight cost per year,Hydrogen overground tank storage fixed operation and maintenance costs,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+hydrogen_energy_lifetime,2050,f,20.0,years,Hydrogen overground tank storage lifetime,"Based on Stöckl et al (2021): https://doi.org/10.48550/arXiv.2005.03464, table SI.9."
+methane_storage_discount,,f,5,percent,Methane overground tank storage discount rate,
+methane_storage_cost,2020,f,8629.2,EUR/m^3,Methane overground tank storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2020,f,1.9,percent of overnight cost per year,Methane overground tank storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2020,f,30.0,years,Methane overground tank storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_cost,2030,f,8629.2,EUR/m^3,Methane overground tank storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2030,f,1.9,percent of overnight cost per year,Methane overground tank storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2030,f,30.0,years,Methane overground tank storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_cost,2040,f,8629.2,EUR/m^3,Methane overground tank storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2040,f,1.9,percent of overnight cost per year,Methane overground tank storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2040,f,30.0,years,Methane overground tank storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_cost,2050,f,8629.2,EUR/m^3,Methane overground tank storage capital cost (overnight),Storage costs per l: https://www.compositesworld.com/articles/pressure-vessels-for-alternative-fuels-2014-2023 (2021-02-10).
+methane_storage_fom,2050,f,1.9,percent of overnight cost per year,Methane overground tank storage fixed operation and maintenance costs,"Guesstimate, based on hydrogen storage tank by DEA."
+methane_storage_lifetime,2050,f,30.0,years,Methane overground tank storage lifetime,"Guesstimate, based on hydrogen storage tank by DEA."
 hydrogen_turbine_discount,,f,5,percent,Hydrogen combined cycle turbine discount rate,
 hydrogen_turbine_cost,2020,f,880.0,EUR/kW,Hydrogen combined cycle turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 hydrogen_turbine_fom,2020,f,3.33,percent of overnight cost per year,Hydrogen combined cycle turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
