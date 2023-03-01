@@ -64,12 +64,12 @@
             <section id="intro">
               <h2>Introduction</h2>
               <hr>
-              <p>This tool calculates the cost of producing and transporting green hydrogen, i.e. electrolytic hydrogen produced with wind and solar power, as well as hydrogen-based fuels such as ammonia, methanol, methane and Fischer-Tropsch fuels.</p>
+              <p>This tool calculates the cost of producing and transporting green hydrogen and hydrogen-based fuels such as ammonia, methanol and methane. Green hydrogen is hydrogen produced by electrolysis where the electricity comes from wind and solar generators.</p>
 	      <p>It is a WORK IN PROGRESS and currently only works for a selection of products.</p>
 	      <p>First choose the location where the hydrogen is produced and the location to which it is delivered. This determines the weather data for the wind and solar generation where the hydrogen is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
               <p>This is a <b>toy model</b> with a <b>strongly simplified</b> setup. Please read the <a class="js-scroll-trigger" href="#warnings">warnings</a> below.</p>
 	      <p>The tool is a simplified version of the <a href="https://github.com/euronion/trace">trace model</a> behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown,  published in PLOS ONE in 2023.</p>
-	      <p>All code and data behind this tool is <a href="https://github.com/PyPSA/efuels-server">openly available</a>.</p>
+	      <p>All code and data behind this tool are <a href="https://github.com/PyPSA/efuels-server">openly available</a>.</p>
             </section>
 
             <section id="location">
@@ -124,7 +124,7 @@
                   <option value="{{ year }}"{{ " selected" if year == config['tech_years_default'] else "" }}>{{ year }} scenario</option>
 		  {% endfor %}
                 </select>
-                <small class="form-text text-muted">Individual cost assumptions can be changed below under "advanced assumption settings". 2030 is the default year for technology assumptions because this is the earliest reasonable time when most regions could have zero emissions.</small>
+                <small class="form-text text-muted">Individual cost assumptions can be changed below under "advanced assumption settings". 2030 is the default year for technology assumptions because this is a reasonable time by which green fuels can be scaled up to large volumes.</small>
               </div>
               <p>Choose which technologies should be included:</p>
 	      {% for d in ["wind","solar","battery","hydrogen","dac"] %}
@@ -229,7 +229,7 @@
                         <th class="tab_data" id="tabh_lcoe">LCOE/S [EUR/MWh]</th>
                       </tr>
 		    </table>
-		    <small class="form-text text-muted">Cap Ftr = Capacity Factor, used is after curtailment, avail is available before curtailment, Curtlmt = Curtailment, LCOE/S = Levelised Cost of Electricity/Storage per energy used, Rel Mkt Value = Relative Market Value (market revenue averaged over dispatch divided by average market price)</small>
+		    <small class="form-text text-muted">Cap Ftr = Capacity Factor, used is after curtailment, avail is available before curtailment, Curtlmt = Curtailment, LCOE/S = Levelised Cost of Electricity/Storage per energy used</small>
 		    <br />
 		    <p><span id="results-overview-download"></span></p>
 		    <p><span id="results-series-download"></span></p>
@@ -251,7 +251,15 @@
 
               <h3 id="warnings">Warnings</h3>
               </p>
-              <ol>
+<ol>
+  <li>Future cost projections are uncertain. If the technologies scale up faster than anticipated, costs will come down faster as manufacturers leverage experience and learning-by-doing.</li>
+  <li>The transport route is not calculated precisely. Instead, a factor is multiplied by the direct distance to account for indirect transport routes. For pipelines and cables the default factor is 1.2 and for shipping the default is 1.8 (since sea routes may have to go around continents). You can change this assumption.</li>
+  <li>At the moment all pipeline and cable costs use the submarine cost. In the future we will offer an overland cost where the user can change the fraction of the route that is over land or under sea. The submarine costs are higher than overland, so this is a conservative assumption.</li>
+<li>Costs for shipping terminals at the exporting and importing locations are not included.</li>
+		<li>The shipping model is simplified. We assume that there are enough ships for a continuous delivery of efuels. The number of ships needed takes into account the time it takes the ships to do a return trip including loading and unloading the efuel.</li>
+                <li>
+                  The default costs for hydrogen storage assumes that hydrogen is stored in overground steel tanks. If underground hydrogen storage is available, for example in salt caverns, change the overnight cost to 2 EUR/kWh and the lifetime to 50 years. Studies on salt deposit availability are available for most countries, see e.g. <a href="https://www.researchgate.net/figure/Underground-salt-deposits-and-cavern-fields-in-Europe-225_fig5_319417820">this map</a> for Europe or Figure 2 of <a href="https://www.nrel.gov/docs/fy10osti/46719.pdf">NREL 2009</a> for the United States.
+                </li>
                 <li>
                   Electricity systems with zero direct CO2 emissions can be
                   built more cheaply by using additional technology options. The
@@ -285,9 +293,6 @@
                   Solar profiles are calculated assuming that panels in the northern hemisphere face south, and that panels in the southern hemisphere face north, with a slope of 35 degrees against the horizontal in both cases.
                 </li>
                 <li>
-                  The default costs for underground hydrogen storage (2 EUR/kWh) assume hydrogen gas is stored in salt caverns in suitable underground salt deposits. Studies on salt deposit availability are available for most countries, see e.g. <a href="https://www.researchgate.net/figure/Underground-salt-deposits-and-cavern-fields-in-Europe-225_fig5_319417820">this map</a> for Europe or Figure 2 of <a href="https://www.nrel.gov/docs/fy10osti/46719.pdf">NREL 2009</a> for the United States. Where suitable salt deposits are not available, hydrogen can be stored in aboveground steel tanks for 13 EUR/kWh.
-                </li>
-                <li>
                   Costs for ancillary services inside each production island are not included.
                 </li>
                 <li>
@@ -298,7 +303,6 @@
 		</li>
                 <li>
 		  The joint production of electricity and hydrogen can lead to lower costs for both, particularly for a low ratio of hydrogen to electricity production. Flexible electrolyser demand creates flexibility for integrating wind and solar for electricity production. However, operating the efuels production in island mode can save costs compared to joint production, since the alternating current doesn't have to match a perfect sine wave. This saves on power electronic costs.</li>
-		<li>The shipping model is simplified. We assume that there are enough ships for a continuous delivery of efuels. The number of ships needed takes into account the time it takes the ships to do a return trip including loading and unloading the efuel.</li>
 		<li>We do not allow waste heat integration. For example, the waste heat from methanol or Fischer-Tropsh synthesis could be fed to direct air capture.</li>
 		<li>Lower reliability delivery of efuels than baseload may cost less, especially for electricity and hydrogen, which are hard to store.</li>
 		<li>The minimum must-run level also represents availability, taking into account maintenance sheduling for many aggregated units.</li>
