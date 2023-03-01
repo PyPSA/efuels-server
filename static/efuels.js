@@ -151,11 +151,10 @@ var timerExpected = config["expected_time"];
 
 
 // time between status polling in milliseconds
-var poll_interval = 500;
+var poll_interval = 1000*config["poll_interval"];
 
-// time out for polling if it doesn't finish after 10 minutes
 // Shouldn't be divisible by poll_interval
-var poll_timeout = 10*60*1000 + poll_interval/2;
+var poll_timeout = 1000*config["poll_timeout"] + poll_interval/2;
 
 
 
