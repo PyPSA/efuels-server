@@ -53,7 +53,7 @@ defaults = defaults.swaplevel().loc[""]
 
 defaults = pd.concat((defaults,defaults_t[str(config["tech_years_default"])])).sort_index()
 
-first = ["frequency","overland_fraction","pipeline_distance_factor","shipping_distance_factor"]
+first = ["efuels_load","year","frequency","overland_fraction","pipeline_distance_factor","shipping_distance_factor"]
 defaults = defaults.reindex(first + defaults.index.drop(first).to_list())
 
 booleans = defaults.index[defaults.type == "b"].to_list()

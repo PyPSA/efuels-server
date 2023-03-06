@@ -88,13 +88,6 @@
                 <input type="text" class="form-control" id="sourLocation" name="source_location" readonly>
                 <small id="sourSelect" class="form-text text-muted">Select from map above.</small>
               </div>
-	      {% for d in ["year"] %}
-              <div class="form-group">
-                <label for="sel-{{ d }}">{{ defaults[d]["full_name"] }}</label>
-                <input type="number" class="form-control" id="sel-{{ d }}" name="{{ d }}">
-		<small class="form-text text-muted">{{ defaults[d]["text"] }}</small>
-              </div>
-	      {% endfor %}
             </section>
 
             <section id="assumptions">
@@ -110,13 +103,6 @@
                 </select>
                 <small class="form-text text-muted">{{ defaults["efuel"]["text"] }}</small>
               </div>
-	      {% for d in ["efuels_load"] %}
-              <div class="form-group">
-                <label for="sel-{{ d }}">{{ defaults[d]["full_name"] }} [{{ defaults[d]["unit"] }}]</label>
-                <input type="number" class="form-control" id="sel-{{ d }}" name="{{ d }}">
-		<small class="form-text text-muted">{{ defaults[d]["text"] }}</small>
-              </div>
-	      {% endfor %}
               <div class="form-group">
                 <label for="tech_scenario">Technology assumption scenario</label>
                 <select class="form-control" name="tech_scenario" id="tech_scenario">
@@ -158,7 +144,7 @@
 			{% endif %}
                       </div>
 		      {% endfor %}
-		      {% for d in defaults if d not in ["year","cf_exponent","efuel","efuels_load","version","destination_lat","destination_lng","source_lat","source_lng"] and defaults[d]["type"] != "b" %}
+		      {% for d in defaults if d not in ["cf_exponent","efuel","version","destination_lat","destination_lng","source_lat","source_lng"] and defaults[d]["type"] != "b" %}
                       <div class="form-group">
                         <label for="sel-{{ d }}">{{ defaults[d]["full_name"] }}
 			  {% if not defaults[d]["unit"] == "" %}
