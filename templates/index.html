@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>model.energy/efuels</title>
+    <title>model.energy hydrogen-based products</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -33,7 +33,7 @@
               <a class="nav-link js-scroll-trigger" href="#location">Select location</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#assumptions">Choose technologies</a>
+              <a class="nav-link js-scroll-trigger" href="#assumptions">Choose product</a>
             </li>
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#solve">Solve</a>
@@ -48,7 +48,7 @@
 
     <header class="bg-primary text-white">
       <div class="container text-center">
-        <h1>Calculate costs of delivering hydrogen-based fuels</h1>
+        <h1>Calculate costs of delivering hydrogen-based products</h1>
       </div>
     </header>
 
@@ -64,12 +64,12 @@
             <section id="intro">
               <h2>Introduction</h2>
               <hr>
-              <p>This tool calculates the cost of producing and transporting green hydrogen and hydrogen-based fuels such as ammonia, methanol and methane. Green hydrogen is hydrogen produced by electrolysis where the electricity comes from wind and solar generators.</p>
-	      <p>It is a WORK IN PROGRESS and currently only works for a selection of products.</p>
-	      <p>First choose the location where the hydrogen is produced and the location to which it is delivered. This determines the weather data for the wind and solar generation where the hydrogen is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
+              <p>This tool calculates the cost of producing and transporting green hydrogen and hydrogen-based products such as ammonia, methanol and methane. Green hydrogen is hydrogen produced by electrolysis where the electricity comes from wind and solar generators.</p>
+	      <p>First choose the location where the hydrogen-based derivative is produced and the location to which it is delivered. This determines the weather data for the wind and solar generation where the derivative is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
               <p>This is a <b>toy model</b> with a <b>strongly simplified</b> setup. Please read the <a class="js-scroll-trigger" href="#warnings">warnings</a> below.</p>
 	      <p>The tool is a simplified version of the <a href="https://github.com/euronion/trace">trace model</a> behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown,  published in PLOS ONE in 2023.</p>
 	      <p>All code and data behind this tool are <a href="https://github.com/PyPSA/efuels-server">openly available</a>.</p>
+	      <p>You may also be interested in our <b>sister websites</b>: <a href="https://model.energy/">model.energy for baseload electricity</a> and an <a href="https://model.energy/scenarios/">interface to run the detailed European model PyPSA-Eur</a>.</p>
             </section>
 
             <section id="location">
@@ -91,7 +91,7 @@
             </section>
 
             <section id="assumptions">
-              <h2 data-toc-text="2. Choose technologies, costs and other assumptions">Step 2: Choose technologies, costs and other assumptions</h2>
+              <h2 data-toc-text="2. Choose product, technologies, costs and other assumptions">Step 2: Choose product, technologies, costs and other assumptions</h2>
               <hr>
               <div class="form-group">
                 <label for="efuel">{{ defaults["efuel"]["full_name"] }}</label>
@@ -110,7 +110,7 @@
                   <option value="{{ year }}"{{ " selected" if year == config['tech_years_default'] else "" }}>{{ year }} scenario</option>
 		  {% endfor %}
                 </select>
-                <small class="form-text text-muted">Individual cost assumptions can be changed below under "advanced assumption settings". 2030 is the default year for technology assumptions because this is a reasonable time by which green fuels can be scaled up to large volumes.</small>
+                <small class="form-text text-muted">Individual cost assumptions can be changed below under "advanced assumption settings". 2030 is the default year for technology assumptions because this is a reasonable time by which green products can be scaled up to large volumes.</small>
               </div>
               <p>Choose which technologies should be included:</p>
 	      {% for d in ["wind","solar","battery","hydrogen","dac"] %}
@@ -180,7 +180,7 @@
                     <p><b><span id="average_cost"></span></b></p>
                     <p><b><span id="average_cost_per_t"></span></b></p>
                     <p><b><span id="average_cost_per_l"></span></b></p>
-		    <small class="form-text text-muted">Costs are for energy delivered in {{ config['cost_year'] }} euros. Energy units (MWh) are given for the lower heating value (LHV).</small>
+		    <small class="form-text text-muted">Costs are for energy delivered in {{ config['cost_year'] }} euros. Energy units (MWh) are given for the lower heating value (LHV). Compare costs to <a href="#historic">historical market prices of fossil-based products</a>.</small>
 		    <br />
 		    <p><b><span id="distance"></span></b></p>
 		    <p><b><span id="distance_transported"></span></b></p>
@@ -243,7 +243,7 @@
   <li>The transport route is not calculated precisely. Instead, a factor is multiplied by the direct distance to account for indirect transport routes. For pipelines and cables the default factor is 1.2 and for shipping the default is 1.8 (since sea routes may have to go around continents). You can change this assumption.</li>
   <li>At the moment all pipeline and cable costs use the submarine cost. In the future we will offer an overland cost where the user can change the fraction of the route that is over land or under sea. The submarine costs are higher than overland, so this is a conservative assumption.</li>
 <li>Costs for shipping terminals at the exporting and importing locations are not included.</li>
-		<li>The shipping model is simplified. We assume that there are enough ships for a continuous delivery of efuels. The number of ships needed takes into account the time it takes the ships to do a return trip including loading and unloading the efuel.</li>
+		<li>The shipping model is simplified. We assume that there are enough ships for a continuous delivery of products. The number of ships needed takes into account the time it takes the ships to do a return trip including loading and unloading the products.</li>
                 <li>
                   The default costs for hydrogen storage assumes that hydrogen is stored in overground steel tanks. If underground hydrogen storage is available, for example in salt caverns, change the overnight cost to 2 EUR/kWh and the lifetime to 50 years. Studies on salt deposit availability are available for most countries, see e.g. <a href="https://www.researchgate.net/figure/Underground-salt-deposits-and-cavern-fields-in-Europe-225_fig5_319417820">this map</a> for Europe or Figure 2 of <a href="https://www.nrel.gov/docs/fy10osti/46719.pdf">NREL 2009</a> for the United States.
                 </li>
@@ -289,9 +289,9 @@
                 hourly for multiple weather years.
 		</li>
                 <li>
-		  The joint production of electricity and hydrogen can lead to lower costs for both, particularly for a low ratio of hydrogen to electricity production. Flexible electrolyser demand creates flexibility for integrating wind and solar for electricity production. However, operating the efuels production in island mode can save costs compared to joint production, since the alternating current doesn't have to match a perfect sine wave. This saves on power electronic costs.</li>
+		  The joint production of electricity and hydrogen can lead to lower costs for both, particularly for a low ratio of hydrogen to electricity production. Flexible electrolyser demand creates flexibility for integrating wind and solar for electricity production. However, operating the hydrogen production in island mode can save costs compared to joint production, since the alternating current doesn't have to match a perfect sine wave. This saves on power electronic costs.</li>
 		<li>We do not allow waste heat integration. For example, the waste heat from methanol or Fischer-Tropsch synthesis could be fed to supply the heat demand of direct air capture.</li>
-		<li>Lower reliability delivery of efuels than baseload may cost less, especially for electricity and hydrogen, which are hard to store.</li>
+		<li>Lower reliability delivery of products than baseload may cost less, especially for electricity and hydrogen, which are hard to store.</li>
 		<li>The minimum must-run level also represents availability, taking into account maintenance sheduling for many aggregated units.</li>
               </ol>
               <h3 id="differences">Differences to model in Hampp et al, 2023</h3>
@@ -315,7 +315,7 @@
 		</li>
 		<li>The paper assumes that the best wind and solar
 		resources in each country are used for domestic energy
-		and excludes these areas from being used for efuel
+		and excludes these areas from being used for hydrogen-based product
 		exports. Since this website only allows point
 		locations for wind and solar, we do not do this. This
 		effect can lead to slightly lower costs on the website
@@ -324,14 +324,14 @@
 		<li>The model for the paper allows many wind and solar locations in
 		each country to be combined. This leads to a
 		smoothing effect across the country that reduces balancing costs compared
-		to an efuels plant at a single location. This effect makes
+		to a plant at a single location. This effect makes
 		the costs on the website higher than the paper in most
 		countries with good wind and solar resources in
 		  sparsely-populated areas.</li>
-		<li>The paper assumes that efuel demand is fixed for
-		the year, but is not strict about when the efuel is
+		<li>The paper assumes that product demand is fixed for
+		the year, but is not strict about when the product is
 		delivered during the year. The website requires
-		baseload delivery of the efuel. This makes the website
+		baseload delivery of the product. This makes the website
 		 results more expensive.</li>
 		<li>The paper used <a href="https://github.com/niclasmattsson/GlobalEnergyGIS">GlobalEnergyGIS</a> for processing the weather data, whereas the website uses the <a href="https://github.com/PyPSA/atlite">atlite library</a>.</li>
 		<li>The paper uses a default minimum part load of
@@ -345,8 +345,15 @@
 		<li>The website has a simplified version of the shipping model in the paper.</li>
 	      </ol>
 
+              <h3 id="historic">Historical market prices of fossil-based products</h3>
+<p>The following graphic from <a href="https://doi.org/10.1371/journal.pone.0281380">Hampp et al, 2023</a> shows historical market prices of fossil-based products (black lines) versus the costs of hydrogen-based products they calculated. Market prices for methanol are based on
+  <a href="https://www.methanol.org/methanol-price-supply-demand/">MMSA Europe Spot FOB</a>, for ammonia on <a href="https://www-genesis.destatis.de/genesis/online?operation=table&code=51000-0006&bypass=true&levelindex=0&levelid=1667074103053#abreadcrumb">German export prices for ammonia</a>, for natural gas on the <a href="https://www.investing.com/commodities/ice-dutch-ttf-gas-c1-futures-historical-data">Dutch TTF C1 future</a> and for Fischer-Tropsch products on <a href="https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en">EU Diesel prices without taxes</a>.</p>
+<br />
+<img width=1000 src="./static/price-history.png" />
 
+<br />
 
+<br />
 
 	      <h3>Only free software and open data</h3>
               <p>The graphical user interface,
@@ -375,6 +382,13 @@
                 <li><a href="https://github.com/coroa">Jonas Hörsch</a> developed the library <a href="https://github.com/PyPSA/atlite">atlite</a> that processes the weather data and selects different geographical areas.</li>
               </ul>
 	      <p>We thank also all the developers of the other free software on which model.energy depends.</p>
+              <h3>Comparable websites</h3>
+	      Here we list other websites that compute the costs of delivering hydrogen-based fuels.
+	      <ul>
+		<li><a href="https://maps.iee.fraunhofer.de/ptx-atlas/">Global PtX Atlas</a> by Fraunhofer IEE</li>
+		<li><a href="http://hydrogen-model.eu/#model">Hydrogen-model.eu</a></li>
+		<li><a href="https://wasserstoffatlas.de/">Wasserstoff Atlas</a></li>
+	      </ul>
               <h3>Privacy statement</h3>
               <p>No personal information is stored on the server. There are no cookies.</p>
               <p>Simulation assumptions and results for each job are stored on the server for statistical purposes.</p>

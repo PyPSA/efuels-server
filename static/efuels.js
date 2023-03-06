@@ -86,7 +86,7 @@ for (let i=0; i<locations.length; i++){
     let marker = L.marker([lat,lng], {draggable:'true'});
     map.addLayer(marker);
     marker._icon.style.filter = (location == "source") ? "hue-rotate(120deg)" : "";
-    marker.bindPopup('efuel ' + location);
+    marker.bindPopup('product ' + location);
     document.getElementsByName(location+"_location")[0].value = printLocation(lat,lng);
     marker.on('dragend', function(){
 	lat = marker.getLatLng().lat;
@@ -648,7 +648,7 @@ function draw_power_capacity_bar(){
 
     data.push(results["assumptions"]["efuels_load"]);
     color.push(colors["efuels_load"]);
-    labels.push("efuels demand");
+    labels.push("product demand");
     units.push("MW");
 
     for(let i=0; i<results["order"].length; i++){
@@ -674,7 +674,7 @@ function draw_energy_capacity_bar(){
 
     data.push(results["assumptions"]["efuels_load"]*24/1000.);
     color.push(colors["efuels_load"]);
-    labels.push("24h efuels demand");
+    labels.push("24h product demand");
     units.push("GWh");
 
     for(let i=0; i<results["order"].length; i++){

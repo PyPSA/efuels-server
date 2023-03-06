@@ -38,7 +38,7 @@ results_threshold: 1.e-3
 #seconds
 poll_interval: 1
 poll_timeout: 600
-expected_time: 70
+expected_time: 120
 
 balances_to_display: ["electricity","hydrogen"]
 
