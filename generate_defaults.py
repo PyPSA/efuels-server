@@ -290,4 +290,14 @@ for name,td_name in [("methanol","MeOH"),("ammonia","NH3 (l)"),("methane","CH4 (
 
 print(df)
 
+
+
+cost_df = df.index[df.index.get_level_values(0).str.contains("cost") & (~df.index.get_level_values(0).str.contains("marginal_cost")) & (~df.index.get_level_values(0).str.contains("co2_cost"))]
+
+inflation_factor = (1 + config["inflation"]/100)**(config["cost_year"] - config["cost_year_assumptions"])
+
+print("inflation factor",inflation_factor)
+
+df.loc[cost_df,"value"] = (inflation_factor*df.loc[cost_df,"value"].astype(float)).round(1)
+
 df.to_csv("defaults.csv")
