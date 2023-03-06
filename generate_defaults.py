@@ -59,6 +59,7 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
                                ("wind","onwind","Onshore wind"),
                                ("solar","solar-utility","Utility-scale solar PV"),
                                ("hydrogen_electrolyser","electrolysis","Hydrogen electrolyser"),
+                               ("desalination","seawater desalination","Seawater desalination"),
                                ("hydrogen_energy","hydrogen storage tank type 1","Hydrogen overground tank storage"),
                                ("methane_storage","methane storage tank incl. compressor","Methane overground tank storage"),
                                ("hydrogen_turbine","CCGT","Hydrogen combined cycle turbine"),
@@ -120,6 +121,20 @@ for name,td_name,full_name in [("battery_power_efficiency_charging","battery inv
                                       unit,
                                       full_name,
                                       td[year].loc[(td_name,"efficiency"),"source"]]
+
+
+df.loc[("hydrogen_electrolyser_water",""),:] = ["f",
+                                                eff.loc[("electrolysis","all","water"),"from_amount"][0]/eff.loc[("electrolysis","all","water"),"to_amount"][0],
+                                                "m3-H2O/MWh-H2-LHV",
+                                                "Hydrogen electrolyser water input",
+                                                eff.loc[("electrolysis","all","water"),"source"][0]]
+
+
+df.loc[("desalination_electricity",""),:] = ["f",
+                                             eff.loc[("seawater desalination","all","electricity"),"from_amount"][0]/eff.loc[("seawater desalination","all","electricity"),"to_amount"][0],
+                                             "MWh-el/m3-H2O",
+                                             "Seawater desalination electricity input",
+                                             eff.loc[("seawater desalination","all","electricity"),"source"][0]]
 
 
 #hydrogen_submarine_pipeline_losses,,f,2.1,percent/1000km,Hydrogen submarine pipeline losses,

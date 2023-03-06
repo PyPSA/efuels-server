@@ -42,7 +42,7 @@ expected_time: 70
 
 balances_to_display: ["electricity","hydrogen"]
 
-preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen storing compressor","hydrogen electrolyser","hydrogen turbine"]
+preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen storing compressor","hydrogen electrolyser","seawater desalination","hydrogen turbine"]
 
 #LHV
 mwh_per_t:
@@ -106,3 +106,4 @@ colors:
   Haber-Bosch synthesis: brown
   air separation unit: red
   ammonia shipping: green
+  seawater desalination: "#000099"
