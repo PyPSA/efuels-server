@@ -67,7 +67,8 @@ co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
 methanolisation_min_part_load,,f,50.0,percent,Methanol synthesis minimum part load,Private discussions.
 haber_bosch_min_part_load,,f,30.0,percent,Haber-Bosch ammonia synthesis minimum part load,Danish Energy Agency renewable fuels database
-methanation_min_part_load,,f,30.0,percent,Haber-Bosch ammonia synthesis minimum part load,Danish Energy Agency renewable fuels database
+methanation_min_part_load,,f,30.0,percent,Methanation minimum part load,Danish Energy Agency renewable fuels database
+ft_min_part_load,,f,90.0,percent,Fischer-Tropsch synthesis minimum part load,Private discussions.
 methanolisation_discount,,f,5,percent,Methanol synthesis discount rate,
 methanolisation_cost,2020,f,757401.0,EUR/MW_MeOH,Methanol synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
 methanolisation_fom,2020,f,3.0,percent of overnight cost per year,Methanol synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
@@ -107,6 +108,19 @@ methane_liquefaction_lifetime,2040,f,25.0,years,Methane liquefaction lifetime,"F
 methane_liquefaction_cost,2050,f,232.13,EUR/kW_CH4,Methane liquefaction capital cost (overnight),"Calculated, based on Lochner and Bothe (2009): https://doi.org/10.1016/j.enpol.2008.12.012 and Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
 methane_liquefaction_fom,2050,f,3.5,percent of overnight cost per year,Methane liquefaction fixed operation and maintenance costs,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
 methane_liquefaction_lifetime,2050,f,25.0,years,Methane liquefaction lifetime,"Fasihi et al 2017, table 1, https://www.mdpi.com/2071-1050/9/2/306"
+ft_discount,,f,5,percent,Fischer-Tropsch synthesis discount rate,
+ft_cost,2020,f,757401.0,EUR/MW_FT,Fischer-Tropsch synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
+ft_fom,2020,f,3.0,percent of overnight cost per year,Fischer-Tropsch synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
+ft_lifetime,2020,f,20.0,years,Fischer-Tropsch synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
+ft_cost,2030,f,650711.26,EUR/MW_FT,Fischer-Tropsch synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
+ft_fom,2030,f,3.0,percent of overnight cost per year,Fischer-Tropsch synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
+ft_lifetime,2030,f,20.0,years,Fischer-Tropsch synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
+ft_cost,2040,f,565647.83,EUR/MW_FT,Fischer-Tropsch synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
+ft_fom,2040,f,3.0,percent of overnight cost per year,Fischer-Tropsch synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
+ft_lifetime,2040,f,20.0,years,Fischer-Tropsch synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
+ft_cost,2050,f,480584.39,EUR/MW_FT,Fischer-Tropsch synthesis capital cost (overnight),"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), table 8: “Reference scenario”."
+ft_fom,2050,f,3.0,percent of overnight cost per year,Fischer-Tropsch synthesis fixed operation and maintenance costs,"Agora Energiewende (2018): The Future Cost of Electricity-Based Synthetic Fuels (https://www.agora-energiewende.de/en/publications/the-future-cost-of-electricity-based-synthetic-fuels-1/), section 6.3.2.1."
+ft_lifetime,2050,f,20.0,years,Fischer-Tropsch synthesis lifetime,"Danish Energy Agency, Technology Data for Renewable Fuels (04/2022), Data sheet “Methanol to Power”."
 hydrogen_liquefaction_discount,,f,5,percent,Hydrogen liquefaction discount rate,
 hydrogen_liquefaction_cost,2020,f,870.56,EUR/kW_H2,Hydrogen liquefaction capital cost (overnight),"IRENA (2022): Global Hydrogen Trade to Meet the 1.5° Climate Goal: Technology Review of Hydrogen Carriers, https://www.irena.org/publications/2022/Apr/Global-hydrogen-trade-Part-II , pg. 62f."
 hydrogen_liquefaction_fom,2020,f,2.5,percent of overnight cost per year,Hydrogen liquefaction fixed operation and maintenance costs,"DNV GL (2020): Study on the Import of Liquid Renewable Energy: Technology Cost Assessment, https://www.gie.eu/wp-content/uploads/filr/2598/DNV-GL_Study-GLE-Technologies-and-costs-analysis-on-imports-of-liquid-renewable-energy.pdf ."
@@ -385,6 +399,9 @@ hvdc_submarine_cable_losses,,f,2.300000000000002,percent/1000km,HVDC submarine c
 methanolisation_efficiency,,f,0.8787469104929423,MWh-MeOH-LHV/MWh-H2-LHV,Methanol synthesis efficiency wrt hydrogen,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 64."
 methanolisation_co2,,f,0.24800852585755315,tCO2/MWh-MeOH-LHV,Methanol synthesis carbon dioxide input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 66."
 methanolisation_electricity,,f,0.2709488629179386,MWhel/MWh-MeOH-LHV,Methanol synthesis electricity input,"DECHEMA 2017: DECHEMA: Low carbon energy and feedstock for the European chemical industry , pg. 65."
+ft_efficiency,,f,0.5628140703517589,MWh-FT-LHV/MWh-H2-LHV,Fischer-Tropsch synthesis efficiency wrt hydrogen,DEA technology data for Renewable fuels (2018): Hydrogen to Power.
+ft_co2,,f,0.40625,tCO2/MWh-FT-LHV,Fischer-Tropsch synthesis carbon dioxide input,DEA technology data for Renewable fuels (2018): Hydrogen to Power.
+ft_electricity,,f,0.008928571428571428,MWhel/MWh-FT-LHV,Fischer-Tropsch synthesis electricity input,DEA technology data for Renewable fuels (2018): Hydrogen to Power.
 methanation_efficiency,,f,0.7799979782323011,MWh-CH4-LHV/MWh-H2-LHV,Methanation efficiency wrt hydrogen,"Götz et al. (2016), fig. 11 ."
 methanation_co2,,f,0.19800126720811012,tCO2/MWh-CH4-LHV,Methanation carbon dioxide input,
 methane_liquefaction_electricity,,f,0.03597122302158273,MWh-el/MWh-CH4-LHV,Methane liquefaction electricity input,"Pospíšil et al. 2019: https://doi.org/10.1016/j.rser.2018.09.027 , Table 2 and Table 3. Source 2: https://encyclopedia.airliquide.com/methane (2021-02-10)."
@@ -485,3 +502,25 @@ lh2_ship_capacity_t,2020,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al
 lh2_ship_capacity_t,2030,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
 lh2_ship_capacity_t,2040,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
 lh2_ship_capacity_t,2050,f,11000.0,t_H2,lh2 shipping mass capacity,"Cihlar et al 2020: http://op.europa.eu/en/publication-detail/-/publication/7e4afa7d-d077-11ea-adf7-01aa75ed71a1/language-en , Table 3-B, based on IEA 2019."
+ft_ship_discount,,f,5,percent,ft shipping discount rate,
+ft_ship_loading_loss,,f,0.0,%/transfer,ft shipping unloading/loading loss,"Guesstimate, transfer of simple non-cryogenic fluid."
+ft_ship_loading_time,,f,48.0,h,ft shipping unloading/loading time,Assume same as for LOHC.
+ft_ship_average_speed,,f,27.8,km/h,ft shipping average speed,Assume same as for LOHC.
+ft_ship_capacity_mwh,,f,896250.0,MWh_LHV,ft shipping energy capacity,Based on FT fuel LHV of 11.95 MWh/t_FTfuel and 75000t capacity.
+ft_ship_energy_demand,,f,0.2428,MWh/km,ft shipping energy demand,Assume same as for LOHC.
+ft_ship_fom,2020,f,5.0,%/year,ft shipping fixed operation and maintenance costs,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_fom,2030,f,5.0,%/year,ft shipping fixed operation and maintenance costs,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_fom,2040,f,5.0,%/year,ft shipping fixed operation and maintenance costs,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_fom,2050,f,5.0,%/year,ft shipping fixed operation and maintenance costs,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_cost,2020,f,31700578.34,EUR,ft shipping capital cost (overnight),"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_cost,2030,f,31700578.34,EUR,ft shipping capital cost (overnight),"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_cost,2040,f,31700578.34,EUR,ft shipping capital cost (overnight),"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_cost,2050,f,31700578.34,EUR,ft shipping capital cost (overnight),"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_lifetime,2020,f,15.0,years,ft shipping lifetime,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_lifetime,2030,f,15.0,years,ft shipping lifetime,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_lifetime,2040,f,15.0,years,ft shipping lifetime,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_lifetime,2050,f,15.0,years,ft shipping lifetime,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_capacity_t,2020,f,75000.0,t_FTfuel,ft shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_capacity_t,2030,f,75000.0,t_FTfuel,ft shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_capacity_t,2040,f,75000.0,t_FTfuel,ft shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."
+ft_ship_capacity_t,2050,f,75000.0,t_FTfuel,ft shipping mass capacity,"Assume comparable tanker as for LOHC transport above, c.f. Runge et al 2020, Table 10, https://papers.ssrn.com/abstract=3623514 ."

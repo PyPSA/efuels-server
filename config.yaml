@@ -12,9 +12,10 @@ tech_years_default: 2030
 efuels:
   hydrogen_submarine_pipeline: Hydrogen by submarine pipeline
   lh2: Liquefied hydrogen by ship
-  methanol: Methanol by ship
   ammonia: Ammonia by ship
   methane: Liquefied methane by ship
+  methanol: Methanol by ship
+  ft: Diesel/gasoline/kerosene by ship
   electricity_hvdc: Electricity by submarine HVDC cable
 
 efuels_default: hydrogen_submarine_pipeline
@@ -46,11 +47,13 @@ mwh_per_t:
   methanol: 5.54
   ammonia: 5.17
   methane: 13.9
+  ft: 11.95
 
 #LHV at 20 C
 mwh_per_m3:
   methanol: 4.4
   methane: 0.01
+  ft: 9.92
 
 colors:
   wind : "#3B6182"
@@ -87,6 +90,9 @@ colors:
   methanation: "#F08080"
   methane liquefaction: "#cc3300"
   methane storage: black
+  ft synthesis: "#F08080"
+  ft storage: black
+  ft shipping: green
   co2: "#999966"
   dac: "#999966"
   co2 storage: "#666633"

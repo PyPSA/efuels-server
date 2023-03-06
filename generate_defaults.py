@@ -54,6 +54,7 @@ shipping = pd.read_csv(fn,
 for name,td_name,full_name in [("methanolisation","methanolisation","Methanol synthesis"),
                                ("methanation","methanation","Methanation"),
                                ("methane_liquefaction","CH4 liquefaction","Methane liquefaction"),
+                               ("ft","Fischer-Tropsch","Fischer-Tropsch synthesis"),
                                ("hydrogen_liquefaction","H2 liquefaction","Hydrogen liquefaction"),
                                ("wind","onwind","Onshore wind"),
                                ("solar","solar-utility","Utility-scale solar PV"),
@@ -155,6 +156,26 @@ df.loc[("methanolisation_electricity",""),:] = ["f",
                                                 "Methanol synthesis electricity input",
                                                 eff.loc[("methanolisation","all","electricity"),"source"][0]]
 
+
+df.loc[("ft_efficiency",""),:] = ["f",
+                                  eff.loc[("Fischer-Tropsch","all","hydrogen (g)"),"to_amount"][0]/eff.loc[("Fischer-Tropsch","all","hydrogen (g)"),"from_amount"][0],
+                                  "MWh-FT-LHV/MWh-H2-LHV",
+                                  "Fischer-Tropsch synthesis efficiency wrt hydrogen",
+                                  eff.loc[("Fischer-Tropsch","all","hydrogen (g)"),"source"][0]]
+
+df.loc[("ft_co2",""),:] = ["f",
+                           eff.loc[("Fischer-Tropsch","all","CO2 (g)"),"from_amount"][0]/eff.loc[("Fischer-Tropsch","all","CO2 (g)"),"to_amount"][0],
+                           "tCO2/MWh-FT-LHV",
+                           "Fischer-Tropsch synthesis carbon dioxide input",
+                           eff.loc[("Fischer-Tropsch","all","CO2 (g)"),"source"][0]]
+
+df.loc[("ft_electricity",""),:] = ["f",
+                                   eff.loc[("Fischer-Tropsch","all","electricity"),"from_amount"][0]/eff.loc[("Fischer-Tropsch","all","electricity"),"to_amount"][0],
+                                   "MWhel/MWh-FT-LHV",
+                                   "Fischer-Tropsch synthesis electricity input",
+                                   eff.loc[("Fischer-Tropsch","all","electricity"),"source"][0]]
+
+
 df.loc[("methanation_efficiency",""),:] = ["f",
                                                eff.loc[("methanation","all","hydrogen (g)"),"to_amount"][0]/eff.loc[("methanation","all","hydrogen (g)"),"from_amount"][0],
                                                "MWh-CH4-LHV/MWh-H2-LHV",
@@ -233,7 +254,7 @@ df.loc[("hydrogen_compressor_electricity",""),:] = ["f",
 
 
 
-for name,td_name in [("methanol","MeOH"),("ammonia","NH3 (l)"),("methane","CH4 (l)"),("lh2","H2 (l)")]:#,("ft","FT fuel"),("lohc","LOHC")]
+for name,td_name in [("methanol","MeOH"),("ammonia","NH3 (l)"),("methane","CH4 (l)"),("lh2","H2 (l)"),("ft","FT fuel")]:#,("lohc","LOHC")]
 
 
     df.loc[(name + "_ship_discount",""),:] = ["f",5,"percent",name + " shipping discount rate",""]
