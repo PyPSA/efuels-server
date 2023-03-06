@@ -771,6 +771,8 @@ def run_optimisation(assumptions, pu):
         efuel = assumptions["efuel"]
         fuel = efuel if "_" not in efuel else efuel[:efuel.find("_")]
         results_overview["average_efuel_price_per_t"] = results_overview["average_efuel_price"]*config["mwh_per_t"][fuel]
+    if assumptions["efuel"] in ["methanol","ft"]:
+        results_overview["average_efuel_price_per_l"] = results_overview["average_efuel_price"]*config["mwh_per_m3"][fuel]/1e3
     results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
 
 

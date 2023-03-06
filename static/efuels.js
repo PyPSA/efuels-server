@@ -252,6 +252,7 @@ function clear_results(){
     document.getElementById("results_assumptions").innerHTML="";
     document.getElementById("average_cost").innerHTML="";
     document.getElementById("average_cost_per_t").innerHTML="";
+    document.getElementById("average_cost_per_l").innerHTML="";
     document.getElementById("distance").innerHTML="";
     document.getElementById("distance_transported").innerHTML="";
 
@@ -328,9 +329,10 @@ function display_results(){
 
     $('#collapseResults').addClass("show");
 
-    document.getElementById("results_assumptions").innerHTML=" for weather year " + results["assumptions"]["year"];
-    document.getElementById("average_cost").innerHTML="Average price [EUR/MWh]: " + results["average_efuel_price"].toFixed(1);
-    document.getElementById("average_cost_per_t").innerHTML= "average_efuel_price_per_t" in results ? "Average price [EUR/t]: " + results["average_efuel_price_per_t"].toFixed(1) : "";
+    document.getElementById("results_assumptions").innerHTML=" for " + config["efuels"][assumptions["efuel"]];
+    document.getElementById("average_cost").innerHTML="Average cost [EUR/MWh]: " + results["average_efuel_price"].toFixed(1);
+    document.getElementById("average_cost_per_t").innerHTML= "average_efuel_price_per_t" in results ? "Average cost [EUR/tonne]: " + results["average_efuel_price_per_t"].toFixed(1) : "";
+    document.getElementById("average_cost_per_l").innerHTML= "average_efuel_price_per_l" in results ? "Average cost [EUR/litre]: " + results["average_efuel_price_per_l"].toFixed(1) : "";
     document.getElementById("distance").innerHTML="Distance as crow flies [km]: " + results["distance"].toFixed(0);
     document.getElementById("distance_transported").innerHTML="Distance transported [km]: " + results["distance_transported"].toFixed(0);
 
@@ -633,7 +635,7 @@ function draw_cost_stack(){
 	labels.push(asset);
     };
 
-    draw_stack(data, labels, color, "Breakdown of avg. sys. cost [EUR/MWh]", "#average_cost_graph", " EUR/MWh");
+    draw_stack(data, labels, color, "Breakdown of average cost [EUR/MWh]", "#average_cost_graph", " EUR/MWh");
 };
 
 

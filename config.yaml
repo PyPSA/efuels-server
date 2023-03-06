@@ -10,13 +10,13 @@ tech_years: [2020,2030,2040,2050]
 tech_years_default: 2030
 
 efuels:
-  hydrogen_submarine_pipeline: Hydrogen by submarine pipeline
-  lh2: Liquefied hydrogen by ship
-  ammonia: Ammonia by ship
-  methane: Liquefied methane by ship
-  methanol: Methanol by ship
-  ft: Diesel/gasoline/kerosene by ship
-  electricity_hvdc: Electricity by submarine HVDC cable
+  hydrogen_submarine_pipeline: hydrogen by submarine pipeline
+  lh2: liquefied hydrogen by ship
+  ammonia: ammonia by ship
+  methane: liquefied methane by ship
+  methanol: methanol by ship
+  ft: diesel/gasoline/kerosene by ship
+  electricity_hvdc: electricity by submarine HVDC cable
 
 efuels_default: hydrogen_submarine_pipeline
 

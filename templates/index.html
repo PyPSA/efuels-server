@@ -132,7 +132,7 @@
                 <div class="col">
                   <div class="collapse multi-collapse" id="advCost">
                     <div class="card card-body">
-		      <p>All costs are in 2015 euros, following the <a href="https://ens.dk/en/our-services/projections-and-models/technology-data">Danish Energy Agency Technology Data Catalogue<a>.</p>
+		      <p>All costs are in 2015 euros, following the <a href="https://ens.dk/en/our-services/projections-and-models/technology-data">Danish Energy Agency Technology Data Catalogue<a>. All energy units for fuels are given for the lower heating value (LHV).</p>
 		      {% for d in defaults if defaults[d]["type"] == "b" and d not in ["wind","solar","battery","hydrogen","dac"] %}
 		      <div class="form-check">
 			<input class="form-check-input" type="checkbox" name="{{ d }}" id="sel-{{ d }}">
@@ -179,7 +179,8 @@
                     <br />
                     <p><b><span id="average_cost"></span></b></p>
                     <p><b><span id="average_cost_per_t"></span></b></p>
-		    <small class="form-text text-muted">Costs and prices are for energy delivered in 2015 euros.</small>
+                    <p><b><span id="average_cost_per_l"></span></b></p>
+		    <small class="form-text text-muted">Costs are for energy delivered in 2015 euros. Energy units (MWh) are given for the lower heating value (LHV).</small>
 		    <br />
 		    <p><b><span id="distance"></span></b></p>
 		    <p><b><span id="distance_transported"></span></b></p>
