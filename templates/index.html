@@ -64,7 +64,7 @@
             <section id="intro">
               <h2>Introduction</h2>
               <hr>
-              <p>This tool calculates the cost of producing and transporting green hydrogen and hydrogen-based products such as ammonia, methanol and methane. Green hydrogen is hydrogen produced by electrolysis where the electricity comes from wind and solar generators.</p>
+              <p>This tool calculates the cost of producing and transporting green hydrogen and hydrogen-based products such as ammonia, methanol and methane. Green hydrogen is produced by water electrolysis where the electricity comes from wind and solar generators.</p>
 	      <p>First choose the location where the hydrogen-based derivative is produced and the location to which it is delivered. This determines the weather data for the wind and solar generation where the derivative is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
               <p>This is a <b>toy model</b> with a <b>strongly simplified</b> setup. Please read the <a class="js-scroll-trigger" href="#warnings">warnings</a> below.</p>
 	      <p>The tool is a simplified version of the <a href="https://github.com/euronion/trace">trace model</a> behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown,  published in PLOS ONE in 2023.</p>
@@ -180,7 +180,7 @@
                     <p><b><span id="average_cost"></span></b></p>
                     <p><b><span id="average_cost_per_t"></span></b></p>
                     <p><b><span id="average_cost_per_l"></span></b></p>
-		    <small class="form-text text-muted">Costs are for energy delivered in {{ config['cost_year'] }} euros. Energy units (MWh) are given for the lower heating value (LHV). Compare costs to <a href="#historic">historical market prices of fossil-based products</a>.</small>
+		    <small class="form-text text-muted">Costs are in {{ config['cost_year'] }} euros for energy delivered. Energy units for fuels are given for the lower heating value (LHV). Compare costs to <a href="#historic">historical market prices of fossil-based products in Europe</a>.</small>
 		    <br />
 		    <p><b><span id="distance"></span></b></p>
 		    <p><b><span id="distance_transported"></span></b></p>
@@ -345,8 +345,8 @@
 		<li>The website has a simplified version of the shipping model in the paper.</li>
 	      </ol>
 
-              <h3 id="historic">Historical market prices of fossil-based products</h3>
-<p>The following graphic from <a href="https://doi.org/10.1371/journal.pone.0281380">Hampp et al, 2023</a> shows historical market prices of fossil-based products (black lines) versus the costs of hydrogen-based products they calculated. Market prices for methanol are based on
+              <h3 id="historic">Historical market prices of fossil-based products in Europe</h3>
+<p>The following graphic from <a href="https://doi.org/10.1371/journal.pone.0281380">Hampp et al, 2023</a> shows historical market prices of fossil-based products in Europe (black lines) versus the costs of hydrogen-based products the authors calculated for 2050 technology assumptions. Market prices for methanol are based on
   <a href="https://www.methanol.org/methanol-price-supply-demand/">MMSA Europe Spot FOB</a>, for ammonia on <a href="https://www-genesis.destatis.de/genesis/online?operation=table&code=51000-0006&bypass=true&levelindex=0&levelid=1667074103053#abreadcrumb">German export prices for ammonia</a>, for natural gas on the <a href="https://www.investing.com/commodities/ice-dutch-ttf-gas-c1-futures-historical-data">Dutch TTF C1 future</a> and for Fischer-Tropsch products on <a href="https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en">EU Diesel prices without taxes</a>.</p>
 <br />
 <img width=1000 src="./static/price-history.png" />
@@ -383,7 +383,9 @@
               </ul>
 	      <p>We thank also all the developers of the other free software on which model.energy depends.</p>
               <h3>Comparable websites</h3>
-	      Here we list other websites that compute the costs of delivering hydrogen-based fuels.
+<p>Here we list other websites that compute the costs of delivering
+hydrogen-based fuels. As far as we know, this website is the only one
+that does live optimisation with hourly time series.</p>
 	      <ul>
 		<li><a href="https://maps.iee.fraunhofer.de/ptx-atlas/">Global PtX Atlas</a> by Fraunhofer IEE</li>
 		<li><a href="http://hydrogen-model.eu/#model">Hydrogen-model.eu</a></li>
