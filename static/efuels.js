@@ -89,19 +89,19 @@ for (let i=0; i<locations.length; i++){
     marker.bindPopup('product ' + location);
     document.getElementsByName(location+"_location")[0].value = printLocation(lat,lng);
     marker.on('dragend', function(){
-	lat = marker.getLatLng().lat;
-	lng = marker.getLatLng().lng;
+	lat = parseFloat(marker.getLatLng().lat.toFixed(1));
+	lng = parseFloat(marker.getLatLng().lng.toFixed(1));
 	assumptions[location +"_lat"] = lat;
 	assumptions[location +"_lng"] = lng;
 	document.getElementsByName(location+"_location")[0].value = printLocation(lat,lng);
-	console.log(location, 'changed location to: lat:', lat.toFixed(1), ", lon:", lng.toFixed(1));
+	console.log(location, 'changed location to: lat:', lat, ", lon:", lng);
     });
 };
 
 
 
 function printLocation(lat,lng){
-    return "latitude: " + lat.toFixed(1) + ", longitude: " + lng.toFixed(1);
+    return "latitude: " + lat + ", longitude: " + lng;
 };
 
 
@@ -111,7 +111,7 @@ for (let i = 0; i < Object.keys(assumptions).length; i++){
     let key = Object.keys(assumptions)[i];
     let value = assumptions[key];
     console.log(key,value);
-    if(["job_type","source_lat","source_lng","destination_lat","destination_lng","version","jobid","timestamp","queue_length","weather_hex","results_hex","cf_exponent"].includes(key)){
+    if(["job_type","source_lat","source_lng","destination_lat","destination_lng","version","jobid","timestamp","queue_length","weather_hex","results_hex","cf_exponent","overland_fraction"].includes(key)){
     }
     else if(typeof value === "boolean"){
 	document.getElementsByName(key)[0].checked = value;
@@ -332,7 +332,7 @@ function display_results(){
     document.getElementById("results_assumptions").innerHTML=" for " + config["efuels"][assumptions["efuel"]];
     document.getElementById("average_cost").innerHTML="Average cost [EUR/MWh]: " + results["average_efuel_price"].toFixed(1);
     document.getElementById("average_cost_per_t").innerHTML= "average_efuel_price_per_t" in results ? "Average cost [EUR/tonne]: " + results["average_efuel_price_per_t"].toFixed(1) : "";
-    document.getElementById("average_cost_per_l").innerHTML= "average_efuel_price_per_l" in results ? "Average cost [EUR/litre]: " + results["average_efuel_price_per_l"].toFixed(1) : "";
+    document.getElementById("average_cost_per_l").innerHTML= "average_efuel_price_per_l" in results ? "Average cost [EUR/litre]: " + results["average_efuel_price_per_l"].toFixed(2) : "";
     document.getElementById("distance").innerHTML="Distance as crow flies [km]: " + results["distance"].toFixed(0);
     document.getElementById("distance_transported").innerHTML="Distance transported [km]: " + results["distance_transported"].toFixed(0);
 
@@ -838,8 +838,14 @@ function draw_bar(data, labels, color, units, ylabel, svgName){
         .text(ylabel);
 
     // add the x Axis
+    // https://stackoverflow.com/questions/20947488/d3-grouped-bar-chart-how-to-rotate-the-text-of-x-axis-ticks
     svgGraph.append("g")
         .attr("transform", "translate(" + margin.left + "," + (height + margin.top) + ")")
-        .call(d3.axisBottom(x));
+        .call(d3.axisBottom(x))
+	.selectAll("text")
+        .style("text-anchor", "middle")
+        .attr("dx", "0em")
+        .attr("dy", "1em")
+        .attr("transform", "rotate(-10)");
 
 };

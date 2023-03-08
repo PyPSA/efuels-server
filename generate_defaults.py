@@ -56,7 +56,7 @@ for name,td_name,full_name in [("methanolisation","methanolisation","Methanol sy
                                ("methane_liquefaction","CH4 liquefaction","Methane liquefaction"),
                                ("ft","Fischer-Tropsch","Fischer-Tropsch synthesis"),
                                ("hydrogen_liquefaction","H2 liquefaction","Hydrogen liquefaction"),
-                               ("wind","onwind","Onshore wind"),
+                               ("wind","onwind","Onshore wind turbine"),
                                ("solar","solar-utility","Utility-scale solar PV"),
                                ("hydrogen_electrolyser","electrolysis","Hydrogen electrolyser"),
                                ("desalination","seawater desalination","Seawater desalination"),

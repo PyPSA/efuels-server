@@ -70,3 +70,5 @@ static/d*
 !defaults-initial.csv
 
 *.png
+
+efuels-*.js

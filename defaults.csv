@@ -6,11 +6,11 @@ destination_lat,,f,50.11,degrees,Destination latitude,
 destination_lng,,f,8.68,degrees,Destination longitude,
 source_lat,,f,-30.8,degrees,Source latitude,
 source_lng,,f,18.5,degrees,Source longitude,
-frequency,,i,3,,Sampling frequency,"n-hourly, n<3 is very slow, big n solves faster (n=25 or n=49 give fast and relatively accurate results)"
+frequency,,i,3,,Sampling frequency for weather time-series,"n-hourly, n<3 is very slow, big n solves faster (n=25 or n=49 give fast and relatively accurate results)"
 efuel,,s,hydrogen_submarine_pipeline,,Product,
 efuels_load,,f,100,MW,Constant demand for product,Demand should be large enough for utility-scale assets but small enough to neglect land availability constraints
-pipeline_distance_factor,,f,1.2,,Pipeline distance multiplicator factor,Factor that multiplies direct distance between source and destination to account for indirect pipeline routes; represents rough average of distance considered in Hampp et al (2023)
-shipping_distance_factor,,f,1.8,,Shipping distance multiplicator factor,Factor that multiplies direct distance between source and destination to account for indirect shipping routes; represents rough average of distance considered in Hampp et al (2023)
+pipeline_distance_factor,,f,1.2,,Pipeline distance multiplicator factor,As-the-crow-flies direct distance between source and destination is multiplied by this factor to create an estimate of the pipeline distance; represents rough average of distances considered in Hampp et al (2023)
+shipping_distance_factor,,f,1.8,,Shipping distance multiplicator factor,As-the-crow-flies direct distance between source and destination is multiplied by this factor to create an estimate of the shipping distance; represents rough average of distances considered in Hampp et al (2023)
 overland_fraction,,f,0.,,Fraction of transport route that goes over land,This is applied if there are separate overland and submarine pipeline or electricity transmission costs
 wind_max,,f,1e7,MWp,Wind maximum capacity allowed,
 wind_min,,f,0,MWp,Wind minimum capacity allowed,
@@ -46,7 +46,7 @@ dispatchable2_lifetime,2030,f,25,years,Dispatchable technology 2 lifetime,
 dispatchable2_lifetime,2050,f,25,years,Dispatchable technology 2 lifetime,
 solar_max,,f,1e7,MWp,Solar maximum capacity allowed,
 solar_min,,f,0,MWp,Solar minimum capacity allowed,
-wind_discount,,f,5,percent,Onshore wind discount rate,
+wind_discount,,f,5,percent,Onshore wind turbine discount rate,
 solar_discount,,f,5,percent,Utility-scale solar PV discount rate,
 battery_energy_discount,,f,5,percent,Utility-scale battery energy discount rate,
 battery_power_discount,,f,5,percent,Utility-scale battery converter power discount rate,
@@ -55,13 +55,13 @@ hydrogen_electrolyser_discount,,f,5,percent,Hydrogen electrolyser discount rate,
 dispatchable1_discount,,f,10,percent,Dispatchable technology 1 discount rate,
 dispatchable2_discount,,f,10,percent,Dispatchable technology 2 discount rate,
 hydrogen_submarine_pipeline_discount,,f,5,percent,Hydrogen submarine pipeline discount rate,
-wind,,b,True,,Wind turbine,
-solar,,b,True,,Solar photovoltaic cell,
-battery,,b,True,,Battery storage,
+wind,,b,True,,Onshore wind turbine,
+solar,,b,True,,Utility-scale solar PV,
+battery,,b,True,,Utility-scale battery storage,
 hydrogen,,b,True,,Hydrogen gas storage,
 dac,,b,True,,Direct air capture for carbonaceous fuels,"If direct air capture is not selected, CO2 is costed according to assumptions specified below"
-dispatchable1,,b,False,,Dispatchable technology 1,Default assumption is based on open cycle natural gas turbine (OCGT)
-dispatchable2,,b,False,,Dispatchable technology 2,Default assumption is based on new nuclear EPR reactor in Europe
+dispatchable1,,b,False,,Include dispatchable technology 1,Default assumption is based on open cycle natural gas turbine (OCGT)
+dispatchable2,,b,False,,Include dispatchable technology 2,Default assumption is based on new nuclear EPR reactor in Europe
 co2_cost,2020,f,300,EUR/tCO2,CO2 cost,
 co2_cost,2030,f,200,EUR/tCO2,CO2 cost,
 co2_cost,2050,f,100,EUR/tCO2,CO2 cost,
@@ -134,18 +134,18 @@ hydrogen_liquefaction_lifetime,2040,f,20.0,years,Hydrogen liquefaction lifetime,
 hydrogen_liquefaction_cost,2050,f,576.7,EUR/kW_H2,Hydrogen liquefaction capital cost (overnight),"IRENA (2022): Global Hydrogen Trade to Meet the 1.5° Climate Goal: Technology Review of Hydrogen Carriers, https://www.irena.org/publications/2022/Apr/Global-hydrogen-trade-Part-II , pg. 62f."
 hydrogen_liquefaction_fom,2050,f,2.5,percent of overnight cost per year,Hydrogen liquefaction fixed operation and maintenance costs,"DNV GL (2020): Study on the Import of Liquid Renewable Energy: Technology Cost Assessment, https://www.gie.eu/wp-content/uploads/filr/2598/DNV-GL_Study-GLE-Technologies-and-costs-analysis-on-imports-of-liquid-renewable-energy.pdf ."
 hydrogen_liquefaction_lifetime,2050,f,20.0,years,Hydrogen liquefaction lifetime,"Reuß et al 2017, https://doi.org/10.1016/j.apenergy.2017.05.050 , Table 9."
-wind_cost,2020,f,1235.2,EUR/kW,Onshore wind capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_fom,2020,f,1.25,percent of overnight cost per year,Onshore wind fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_lifetime,2020,f,27.0,years,Onshore wind lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_cost,2030,f,1143.3,EUR/kW,Onshore wind capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_fom,2030,f,1.22,percent of overnight cost per year,Onshore wind fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_lifetime,2030,f,30.0,years,Onshore wind lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_cost,2040,f,1079.3,EUR/kW,Onshore wind capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_fom,2040,f,1.19,percent of overnight cost per year,Onshore wind fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_lifetime,2040,f,30.0,years,Onshore wind lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_cost,2050,f,1063.3,EUR/kW,Onshore wind capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_fom,2050,f,1.18,percent of overnight cost per year,Onshore wind fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
-wind_lifetime,2050,f,30.0,years,Onshore wind lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_cost,2020,f,1235.2,EUR/kW,Onshore wind turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_fom,2020,f,1.25,percent of overnight cost per year,Onshore wind turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_lifetime,2020,f,27.0,years,Onshore wind turbine lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_cost,2030,f,1143.3,EUR/kW,Onshore wind turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_fom,2030,f,1.22,percent of overnight cost per year,Onshore wind turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_lifetime,2030,f,30.0,years,Onshore wind turbine lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_cost,2040,f,1079.3,EUR/kW,Onshore wind turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_fom,2040,f,1.19,percent of overnight cost per year,Onshore wind turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_lifetime,2040,f,30.0,years,Onshore wind turbine lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_cost,2050,f,1063.3,EUR/kW,Onshore wind turbine capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_fom,2050,f,1.18,percent of overnight cost per year,Onshore wind turbine fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
+wind_lifetime,2050,f,30.0,years,Onshore wind turbine lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 solar_cost,2020,f,562.5,EUR/kW_e,Utility-scale solar PV capital cost (overnight),"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 solar_fom,2020,f,2.01,percent of overnight cost per year,Utility-scale solar PV fixed operation and maintenance costs,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"
 solar_lifetime,2020,f,35.0,years,Utility-scale solar PV lifetime,"Danish Energy Agency, technology_data_for_el_and_dh.xlsx"

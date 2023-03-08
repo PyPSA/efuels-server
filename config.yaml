@@ -14,10 +14,10 @@ cost_year: 2020
 inflation: 2
 
 efuels:
-  hydrogen_submarine_pipeline: hydrogen by submarine pipeline
-  lh2: liquefied hydrogen by ship
-  ammonia: ammonia by ship
-  methane: liquefied methane by ship
+  hydrogen_submarine_pipeline: hydrogen (gas) by submarine pipeline
+  lh2: hydrogen (liquid) by ship
+  ammonia: ammonia (liquid) by ship
+  methane: methane (liquid) by ship
   methanol: methanol by ship
   ft: diesel/gasoline/kerosene by ship
   electricity_hvdc: electricity by submarine HVDC cable

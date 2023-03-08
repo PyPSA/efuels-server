@@ -65,7 +65,7 @@
               <h2>Introduction</h2>
               <hr>
               <p>This tool calculates the cost of producing and transporting green hydrogen and hydrogen-based products such as ammonia, methanol and methane. Green hydrogen is produced by water electrolysis where the electricity comes from wind and solar generators.</p>
-	      <p>First choose the location where the hydrogen-based derivative is produced and the location to which it is delivered. This determines the weather data for the wind and solar generation where the derivative is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost.</p>
+	      <p>First choose the location where the hydrogen-based derivative is produced and the location to which it is delivered. This determines the weather data for the wind and solar generation where the derivative is produced, as well as the transport costs to the destination. Then choose your cost and technology assumptions to find the solution with least cost. Interesting cost levers are: capital costs of electrolysers and hydrogen storage, financing costs and minimum part-load rates of synthesis units.</p>
               <p>This is a <b>toy model</b> with a <b>strongly simplified</b> setup. Please read the <a class="js-scroll-trigger" href="#warnings">warnings</a> below.</p>
 	      <p>The tool is a simplified version of the <a href="https://github.com/euronion/trace">trace model</a> behind the research paper <a href="https://doi.org/10.1371/journal.pone.0281380">Import options for chemical energy carriers from renewable sources to Germany</a> by Johannes Hampp, Michael Düren and Tom Brown,  published in PLOS ONE in 2023.</p>
 	      <p>All code and data behind this tool are <a href="https://github.com/PyPSA/efuels-server">openly available</a>.</p>
@@ -132,19 +132,9 @@
                 <div class="col">
                   <div class="collapse multi-collapse" id="advCost">
                     <div class="card card-body">
-		      <p>All costs are in {{ config['cost_year'] }} euros. All energy units for fuels are given for the lower heating value (LHV).</p>
-		      {% for d in defaults if defaults[d]["type"] == "b" and d not in ["wind","solar","battery","hydrogen","dac"] %}
-		      <div class="form-check">
-			<input class="form-check-input" type="checkbox" name="{{ d }}" id="sel-{{ d }}">
-			<label class="form-check-label" for="sel-{{ d }}">
-			  {{ defaults[d]["full_name"] }}
-			</label>
-			{% if not defaults[d]["text"] == "" %}
-			<small class="form-text text-muted">{{ defaults[d]["text"] }}</small>
-			{% endif %}
-                      </div>
-		      {% endfor %}
-		      {% for d in defaults if d not in ["cf_exponent","efuel","version","destination_lat","destination_lng","source_lat","source_lng"] and defaults[d]["type"] != "b" %}
+		      <p>All costs are in {{ config['cost_year'] }} euros. All energy units for fuels are given for the lower heating value (LHV). The exact configuration of technologies for each product can be found at the back of the paper <a href="https://doi.org/10.1371/journal.pone.0281380">Hampp et al, 2023</a>.</p>
+		      {% for d in defaults if d not in ["wind", "solar", "battery", "hydrogen", "dac", "overland_fraction", "cf_exponent", "efuel", "version", "destination_lat", "destination_lng", "source_lat", "source_lng"] %}
+		        {% if defaults[d]["type"] in ["f","i"] %}
                       <div class="form-group">
                         <label for="sel-{{ d }}">{{ defaults[d]["full_name"] }}
 			  {% if not defaults[d]["unit"] == "" %}
@@ -152,6 +142,14 @@
 			  {% endif %}
 			</label>
                         <input type="number" class="form-control" id="sel-{{ d }}" name="{{ d }}">
+		        {% endif %}
+		        {% if defaults[d]["type"] == "b" %}
+                      <div class="form-check">
+			<input class="form-check-input" type="checkbox" name="{{ d }}" id="sel-{{ d }}">
+			<label class="form-check-label" for="sel-{{ d }}">
+			  {{ defaults[d]["full_name"] }}
+			</label>
+			{% endif %}
 			{% if not defaults[d]["text"] == "" %}
 			<small class="form-text text-muted">{{ defaults[d]["text"]|safe }}</small>
 			{% endif %}
@@ -213,10 +211,10 @@
                         <th class="tab_data" id="tabh_cf_used">Cap Ftr used [%]</th>
                         <th class="tab_data" id="tabh_cf_available">Cap Ftr avail [%]</th>
                         <th class="tab_data" id="tabh_curtailment">Curtlmt [%]</th>
-                        <th class="tab_data" id="tabh_lcoe">LCOE/S [EUR/MWh]</th>
+                        <th class="tab_data" id="tabh_lcoe">LCOE [EUR/MWh]</th>
                       </tr>
 		    </table>
-		    <small class="form-text text-muted">Cap Ftr = Capacity Factor, used is after curtailment, avail is available before curtailment, Curtlmt = Curtailment, LCOE/S = Levelised Cost of Electricity/Storage per energy used</small>
+		    <small class="form-text text-muted">Cap Ftr = Capacity Factor, used is after curtailment, avail is available before curtailment, Curtlmt = Curtailment, LCOE = Levelised Cost of Electricity</small>
 		    <br />
 		    <p><span id="results-overview-download"></span></p>
 		    <p><span id="results-series-download"></span></p>
@@ -239,19 +237,17 @@
               <h3 id="warnings">Warnings</h3>
               </p>
 <ol>
+  <li>Technologies such as direct air capture and shipping for liquid hydrogen are not yet widely commercially deployed, so results that rely on these technologies should be treated with caution.</li>
   <li>Future cost projections are uncertain. If the technologies scale up faster than anticipated, costs will come down faster as manufacturers leverage experience and learning-by-doing.</li>
   <li>The transport route is not calculated precisely. Instead, a factor is multiplied by the direct distance to account for indirect transport routes. For pipelines and cables the default factor is 1.2 and for shipping the default is 1.8 (since sea routes may have to go around continents). You can change this assumption.</li>
   <li>At the moment all pipeline and cable costs use the submarine cost. In the future we will offer an overland cost where the user can change the fraction of the route that is over land or under sea. The submarine costs are higher than overland, so this is a conservative assumption.</li>
 <li>Costs for shipping terminals at the exporting and importing locations are not included.</li>
-		<li>The shipping model is simplified. We assume that there are enough ships for a continuous delivery of products. The number of ships needed takes into account the time it takes the ships to do a return trip including loading and unloading the products.</li>
+		<li>The shipping model is simplified. We assume that there are enough ships for a continuous delivery of products. The number of ships needed takes into account the time it takes the ships to do a return trip including loading and unloading the products. The continuous delivery means that the model neglects the need for buffer storage at the shipping terminals.</li>
                 <li>
                   The default costs for hydrogen storage assumes that hydrogen is stored in overground steel tanks. If underground hydrogen storage is available, for example in salt caverns, change the overnight cost to 2 EUR/kWh and the lifetime to 50 years. Studies on salt deposit availability are available for most countries, see e.g. <a href="https://www.researchgate.net/figure/Underground-salt-deposits-and-cavern-fields-in-Europe-225_fig5_319417820">this map</a> for Europe or Figure 2 of <a href="https://www.nrel.gov/docs/fy10osti/46719.pdf">NREL 2009</a> for the United States.
                 </li>
-                <li>
-                  Electricity systems with zero direct CO2 emissions can be
-                  built more cheaply by using additional technology options. The
-                  examples here are simply a toy model to put an upper bound on the
-                  costs for a very simple setup. Additional generation technologies
+  <li>
+    The default setting restricts power generation to wind solar. Additional low-carbon generation technologies
                   which may reduce costs include using existing hydroelectric
                   generators, biomass from sustainable resources (such as waste and
                   agricultural/forestry residues), offshore wind, concentrating
@@ -342,11 +338,12 @@
 		demand for liquid CO2 tanks, whereas the website
 		ignores these since the effect is tiny.</li>
 		<li>The paper displays results in 2015 euros, whereas the website uses {{ config['cost_year'] }} euros.</li>
-		<li>The website has a simplified version of the shipping model in the paper.</li>
+		<li>The website has a simplified version of the shipping model in the paper (see warnings above).</li>
+		<li>The website includes the option for electricity delivered by HVDC cable, with hydrogen storage used as long-duration storage on the producer side. This option was not available in the paper, but the paper had instead electricity transmission followed by electrolysis on the consumer side.</li>
 	      </ol>
 
               <h3 id="historic">Historical market prices of fossil-based products in Europe</h3>
-<p>The following graphic from <a href="https://doi.org/10.1371/journal.pone.0281380">Hampp et al, 2023</a> shows historical market prices of fossil-based products in Europe (black lines) versus the costs of hydrogen-based products the authors calculated for 2050 technology assumptions. Market prices for methanol are based on
+<p>The following graphic from <a href="https://doi.org/10.1371/journal.pone.0281380">Hampp et al, 2023</a> shows historical market prices in EUR-2015 of fossil-based products in Europe (black lines) versus the costs of hydrogen-based products the authors calculated for 2050 technology assumptions. Market prices for methanol are based on
   <a href="https://www.methanol.org/methanol-price-supply-demand/">MMSA Europe Spot FOB</a>, for ammonia on <a href="https://www-genesis.destatis.de/genesis/online?operation=table&code=51000-0006&bypass=true&levelindex=0&levelid=1667074103053#abreadcrumb">German export prices for ammonia</a>, for natural gas on the <a href="https://www.investing.com/commodities/ice-dutch-ttf-gas-c1-futures-historical-data">Dutch TTF C1 future</a> and for Fischer-Tropsch products on <a href="https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en">EU Diesel prices without taxes</a>.</p>
 <br />
 <img width=1000 src="./static/price-history.png" />
@@ -432,6 +429,6 @@ that does live optimisation with hourly time series.</p>
       var results = {{ results | tojson }};
 
     </script>
-    <script src="./static/efuels.js"></script>
+    <script src="./static/efuels-230308.js"></script>
   </body>
 </html>
