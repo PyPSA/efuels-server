@@ -600,7 +600,7 @@ def run_optimisation(assumptions, pu):
                     carrier="methane storage",
                     e_nom_extendable=True,
                     e_cyclic=True,
-                    capital_cost=assumptions_df.at["methane_storage","fixed"]/config["mwh_per_m3"]["methane"])
+                    capital_cost=assumptions_df.at["methane_storage","fixed"]/config["mwh_per_m3"]["methane"]/config["methane storage pressure"])
 
         network.add("Load","methane_load",
                     bus="destination",

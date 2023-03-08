@@ -44,10 +44,13 @@ balances_to_display: ["electricity","hydrogen"]
 
 preferred order: ["wind","solar","battery storage","battery inverter","hydrogen storage","hydrogen storing compressor","hydrogen electrolyser","seawater desalination","hydrogen turbine"]
 
+#steel tank in bar
+methane storage pressure: 80
+
 #LHV
 mwh_per_t:
-  hydrogen: 33
-  lh2: 33
+  hydrogen: 33.3
+  lh2: 33.3
   methanol: 5.54
   ammonia: 5.17
   methane: 13.9
