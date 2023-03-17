@@ -1,7 +1,7 @@
 
-# model.energy/efuels: online optimisation of hydrogen-based e-fuel delivery
+# model.energy/products: online optimisation of hydrogen-based e-product delivery
 
-This is the code for the online optimisation of hydrogen-based e-fuel
+This is the code for the online optimisation of hydrogen-based e-product
 delivery from wind and solar.
 
 It uses only free software and open data, including [Python for Power
@@ -20,7 +20,7 @@ gunicorn, Redis).
 
 You can find a live version at:
 
-<https://model.energy/efuels/>
+<https://model.energy/products/>
 
 The tool is a simplified version of the model behind the research
 paper [Import options for chemical energy carriers from renewable
