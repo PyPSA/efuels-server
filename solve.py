@@ -127,36 +127,67 @@ def find_interval(interval_start,interval_length,value):
     return int((value-interval_start)//interval_length)
 
 
+def get_octant_bounds(quadrant, hemisphere):
+
+    x0 = -180 + quadrant*90.
+    x1 = x0 + 90.
+
+    y0 = -90. + hemisphere*90.
+    y1 = y0 + 90.
+
+    return x0,x1,y0,y1
+
+def generate_octant_grid_cells(quadrant, hemisphere, mesh=0.5):
+
+    x0,x1,y0,y1 = get_octant_bounds(quadrant, hemisphere)
+
+    x = np.arange(x0,
+                  x1 + mesh,
+                  mesh)
+
+    y = np.arange(y0,
+                  y1 + mesh,
+                  mesh)
+
+    #grid_coordinates and grid_cells copied from atlite/cutout.py
+    xs, ys = np.meshgrid(x,y)
+    grid_coordinates = np.asarray((np.ravel(xs), np.ravel(ys))).T
+
+    span = mesh / 2
+    return [box(*c) for c in np.hstack((grid_coordinates - span, grid_coordinates + span))]
+
+
 def get_octant(lon,lat):
 
     # 0 for lon -180--90, 1 for lon -90-0, etc.
     quadrant = find_interval(-180.,90,lon)
 
-    #0 for lat 90-0, 1 for lat 0--90
-    hemisphere = 1-find_interval(-90,90,lat)
+    #0 for lat -90 - 0, 1 for lat 0 - 90
+    hemisphere = find_interval(-90,90,lat)
 
-    octant = 2*quadrant + hemisphere
+    print(f"octant is in quadrant {quadrant} and hemisphere {hemisphere}")
 
     rel_x = lon - quadrant*90 + 180.
 
-    rel_y = lat + 90*hemisphere
+    rel_y = lat - hemisphere*90 + 90.
 
     span = 0.5
 
     n_per_octant = int(90/span +1)
 
     i = find_interval(0-span/2,span,rel_x)
-    j = n_per_octant - 1 - find_interval(0-span/2,span,rel_y)
+    j = find_interval(0-span/2,span,rel_y)
 
     position = j*n_per_octant+i
 
+    print("position",position)
+
     #paranoid check
-    if False:
-        grid_cells = generate_octant_grid_cells(octant, mesh=span)
+    if True:
+        grid_cells = generate_octant_grid_cells(quadrant, hemisphere, mesh=span)
         assert grid_cells[position].contains(Point(lon,lat))
 
-    return octant, position
-
+    return quadrant, hemisphere, position
 
 
 def get_weather(lat, lon, year, cf_exponent):
@@ -164,13 +195,15 @@ def get_weather(lat, lon, year, cf_exponent):
     if lon < -180 or lon > 180 or lat > 90 or lat < -90:
         return "Point's coordinates not within lon*lat range of (-180,180)*(-90,90)", None
 
-    octant, position = get_octant(lon,lat)
+    quadrant, hemisphere, position = get_octant(lon,lat)
 
     pu = {}
 
     for tech in ["solar", "onwind"]:
-        o = xr.open_dataarray("{}octant{}-{}-{}.nc".format(config["octant_folder"],octant,year,tech))
-        pu[tech] = o.loc[position,:].to_pandas()
+        filename = os.path.join(config['octant_folder'],
+                                f"octant-{year}-{quadrant}-{hemisphere}-{tech}.nc")
+        o = xr.open_dataarray(filename)
+        pu[tech] = o.loc[{"dim_0":position}].to_pandas()
 
     pu = pd.DataFrame(pu)
 
