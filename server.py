@@ -114,7 +114,7 @@ def sanitise_assumptions(assumptions):
     if assumptions["frequency"] < 1 or assumptions["frequency"] > 8760:
         return "Frequency {} is not in the valid range [1,8760]".format(assumptions["frequency"]), None
 
-    if assumptions["year"] < config["years_available_start"] or assumptions["year"] > config["years_available_end"]:
+    if assumptions["year"] not in config["weather_years"]:
         return "Year {} not in valid range".format(assumptions["year"]), None
 
     if assumptions["efuels_load"] == 0:

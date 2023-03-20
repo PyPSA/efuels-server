@@ -11,6 +11,9 @@ with open("config.yaml", "r") as f:
 years = config["tech_years"]
 
 
+df.at[("year",""),"text"] = df.at[("year",""),"text"].replace("weather_years",str(config["weather_years"])[1:-1])
+
+
 #get technology data
 td = {}
 for year in years:
