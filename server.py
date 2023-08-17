@@ -14,9 +14,11 @@
 ## https://github.com/PyPSA/efuels-server
 
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
 
 from markupsafe import Markup
+
+from solve import export_time_series, generate_overview
 
 from redis import Redis
 
@@ -27,6 +29,8 @@ from rq import Queue
 import json, os, hashlib, yaml
 
 import pandas as pd
+
+import pypsa
 
 import datetime
 
@@ -139,26 +143,22 @@ def compute_results_hash(assumptions):
 def find_results(results_hash):
 
     assumptions_json = f'data/results-assumptions-{results_hash}.json'
-    overview_csv = f'data/results-overview-{results_hash}.csv'
-    carrier_series_csv = f'data/results-carrier-series-{results_hash}.csv'
+    network_fn = f'networks/{results_hash}.nc'
 
     if not os.path.isfile(assumptions_json):
         return "Assumptions file is missing", {}
-    if not os.path.isfile(overview_csv):
-        return "Overview results file is missing", {}
-    if not os.path.isfile(carrier_series_csv):
-        return "Carrier series results file is missing", {}
+    if not os.path.isfile(network_fn):
+        return "Network file is missing", {}
 
-    print("Using preexisting results files:", assumptions_json, overview_csv, carrier_series_csv)
+    print("Using preexisting results files:", assumptions_json, network_fn)
     with(open(assumptions_json, 'r')) as f:
         assumptions = json.load(f)
-    results_overview = pd.read_csv(overview_csv,
-                                   index_col=0,
-                                   header=None).squeeze()
-    carrier_series = pd.read_csv(carrier_series_csv,
-                                 index_col=0,
-                                 header=[0,1],
-                                 parse_dates=True).round(1)
+
+    n = pypsa.Network(network_fn)
+
+    results_overview = generate_overview(n, assumptions)
+
+    carrier_series = export_time_series(n).round(1)
 
     #determine nice ordering of components
     current_order = results_overview.index[results_overview.index.str[-6:] == " totex"].str[:-6]
@@ -338,6 +338,40 @@ def jobid_api(jobid):
 
     return jsonify(result)
 
+
+
+@app.route('/csvs/overview-<resultshex>.csv')
+def overview_api(resultshex):
+    fn = f'networks/{resultshex}.nc'
+    try:
+        n = pypsa.Network(fn)
+    except:
+        return Response(f"network {resultshex} not found")
+
+    assumptions_json = f'data/results-assumptions-{resultshex}.json'
+    if not os.path.isfile(assumptions_json):
+        return Response(f"assumptions file {resultshex} not found")
+    with(open(assumptions_json, 'r')) as f:
+        assumptions = json.load(f)
+
+    csv = generate_overview(n,assumptions).to_csv(header=False)
+    response = Response(csv, content_type='text/csv')
+    response.headers['Content-Disposition'] = f'attachment; filename=overview-{resultshex}.csv'
+    return response
+
+
+@app.route('/csvs/series-<resultshex>.csv')
+def series_api(resultshex):
+    fn = f'networks/{resultshex}.nc'
+    try:
+        n = pypsa.Network(fn)
+    except:
+        return Response(f"network {resultshex} not found")
+
+    csv = export_time_series(n).round(1).to_csv()
+    response = Response(csv, content_type='text/csv')
+    response.headers['Content-Disposition'] = f'attachment; filename=series-{resultshex}.csv'
+    return response
 
 
 if __name__ == '__main__':

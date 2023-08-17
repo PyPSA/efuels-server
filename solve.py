@@ -109,11 +109,6 @@ assumptions_df = pd.DataFrame(columns=["FOM","fixed","discount rate","lifetime",
 
 
 def error(message, jobid):
-    with open('results-solve/results-{}.json'.format(jobid), 'w') as fp:
-        json.dump({"jobid" : jobid,
-                   "status" : "Error",
-                   "error" : message
-                   },fp)
     print("Error: {}".format(message))
     return {"error" : message}
 
@@ -249,6 +244,52 @@ def export_time_series(n):
 
     return all_carrier_df
 
+def generate_overview(network, assumptions):
+
+    results_overview = pd.Series(dtype=float)
+    results_overview["distance"] = assumptions["distance"]
+    results_overview["distance_transported"] = assumptions["distance_transported"]
+    results_overview["objective"] = network.objective/8760
+    results_overview["average_price"] = network.buses_t.marginal_price.mean()["electricity"]
+    results_overview["average_efuel_price"] = network.buses_t.marginal_price.mean()["destination"]
+    results_overview["average_cost"] = results_overview["average_efuel_price"]
+    if "electricity" not in assumptions["efuel"]:
+        efuel = assumptions["efuel"]
+        fuel = efuel if "_" not in efuel else efuel[:efuel.find("_")]
+        results_overview["average_efuel_price_per_t"] = results_overview["average_efuel_price"]*config["mwh_per_t"][fuel]
+    if assumptions["efuel"] in ["methanol","ft"]:
+        results_overview["average_efuel_price_per_l"] = results_overview["average_efuel_price"]*config["mwh_per_m3"][fuel]/1e3
+    results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
+
+    stats = network.statistics().groupby(level=1).sum()
+
+    stats["Total Expenditure"] = stats[["Capital Expenditure","Operational Expenditure"]].sum(axis=1)
+
+    #exclude components contributing less than 0.1 EUR/MWh
+    selection = stats.index[stats["Total Expenditure"]/assumptions["efuels_load"] > 100*threshold]
+    stats = stats.loc[selection]
+
+    for name,full_name in [("capex","Capital Expenditure"),("opex","Operational Expenditure"),("totex","Total Expenditure"),("capacity","Optimal Capacity")]:
+        results_overview = pd.concat((results_overview,
+                                      stats[full_name].rename(lambda x: x+ f" {name}")))
+
+    results_overview = pd.concat((results_overview,
+                                  (stats["Curtailment"]/(stats["Supply"]+stats["Curtailment"])).rename(lambda x: x+ " curtailment")))
+
+    results_overview = pd.concat((results_overview,
+                                  (stats["Total Expenditure"]/(stats["Supply"])).rename(lambda x: x+ " LCOE")))
+
+    results_overview = pd.concat((results_overview,
+                                  stats["Capacity Factor"].rename(lambda x: x+ " cf used")))
+    results_overview = pd.concat((results_overview,
+                                  ((stats["Supply"]+stats["Curtailment"])/stats["Optimal Capacity"]/network.snapshot_weightings["generators"].sum()).rename(lambda x: x+ " cf available")))
+
+    #this is not a real capacity
+    results_overview.drop("co2 capacity",
+                          inplace=True,
+                          errors='ignore')
+
+    return results_overview
 
 
 def run_optimisation(assumptions, pu):
@@ -285,6 +326,9 @@ def run_optimisation(assumptions, pu):
         distance_transported = 0.
 
     print(f'distance transported between points is {distance_transported} km')
+
+    assumptions["distance"] = distance
+    assumptions["distance_transported"] = distance_transported
 
     print('Starting task with assumptions {}'.format(assumptions_df))
 
@@ -785,75 +829,20 @@ def run_optimisation(assumptions, pu):
     print(status,termination_condition)
 
     if termination_condition in ["infeasible","infeasible or unbounded"]:
-        return None, None, "Problem was infeasible"
+        return "Problem was infeasible"
     elif termination_condition in ["numeric"]:
-        return None, None, "Numerical trouble encountered, problem could be infeasible"
+        return "Numerical trouble encountered, problem could be infeasible"
     elif status == "ok" and termination_condition == "optimal":
         pass
     elif status == "warning" and termination_condition == "suboptimal":
         pass
     else:
-        return None, None, "Job failed to optimise correctly"
-
-
-    results_overview = pd.Series(dtype=float)
-    results_overview["distance"] = distance
-    results_overview["distance_transported"] = distance_transported
-    results_overview["objective"] = network.objective/8760
-    results_overview["average_price"] = network.buses_t.marginal_price.mean()["electricity"]
-    results_overview["average_efuel_price"] = network.buses_t.marginal_price.mean()["destination"]
-    if "electricity" not in assumptions["efuel"]:
-        efuel = assumptions["efuel"]
-        fuel = efuel if "_" not in efuel else efuel[:efuel.find("_")]
-        results_overview["average_efuel_price_per_t"] = results_overview["average_efuel_price"]*config["mwh_per_t"][fuel]
-    if assumptions["efuel"] in ["methanol","ft"]:
-        results_overview["average_efuel_price_per_l"] = results_overview["average_efuel_price"]*config["mwh_per_m3"][fuel]/1e3
-    results_overview["average_hydrogen_price"] = network.buses_t.marginal_price.mean()["hydrogen"]
-
-
-    results_series = export_time_series(network)
-
-    absmax = results_series.abs().max()
-
-    to_drop = absmax.index[absmax < threshold*assumptions["efuels_load"]]
-    results_series.drop(to_drop,
-                        axis=1,
-                        inplace=True)
-
-    #results_series["electricity_price"] = network.buses_t.marginal_price["electricity"]
-
-    stats = network.statistics().groupby(level=1).sum()
-
-    stats["Total Expenditure"] = stats[["Capital Expenditure","Operational Expenditure"]].sum(axis=1)
-
-    #exclude components contributing less than 0.1 EUR/MWh
-    selection = stats.index[stats["Total Expenditure"]/assumptions["efuels_load"] > 100*threshold]
-    stats = stats.loc[selection]
-
-    for name,full_name in [("capex","Capital Expenditure"),("opex","Operational Expenditure"),("totex","Total Expenditure"),("capacity","Optimal Capacity")]:
-        results_overview = pd.concat((results_overview,
-                                      stats[full_name].rename(lambda x: x+ f" {name}")))
-
-    results_overview = pd.concat((results_overview,
-                                  (stats["Curtailment"]/(stats["Supply"]+stats["Curtailment"])).rename(lambda x: x+ " curtailment")))
-
-    results_overview = pd.concat((results_overview,
-                                  (stats["Total Expenditure"]/(stats["Supply"])).rename(lambda x: x+ " LCOE")))
-
-    results_overview = pd.concat((results_overview,
-                                  stats["Capacity Factor"].rename(lambda x: x+ " cf used")))
-    results_overview = pd.concat((results_overview,
-                                  ((stats["Supply"]+stats["Curtailment"])/stats["Optimal Capacity"]/network.snapshot_weightings["generators"].sum()).rename(lambda x: x+ " cf available")))
-
-    #this is not a real capacity
-    results_overview.drop("co2 capacity",
-                          inplace=True,
-                          errors='ignore')
+        return "Job failed to optimise correctly"
 
     fn = 'networks/{}.nc'.format(assumptions['results_hex'])
     network.export_to_netcdf(fn)
 
-    return results_overview, results_series, None
+    return None
 
 
 def solve(assumptions):
@@ -876,35 +865,20 @@ def solve(assumptions):
     snapshots = pd.date_range("{}-01-01".format(assumptions["year"]),"{}-12-31 23:00".format(assumptions["year"]),freq="H")
     pu = pu.reindex(snapshots,method="nearest")
 
-    carrier_series_csv = 'data/results-carrier-series-{}.csv'.format(assumptions['results_hex'])
-    overview_csv = 'data/results-overview-{}.csv'.format(assumptions['results_hex'])
+    print(f"Calculating results from scratch, saving as {assumptions['results_hex']}.nc")
 
-    print("Calculating results from scratch, saving as:", overview_csv, carrier_series_csv)
     job.meta['status'] = "Solving optimisation problem"
     job.save_meta()
-    results_overview, results_series, error_msg = run_optimisation(assumptions, pu)
+
+    error_msg = run_optimisation(assumptions, pu)
+
     if error_msg is not None:
         return error(error_msg, jobid)
-    results_series = results_series.round(1)
-
-    results_series.to_csv(carrier_series_csv)
-    results_overview.to_csv(overview_csv,header=False)
 
     with open('data/results-assumptions-{}.json'.format(assumptions['results_hex']), 'w') as fp:
         json.dump(assumptions,fp)
 
     job.meta['status'] = "Processing and sending results"
     job.save_meta()
-
-    with open('results-solve/results-{}.json'.format(jobid), 'w') as fp:
-        json.dump({"jobid" : jobid,
-                   "status" : "Finished",
-                   "job_type" : assumptions["job_type"],
-                   "average_efuel_price": results_overview["average_efuel_price"],
-                   "results_hex" : assumptions['results_hex']
-                   },fp)
-
-    #with open('results-{}.json'.format(job.id), 'w') as fp:
-    #    json.dump(results,fp)
 
     return {"job_type" : "solve", "results_hex" : assumptions['results_hex']}
