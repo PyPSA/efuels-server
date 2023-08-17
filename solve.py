@@ -835,10 +835,6 @@ def run_optimisation(assumptions, pu):
 
     #results_series["electricity_price"] = network.buses_t.marginal_price["electricity"]
 
-
-    results_overview["average_cost"] = sum([results_overview[s] for s in results_overview.index if s[-5:] == "_cost"])/assumptions["efuels_load"]
-
-
     stats = network.statistics(aggregate_time="sum").groupby(level=1).sum()
 
     stats["Total Expenditure"] = stats[["Capital Expenditure","Operational Expenditure"]].sum(axis=1)
@@ -908,8 +904,6 @@ def solve(assumptions):
     results_series.to_csv(carrier_series_csv)
     results_overview.to_csv(overview_csv,header=False)
 
-    results_series.to_csv(carrier_series_csv)
-
     with open('data/results-assumptions-{}.json'.format(assumptions['results_hex']), 'w') as fp:
         json.dump(assumptions,fp)
 
@@ -920,7 +914,7 @@ def solve(assumptions):
         json.dump({"jobid" : jobid,
                    "status" : "Finished",
                    "job_type" : assumptions["job_type"],
-                   "average_cost" : results_overview["average_cost"],
+                   "average_efuel_price": results_overview["average_efuel_price"],
                    "results_hex" : assumptions['results_hex']
                    },fp)
 
