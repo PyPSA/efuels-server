@@ -17,18 +17,13 @@
 
 import pypsa
 
-from pypsa.linopt import get_var, linexpr, define_constraints
-
 from pypsa.geo import haversine
 
 import pandas as pd
-from pyomo.environ import Constraint
+
 from rq import get_current_job
 
 import json, os, hashlib, yaml
-
-#required to stop wierd failures
-import netCDF4
 
 from atlite.gis import spdiag, compute_indicatormatrix
 
@@ -240,7 +235,7 @@ def export_time_series(n):
 
             for end in [col[3:] for col in c.df.columns if col[:3] == "bus"]:
 
-                items = c.df.index[c.df["bus" + str(end)].map(bus_map,na_action=False)]
+                items = c.df.index[c.df["bus" + str(end)].map(bus_map,na_action=None)]
 
                 if len(items) == 0:
                     continue
@@ -364,18 +359,6 @@ def run_optimisation(assumptions, pu):
                     carrier="battery discharger",
                     p_nom_extendable = True,
                     efficiency = assumptions["battery_power_efficiency_discharging"]/100.)
-
-        def extra_functionality(network,snapshots):
-
-            link_p_nom = get_var(network, "Link", "p_nom")
-
-            lhs = linexpr((1,link_p_nom["battery_power"]),
-                          (-network.links.loc["battery_discharge", "efficiency"],
-                           link_p_nom["battery_discharge"]))
-            define_constraints(network, lhs, "=", 0, 'Link', 'charger_ratio')
-    else:
-        def extra_functionality(network,snapshots):
-            pass
 
     network.add("Bus",
                 "hydrogen",
@@ -788,12 +771,16 @@ def run_optimisation(assumptions, pu):
                       #"PreDual": 0,
                       #"GURO_PAR_BARDENSETHRESH": 200}
 
-    formulation = "kirchhoff"
-    status, termination_condition = network.lopf(pyomo=False,
-                                                 solver_name=solver_name,
-                                                 solver_options=solver_options,
-                                                 formulation=formulation,
-                                                 extra_functionality=extra_functionality)
+    network.optimize.create_model()
+
+    if assumptions["battery"]:
+        network.model.add_constraints(network.model["Link-p_nom"].loc["battery_power"]
+                                      -network.links.loc["battery_discharge", "efficiency"]*
+                                      network.model["Link-p_nom"].loc["battery_discharge"] == 0,
+                                      name='charger_ratio')
+
+    status, termination_condition = network.optimize.solve_model(solver_name=solver_name,
+                                                                 solver_options=solver_options)
 
     print(status,termination_condition)
 
@@ -835,7 +822,7 @@ def run_optimisation(assumptions, pu):
 
     #results_series["electricity_price"] = network.buses_t.marginal_price["electricity"]
 
-    stats = network.statistics(aggregate_time="sum").groupby(level=1).sum()
+    stats = network.statistics().groupby(level=1).sum()
 
     stats["Total Expenditure"] = stats[["Capital Expenditure","Operational Expenditure"]].sum(axis=1)
 
@@ -853,11 +840,10 @@ def run_optimisation(assumptions, pu):
     results_overview = pd.concat((results_overview,
                                   (stats["Total Expenditure"]/(stats["Supply"])).rename(lambda x: x+ " LCOE")))
 
-    stats_mean = network.statistics(aggregate_time="mean").groupby(level=1).sum().loc[selection]
     results_overview = pd.concat((results_overview,
-                                  stats_mean["Capacity Factor"].rename(lambda x: x+ " cf used")))
+                                  stats["Capacity Factor"].rename(lambda x: x+ " cf used")))
     results_overview = pd.concat((results_overview,
-                                  ((stats_mean["Supply"]+stats_mean["Curtailment"])/stats_mean["Optimal Capacity"]).rename(lambda x: x+ " cf available")))
+                                  ((stats["Supply"]+stats["Curtailment"])/stats["Optimal Capacity"]/network.snapshot_weightings["generators"].sum()).rename(lambda x: x+ " cf available")))
 
     #this is not a real capacity
     results_overview.drop("co2 capacity",

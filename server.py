@@ -14,7 +14,9 @@
 ## https://github.com/PyPSA/efuels-server
 
 
-from flask import Flask, request, jsonify, render_template, Markup
+from flask import Flask, request, jsonify, render_template
+
+from markupsafe import Markup
 
 from redis import Redis
 
